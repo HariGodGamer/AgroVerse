@@ -1,15 +1,566 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgroVerse -- Smart Farming Platform</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroVerse — Smart Farming Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --emerald: #00e5a0;
+    --teal: #00c9b1;
+    --cyan: #00d4ff;
+    --green-deep: #0a6b4a;
+    --bg-dark: #050e0a;
+    --bg-mid: #091a12;
+    --bg-card: rgba(255,255,255,0.03);
+    --glass: rgba(0, 229, 160, 0.06);
+    --glass-border: rgba(0, 229, 160, 0.15);
+    --text-main: #e8f5ee;
+    --text-muted: #7aa390;
+    --glow: 0 0 40px rgba(0, 229, 160, 0.25);
+    --sidebar-w: 220px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+    display: flex;
+    height: 100vh;
+  }
+
+  /* ======================== SIDEBAR ======================== */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg-mid);
+    border-right: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0; top: 0;
+    z-index: 100;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 10px;
+    padding: 22px 20px 16px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 8px;
+  }
+  .sidebar-logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    box-shadow: 0 0 18px rgba(0,229,160,0.35);
+    flex-shrink: 0;
+  }
+
+  /* i changed it  */
+  .sidebar-logo span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 18px;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .sidebar-section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text-muted);
+    padding: 14px 20px 6px;
+  }
+
+  .sidebar-nav { list-style: none; padding: 0 10px; }
+  .sidebar-nav li { margin-bottom: 2px; }
+  .sidebar-nav a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 13.5px; font-weight: 500;
+    transition: all 0.25s;
+    position: relative;
+    cursor: pointer;
+  }
+  .sidebar-nav a:hover { background: var(--glass); color: var(--text-main); }
+  .sidebar-nav a.active {
+    background: rgba(0,229,160,0.12);
+    color: var(--emerald);
+    font-weight: 600;
+  }
+  .sidebar-nav a .nav-icon { font-size: 16px; flex-shrink: 0; }
+  .sidebar-nav a .nav-badge {
+    margin-left: auto;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    color: #050e0a;
+    padding: 2px 6px; border-radius: 20px;
+  }
+
+  .sidebar-user {
+    margin-top: auto;
+    padding: 14px 14px 20px;
+    border-top: 1px solid var(--glass-border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sidebar-avatar {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #050e0a;
+    position: relative;
+  }
+  .sidebar-avatar .online-dot {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 8px; height: 8px;
+    background: #4ade80; border-radius: 50%;
+    border: 1.5px solid var(--bg-mid);
+  }
+  .sidebar-user-info { flex: 1; min-width: 0; }
+  .sidebar-user-name {
+    font-size: 13px; font-weight: 600; color: var(--text-main);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sidebar-user-role { font-size: 11px; color: var(--text-muted); }
+
+  /* ======================== MAIN AREA ======================== */
+  .main-area {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ======================== TOP BAR ======================== */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--glass-border);
+    background: var(--bg-dark);
+    flex-shrink: 0;
+  }
+  .topbar-greeting .greet-sub {
+    font-size: 12px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 5px;
+    margin-bottom: 2px;
+  }
+  .topbar-greeting h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
+  }
+  .topbar-greeting h1 span {
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .search-box {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 13px; color: var(--text-muted);
+    width: 220px; cursor: text; transition: all 0.2s;
+  }
+  .search-box:hover { border-color: rgba(0,229,160,0.3); }
+  .search-box input {
+    background: none; border: none; outline: none;
+    color: var(--text-main); font-family: inherit; font-size: 13px; width: 100%;
+  }
+  .search-box input::placeholder { color: var(--text-muted); }
+  .icon-btn {
+    width: 36px; height: 36px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; position: relative;
+  }
+  .icon-btn:hover { background: var(--glass); border-color: rgba(0,229,160,0.3); }
+  .notif-dot {
+    position: absolute; top: 6px; right: 6px;
+    width: 7px; height: 7px; background: #ff6b6b;
+    border-radius: 50%; border: 1.5px solid var(--bg-dark);
+  }
+
+  /* ======================== DASHBOARD SCROLL ======================== */
+  .dashboard-content {
+    flex: 1; overflow-y: auto;
+    padding: 24px 28px 36px;
+    background: radial-gradient(ellipse 60% 40% at 70% 20%, rgba(0,229,160,0.04) 0%, transparent 60%);
+  }
+  .dashboard-content::-webkit-scrollbar { width: 4px; }
+  .dashboard-content::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+
+  /* ======================== SEASON BANNER ======================== */
+  .season-banner {
+    background: linear-gradient(135deg, rgba(0,40,28,0.85), rgba(5,14,10,0.95));
+    border: 1px solid rgba(0,229,160,0.18);
+    border-radius: 18px;
+    padding: 18px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; margin-bottom: 22px;
+    position: relative; overflow: hidden;
+  }
+  .season-banner::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 50% 80% at 80% 50%, rgba(0,229,160,0.07), transparent);
+    pointer-events: none;
+  }
+  .season-banner-left { display: flex; align-items: center; gap: 16px; }
+  .season-icon { font-size: 32px; flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(0,229,160,0.4)); }
+  .season-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px;
+  }
+  .season-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .season-title em {
+    font-style: italic;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .season-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+  .btn-report {
+    flex-shrink: 0; background: transparent;
+    border: 1px solid var(--glass-border); border-radius: 10px;
+    padding: 10px 18px; font-size: 12.5px; font-weight: 600; color: var(--text-main);
+    cursor: pointer; transition: all 0.25s; white-space: nowrap;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-report:hover { background: var(--glass); border-color: var(--emerald); color: var(--emerald); }
+
+  /* ======================== STAT CARDS ======================== */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin-bottom: 22px;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 16px; padding: 20px 18px;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .stat-card:hover {
+    border-color: rgba(0,229,160,0.22); transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0,229,160,0.06);
+  }
+  .stat-card-icon {
+    font-size: 20px; margin-bottom: 12px; width: 40px; height: 40px;
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    background: rgba(0,229,160,0.08);
+  }
+  .stat-card-val {
+    font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -1px;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1;
+  }
+  .stat-card-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .stat-card-change { font-size: 11px; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+  .change-good { color: var(--emerald); }
+  .change-warn { color: #ffb84d; }
+  .change-bad  { color: #ff6b6b; }
+
+  /* ======================== CONTENT GRID ======================== */
+  .content-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 22px; }
+  .card-panel {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 18px; padding: 22px;
+  }
+  .card-panel-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+  }
+  .card-panel-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  .card-panel-title::before { content: '•'; color: var(--emerald); font-size: 16px; }
+
+  /* Field Conditions */
+  .condition-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .condition-icon { font-size: 18px; flex-shrink: 0; }
+  .condition-label { font-size: 12.5px; color: var(--text-muted); min-width: 72px; }
+  .condition-bar-wrap { flex: 1; }
+  .condition-bar { height: 5px; background: rgba(0,229,160,0.08); border-radius: 10px; overflow: hidden; }
+  .condition-bar-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    animation: barFill 1.2s ease both;
+    transition: width 0.6s ease;
+  }
+  @keyframes barFill { from { width: 0 !important; } }
+  .condition-val { font-size: 12px; font-weight: 600; color: var(--text-main); min-width: 55px; text-align: right; }
+
+  /* ======================== FEATURE CARDS ======================== */
+  .features-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 16px; padding: 20px;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+    text-decoration: none; color: inherit; display: block;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::after {
+    content: ''; position: absolute;
+    top: -1px; left: 20%; right: 20%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--emerald), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .feature-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0,229,160,0.25);
+    box-shadow: 0 16px 50px rgba(0,0,0,0.5), 0 0 30px rgba(0,229,160,0.07);
+  }
+  .feature-card:hover::after { opacity: 1; }
+  .fc-icon-wrap {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 14px;
+  }
+  .icon-green  { background: rgba(0,229,160,0.12); }
+  .icon-teal   { background: rgba(0,201,177,0.12); }
+  .icon-cyan   { background: rgba(0,212,255,0.12); }
+  .icon-lime   { background: rgba(120,255,100,0.1); }
+  .icon-amber  { background: rgba(255,180,50,0.1); }
+  .icon-purple { background: rgba(160,100,255,0.1); }
+  .feature-card h3 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .feature-card p  { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .card-arrow {
+    position: absolute; top: 18px; right: 18px;
+    font-size: 13px; color: var(--emerald);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .feature-card:hover .card-arrow { opacity: 1; }
+
+  /* ======================== CHATBOT PANEL ======================== */
+  /* Floating FAB button */
+  .chat-fab {
+    position: fixed; bottom: 28px; right: 28px;
+    width: 54px; height: 54px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; cursor: pointer; z-index: 500;
+    box-shadow: 0 4px 20px rgba(0,229,160,0.4);
+    transition: all 0.3s;
+    border: none; color: #050e0a;
+  }
+  .chat-fab:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(0,229,160,0.55); }
+  .chat-fab .fab-badge {
+    position: absolute; top: -3px; right: -3px;
+    background: #ff6b6b; color: #fff;
+    font-size: 9px; font-weight: 700;
+    width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--bg-dark);
+  }
+
+  /* Chat drawer */
+  .chat-drawer {
+    position: fixed; bottom: 94px; right: 28px;
+    width: 360px; max-height: 520px;
+    background: var(--bg-mid);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    display: flex; flex-direction: column;
+    z-index: 499;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(0,229,160,0.08);
+    transform: scale(0.85) translateY(30px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+    transform-origin: bottom right;
+  }
+  .chat-drawer.open {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  .chat-drawer-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
+  .chat-drawer-avatar {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .chat-drawer-info { flex: 1; }
+  .chat-drawer-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; }
+  .chat-drawer-status { font-size: 11px; color: var(--emerald); display: flex; align-items: center; gap: 4px; }
+  .chat-drawer-status::before {
+    content: ''; display: inline-block; width: 6px; height: 6px;
+    background: var(--emerald); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .chat-close {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 18px; cursor: pointer; padding: 4px;
+    transition: color 0.2s; line-height: 1;
+  }
+  .chat-close:hover { color: var(--text-main); }
+
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
+    min-height: 200px;
+  }
+  .chat-messages::-webkit-scrollbar { width: 3px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.2); border-radius: 10px; }
+
+  .chat-msg { display: flex; gap: 8px; }
+  .chat-msg.user { flex-direction: row-reverse; }
+  .chat-msg-avatar {
+    width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+  }
+  .chat-msg.bot .chat-msg-avatar { background: rgba(0,229,160,0.15); }
+  .chat-msg.user .chat-msg-avatar { background: rgba(0,212,255,0.15); }
+  .chat-msg-bubble {
+    max-width: 75%; padding: 9px 13px;
+    border-radius: 14px; font-size: 12.5px; line-height: 1.55;
+  }
+  .chat-msg.bot .chat-msg-bubble {
+    background: rgba(0,229,160,0.07);
+    border: 1px solid rgba(0,229,160,0.12);
+    color: var(--text-main);
+    border-bottom-left-radius: 4px;
+  }
+  .chat-msg.user .chat-msg-bubble {
+    background: linear-gradient(135deg, rgba(0,229,160,0.2), rgba(0,212,255,0.15));
+    border: 1px solid rgba(0,229,160,0.2);
+    color: var(--text-main);
+    border-bottom-right-radius: 4px;
+  }
+  .chat-msg-time { font-size: 9px; color: var(--text-muted); margin-top: 3px; text-align: right; }
+  .chat-msg.user .chat-msg-time { text-align: left; }
+
+  .chat-typing { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+  .chat-typing span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--emerald); opacity: 0.6;
+    animation: typingDot 1.2s infinite;
+  }
+  .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingDot { 0%,80%,100%{transform:scale(1)} 40%{transform:scale(1.4);opacity:1} }
+
+  .chat-input-row {
+    padding: 12px 14px;
+    border-top: 1px solid var(--glass-border);
+    display: flex; gap: 8px; align-items: flex-end;
+    flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1; background: rgba(0,229,160,0.05);
+    border: 1px solid var(--glass-border); border-radius: 12px;
+    padding: 10px 13px; color: var(--text-main);
+    font-family: inherit; font-size: 12.5px;
+    resize: none; outline: none; min-height: 40px; max-height: 100px;
+    transition: border-color 0.2s;
+  }
+  .chat-input:focus { border-color: rgba(0,229,160,0.35); }
+  .chat-input::placeholder { color: var(--text-muted); }
+  .chat-send-btn {
+    width: 38px; height: 38px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border: none; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; cursor: pointer; color: #050e0a;
+    transition: all 0.2s;
+  }
+  .chat-send-btn:hover { box-shadow: 0 4px 15px rgba(0,229,160,0.4); transform: scale(1.05); }
+  .chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* Suggestion chips */
+  .chat-suggestions {
+    padding: 0 14px 10px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .chip {
+    font-size: 10.5px; padding: 4px 10px;
+    background: rgba(0,229,160,0.07);
+    border: 1px solid rgba(0,229,160,0.15);
+    border-radius: 20px; color: var(--emerald);
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .chip:hover { background: rgba(0,229,160,0.15); }
+
+  /* ======================== CANVAS BG ======================== */
+  #particle-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 0.55;
+  }
+
+  /* ======================== MOBILE ======================== */
+  .mobile-topbar {
+    display: none; align-items: center; justify-content: space-between;
+    padding: 14px 16px; background: var(--bg-mid);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky; top: 0; z-index: 200;
+  }
+  .hamburger { display: flex; flex-direction: column; gap: 4px; cursor: pointer; padding: 6px; }
+  .hamburger span { display: block; width: 20px; height: 2px; background: var(--text-muted); border-radius: 2px; transition: all 0.3s; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 90; }
+  .sidebar-overlay.open { display: block; }
+
+  /* ======================== RESPONSIVE ======================== */
+  @media (max-width: 1100px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .features-row { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; z-index: 100; }
+    .sidebar.open { transform: translateX(0); }
+    .main-area { margin-left: 0; }
+    .mobile-topbar { display: flex; }
+    .topbar { display: none; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .features-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .dashboard-content { padding: 16px; }
+    .season-banner { flex-direction: column; align-items: flex-start; }
+    .chat-drawer { width: calc(100vw - 32px); right: 16px; }
+    .chat-fab { right: 16px; bottom: 20px; }
+  }
+  @media (max-width: 480px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .features-row { grid-template-columns: 1fr; }
+    .search-box { display: none; }
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+</style>
 </head>
 <body>
-    <canvas id="particle-canvas"></canvas>
+<canvas id="particle-canvas"></canvas>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <!-- ======================== SIDEBAR ======================== -->
@@ -66,22 +617,7 @@
     </li>
   </ul>
 
-  <span class="sidebar-section-label">Plants</span>
-  <ul class="sidebar-nav">
-    <li>
-      <a href="#">
-        <span class="nav-icon">🌱</span>
-        Plant Library
-      </a>
-    </li>
-    <li>
-      <a href="#">
-        <span class="nav-icon">💧</span>
-        Care Guide
-      </a>
-    </li>
-  </ul>
-
+  
   <div class="sidebar-user">
     <div class="sidebar-avatar" id="dash-avatar">
       U<span class="online-dot"></span>
@@ -119,8 +655,8 @@
         <span>🔍</span>
         <input type="text" placeholder="Search crops, diseases...">
       </div>
-      <div class="icon-btn" title="Notifications">🔔<span class="notif-dot"></span></div>
-      <div class="icon-btn" title="Settings">⚙️</div>
+      
+      
     </div>
   </div>
 
@@ -328,6 +864,303 @@
   🤖
   <span class="fab-badge" id="fabBadge" style="display:none;">1</span>
 </button>
-    
+
+<script>
+// ── Time-based greeting ───────────────────────────────────────────────────────
+function updateGreeting(firstName) {
+  const h = new Date().getHours();
+  let greet, icon, sub;
+  if (h >= 5 && h < 12)       { greet = 'Good morning';   icon = '🌅'; sub = '🌤️ Farm Intelligence'; }
+  else if (h >= 12 && h < 17) { greet = 'Good afternoon'; icon = '☀️'; sub = '☀️ Farm Intelligence'; }
+  else if (h >= 17 && h < 21) { greet = 'Good evening';   icon = '🌇'; sub = '🌆 Farm Intelligence'; }
+  else                         { greet = 'Good night';     icon = '🌙'; sub = '🌙 Farm Intelligence'; }
+
+  const greetLine = document.getElementById('greeting-line');
+  const greetSub  = document.getElementById('greet-sub');
+  const name      = firstName || 'User';
+  if (greetLine) greetLine.innerHTML = `${greet}, <span id="topbar-username">${name} ${icon}</span>`;
+  if (greetSub)  greetSub.textContent = sub;
+}
+
+// ── Weather helpers ───────────────────────────────────────────────────────────
+function setBar(id, pct) {
+  const el = document.getElementById(id);
+  if (el) el.style.width = Math.max(2, pct) + '%';
+}
+function setVal(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function applyWeather(w) {
+  const locEl = document.getElementById('location-text');
+  if (locEl) locEl.textContent = w.location || 'Unknown location';
+
+  const condTag = document.getElementById('weather-condition-tag');
+  if (condTag && w.condition) {
+    condTag.textContent = '🌍 ' + w.condition;
+    condTag.style.display = 'block';
+  }
+
+  const b = w.bars;
+  setBar('bar-temp',     b.temp);       setVal('val-temp',     w.temperature + '°C');
+  setBar('bar-humidity', b.humidity);   setVal('val-humidity', w.humidity + '%');
+  setBar('bar-wind',     b.wind);       setVal('val-wind',     w.wind_speed + ' km/h');
+  setBar('bar-rain',     b.rain);       setVal('val-rain',     w.rain + ' mm');
+  setBar('bar-uv',       b.uv);         setVal('val-uv',       w.uv_index);
+  setBar('bar-vis',      b.visibility); setVal('val-vis',      w.visibility + ' km');
+
+  // Also update stat card humidity
+  const statHum = document.getElementById('stat-humidity');
+  if (statHum) statHum.textContent = w.humidity + '%';
+}
+
+function fetchWeather(lat, lon) {
+  fetch(`/api/weather?lat=${lat}&lon=${lon}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error);
+      applyWeather(data);
+    })
+    .catch(err => {
+      console.warn('Weather error:', err);
+      document.getElementById('weather-error').style.display = 'block';
+      document.getElementById('location-text').textContent = 'Location unavailable';
+    });
+}
+
+function initWeather() {
+  const locEl = document.getElementById('location-text');
+  if (!navigator.geolocation) {
+    if (locEl) locEl.textContent = 'Geolocation not supported';
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    pos => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+    err => {
+      console.warn('Geolocation denied:', err.message);
+      if (locEl) locEl.textContent = 'Location permission denied';
+      document.getElementById('weather-error').style.display = 'block';
+    },
+    { timeout: 8000 }
+  );
+}
+
+// ── Session init ──────────────────────────────────────────────────────────────
+fetch('/api/session')
+  .then(r => r.json())
+  .then(data => {
+    if (!data.logged_in) { window.location.href = '/signin'; return; }
+    const name     = data.name || 'User';
+    const first    = name.split(' ')[0];
+    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+    const dashAvatar = document.getElementById('dash-avatar');
+    if (dashAvatar) dashAvatar.childNodes[0].textContent = initials[0] || 'U';
+    const dashUsername = document.getElementById('dash-username');
+    if (dashUsername) dashUsername.textContent = name;
+
+    updateGreeting(first);
+    initWeather();
+  })
+  .catch(() => { window.location.href = '/signin'; });
+
+// ── Chatbot Logic ─────────────────────────────────────────────────────────────
+const chatDrawer    = document.getElementById('chatDrawer');
+const chatFab       = document.getElementById('chatFab');
+const chatClose     = document.getElementById('chatClose');
+const chatInput     = document.getElementById('chatInput');
+const chatSendBtn   = document.getElementById('chatSendBtn');
+const chatMessages  = document.getElementById('chatMessages');
+const fabBadge      = document.getElementById('fabBadge');
+const suggestions   = document.getElementById('chatSuggestions');
+
+let chatHistory     = [];
+let chatOpen        = false;
+let hasNewMsg       = false;
+
+// Set welcome time
+document.getElementById('welcome-time').textContent = formatTime(new Date());
+
+function formatTime(d) {
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function openChat() {
+  chatOpen = true;
+  chatDrawer.classList.add('open');
+  fabBadge.style.display = 'none';
+  hasNewMsg = false;
+  setTimeout(() => chatInput.focus(), 300);
+  // mark chatbot nav as active
+  document.getElementById('nav-chatbot-btn').classList.add('active');
+}
+
+function closeChat() {
+  chatOpen = false;
+  chatDrawer.classList.remove('open');
+  document.getElementById('nav-chatbot-btn').classList.remove('active');
+}
+
+chatFab.addEventListener('click',  openChat);
+chatClose.addEventListener('click', closeChat);
+
+function scrollToBottom() {
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addMessage(role, text) {
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+  const isBot = role === 'bot';
+  div.innerHTML = `
+    <div class="chat-msg-avatar">${isBot ? '🤖' : '👤'}</div>
+    <div>
+      <div class="chat-msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+      <div class="chat-msg-time">${formatTime(new Date())}</div>
+    </div>`;
+  chatMessages.appendChild(div);
+  scrollToBottom();
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'chat-msg bot';
+  div.id = 'typing-indicator';
+  div.innerHTML = `
+    <div class="chat-msg-avatar">🤖</div>
+    <div class="chat-msg-bubble" style="padding:10px 14px;">
+      <div class="chat-typing"><span></span><span></span><span></span></div>
+    </div>`;
+  chatMessages.appendChild(div);
+  scrollToBottom();
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+async function sendMessage(message) {
+  if (!message.trim()) return;
+  suggestions.style.display = 'none';
+
+  // Add user message
+  addMessage('user', message);
+  chatHistory.push({ role: 'user', content: message });
+
+  // Disable input
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
+  chatSendBtn.disabled = true;
+
+  showTyping();
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, history: chatHistory.slice(-10) })
+    });
+    const data = await res.json();
+    hideTyping();
+    const reply = data.reply || '⚠️ No response received.';
+    addMessage('bot', reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    // Show badge if chat is closed
+    if (!chatOpen) {
+      fabBadge.style.display = 'flex';
+      hasNewMsg = true;
+    }
+  } catch (err) {
+    hideTyping();
+    addMessage('bot', '⚠️ Could not reach AgroBot. Please check your connection.');
+  } finally {
+    chatSendBtn.disabled = false;
+    chatInput.focus();
+  }
+}
+
+function sendSuggestion(text) {
+  openChat();
+  setTimeout(() => sendMessage(text), 200);
+}
+
+chatSendBtn.addEventListener('click', () => sendMessage(chatInput.value));
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage(chatInput.value);
+  }
+});
+// Auto-resize textarea
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 100) + 'px';
+});
+
+// ── Particle / canvas background ─────────────────────────────────────────────
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+const EMOJIS = ['🌿','🌱','🍀','🌸','🌼','🌺','🌻','✨','💫','⭐','🌾','🍃','🌷'];
+const floaters = Array.from({length: 55}, () => ({
+  x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+  emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+  size: Math.random() * 14 + 8,
+  vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+  opacity: Math.random() * 0.45 + 0.1,
+  rotation: Math.random() * Math.PI * 2, rotSpeed: (Math.random() - 0.5) * 0.01,
+  pulse: Math.random() * Math.PI * 2,
+}));
+const sparkles = Array.from({length: 40}, () => ({
+  x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+  r: Math.random() * 1.5 + 0.5, o: Math.random(),
+  phase: Math.random() * Math.PI * 2, speed: Math.random() * 0.04 + 0.02,
+}));
+
+function drawBg() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  sparkles.forEach(s => {
+    s.phase += s.speed;
+    const alpha = (Math.sin(s.phase) + 1) / 2 * 0.7;
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,229,160,${alpha})`; ctx.fill();
+  });
+  floaters.forEach(f => {
+    f.pulse += 0.012; f.rotation += f.rotSpeed;
+    f.x += f.vx; f.y += f.vy;
+    if (f.x < -30) f.x = canvas.width + 30;
+    if (f.x > canvas.width + 30) f.x = -30;
+    if (f.y < -30) f.y = canvas.height + 30;
+    if (f.y > canvas.height + 30) f.y = -30;
+    const scale = 1 + Math.sin(f.pulse) * 0.06;
+    ctx.save(); ctx.globalAlpha = f.opacity;
+    ctx.translate(f.x, f.y); ctx.rotate(f.rotation); ctx.scale(scale, scale);
+    ctx.font = `${f.size}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(f.emoji, 0, 0); ctx.restore();
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// Mobile sidebar
+const hamburger = document.getElementById('hamburger');
+const sidebar   = document.getElementById('sidebar');
+const overlay   = document.getElementById('sidebarOverlay');
+hamburger.addEventListener('click', () => { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); });
+overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('open'); });
+
+document.querySelectorAll('.sidebar-nav a').forEach(link => {
+  link.addEventListener('click', function() {
+    if (this.id === 'nav-chatbot-btn') return;
+    document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
 </body>
 </html>
