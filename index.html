@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroVerse — Smart Farming Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --emerald: #00e5a0;
+    --teal: #00c9b1;
+    --cyan: #00d4ff;
+    --green-deep: #0a6b4a;
+    --bg-dark: #050e0a;
+    --bg-mid: #091a12;
+    --bg-card: rgba(255,255,255,0.03);
+    --glass: rgba(0, 229, 160, 0.06);
+    --glass-border: rgba(0, 229, 160, 0.15);
+    --text-main: #e8f5ee;
+    --text-muted: #7aa390;
+    --glow: 0 0 40px rgba(0, 229, 160, 0.25);
+    --glow-strong: 0 0 80px rgba(0, 229, 160, 0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--emerald);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 40px; height: 40px;
+    border: 1.5px solid rgba(0,229,160,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease, width 0.3s, height 0.3s;
+  }
+
+  /* CANVAS PARTICLE BACKGROUND */
+  #particle-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ========================
+     NAVBAR
+  ======================== */
+  nav {
+    position: fixed; top: 16px; left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 48px); max-width: 1300px;
+    z-index: 1000;
+    background: rgba(5, 14, 10, 0.6);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(0,229,160,0.1);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 0 20px rgba(0,229,160,0.4);
+  }
+  .nav-logo span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 20px;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 4px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--text-muted);
+    font-size: 14px; font-weight: 500;
+    padding: 8px 16px; border-radius: 10px;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--emerald);
+    background: rgba(0,229,160,0.08);
+  }
+
+  .nav-right {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .nav-user {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(0,229,160,0.06);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px; padding: 7px 14px;
+    font-size: 13px; color: var(--text-muted);
+  }
+  .nav-user .avatar {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #050e0a;
+  }
+  .btn-login {
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    color: #050e0a; font-weight: 700; font-size: 13px;
+    padding: 9px 22px; border-radius: 12px; border: none;
+    cursor: pointer; transition: all 0.3s;
+    text-decoration: none; display: inline-block;
+    box-shadow: 0 4px 20px rgba(0,229,160,0.3);
+  }
+  .btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,229,160,0.5);
+  }
+
+  /* ========================
+     HERO SECTION
+  ======================== */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 40px 80px;
+    overflow: hidden; z-index: 1;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,229,160,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 20% 80%, rgba(0,200,177,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(0,212,255,0.04) 0%, transparent 50%);
+  }
+
+  /* Parallax layers */
+  .parallax-layer {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .float-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(60px); opacity: 0.12;
+    animation: orbFloat 8s ease-in-out infinite;
+  }
+  .orb1 { width: 400px; height: 400px; background: var(--emerald); top: -100px; right: 10%; animation-delay: 0s; }
+  .orb2 { width: 300px; height: 300px; background: var(--cyan); bottom: 0; right: 30%; animation-delay: -3s; }
+  .orb3 { width: 250px; height: 250px; background: var(--teal); top: 40%; left: 5%; animation-delay: -5s; }
+
+  @keyframes orbFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 620px;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.2);
+    border-radius: 100px; padding: 6px 16px;
+    font-size: 12px; font-weight: 600; color: var(--emerald);
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; background: var(--emerald);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--emerald);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 6vw, 76px);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+  .hero h1 .line-glow {
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: block;
+  }
+
+  .hero p {
+    font-size: 17px; line-height: 1.7;
+    color: var(--text-muted); max-width: 480px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-cta {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--emerald) 0%, var(--teal) 100%);
+    color: #050e0a; font-weight: 700; font-size: 15px;
+    padding: 16px 36px; border-radius: 16px; border: none;
+    cursor: pointer; transition: all 0.4s;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+    box-shadow: 0 8px 32px rgba(0,229,160,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    border-radius: inherit;
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(0,229,160,0.5);
+  }
+  .btn-secondary {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    color: var(--text-main); font-weight: 600; font-size: 15px;
+    padding: 16px 36px; border-radius: 16px;
+    cursor: pointer; transition: all 0.3s;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+    backdrop-filter: blur(10px);
+  }
+  .btn-secondary:hover {
+    background: rgba(0,229,160,0.1);
+    border-color: rgba(0,229,160,0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  /* HERO VISUAL (right side) */
+  .hero-visual {
+    position: absolute; right: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 55%; max-width: 780px;
+    z-index: 1;
+    animation: heroVisualIn 1.2s ease 0.4s both;
+  }
+  @keyframes heroVisualIn {
+    from { opacity: 0; transform: translateY(-50%) translateX(60px); }
+    to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  }
+
+  .hero-farm-scene {
+    position: relative; width: 100%; padding-top: 75%;
+  }
+
+  /* SVG Farm Scene */
+  .farm-svg-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Floating UI Cards on hero */
+  .floating-card {
+    position: absolute;
+    background: rgba(5,14,10,0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 16px 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), var(--glow);
+    animation: cardFloat 6s ease-in-out infinite;
+    z-index: 10;
+  }
+  .fc-disease { top: 8%; left: 2%; animation-delay: 0s; }
+  .fc-weather { bottom: 15%; left: -5%; animation-delay: -2s; }
+  .fc-yield { top: 20%; right: 2%; animation-delay: -4s; }
+
+  @keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .fc-label {
+    font-size: 10px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .fc-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 800;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .fc-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .fc-icon { font-size: 28px; margin-bottom: 6px; }
+
+  /* Floating leaves */
+  .leaf {
+    position: absolute; pointer-events: none;
+    animation: leafDrift linear infinite;
+    opacity: 0;
+    font-size: 20px;
+    filter: drop-shadow(0 0 6px rgba(0,229,160,0.5));
+  }
+  @keyframes leafDrift {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========================
+     SECTION COMMON
+  ======================== */
+  section { position: relative; z-index: 1; }
+
+  .section-wrap {
+    max-width: 1300px; margin: 0 auto;
+    padding: 100px 40px;
+  }
+
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--emerald);
+    margin-bottom: 16px;
+  }
+  .section-tag::before {
+    content: ''; width: 24px; height: 1.5px;
+    background: var(--emerald);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 4vw, 54px);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+  }
+  .section-title span {
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--text-muted);
+    max-width: 520px; line-height: 1.7;
+    margin-bottom: 60px;
+  }
+
+  /* ========================
+     FEATURES / SERVICE CARDS
+  ======================== */
+  .features-bg {
+    background:
+      radial-gradient(ellipse 70% 50% at 30% 50%, rgba(0,100,70,0.06), transparent),
+      linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 50%, var(--bg-dark) 100%);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .feature-card {
+    position: relative;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 24px;
+    padding: 36px 30px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+    text-decoration: none; color: inherit;
+    display: block;
+  }
+  .feature-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(0,229,160,0.07), transparent);
+    opacity: 0; transition: opacity 0.4s; border-radius: inherit;
+  }
+  .feature-card::after {
+    content: ''; position: absolute;
+    top: -1px; left: 20%; right: 20%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--emerald), transparent);
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .feature-card:hover {
+    transform: translateY(-10px) scale(1.01);
+    border-color: rgba(0,229,160,0.25);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 50px rgba(0,229,160,0.1);
+  }
+  .feature-card:hover::before, .feature-card:hover::after { opacity: 1; }
+
+  .fc-icon-wrap {
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 24px;
+    position: relative;
+    transition: all 0.4s;
+  }
+  .feature-card:hover .fc-icon-wrap {
+    transform: scale(1.1) rotate(-5deg);
+  }
+
+  /* Icon color variants */
+  .icon-green { background: rgba(0,229,160,0.12); box-shadow: 0 0 20px rgba(0,229,160,0.15); }
+  .icon-teal { background: rgba(0,201,177,0.12); box-shadow: 0 0 20px rgba(0,201,177,0.15); }
+  .icon-cyan { background: rgba(0,212,255,0.12); box-shadow: 0 0 20px rgba(0,212,255,0.15); }
+  .icon-lime { background: rgba(120,255,100,0.1); box-shadow: 0 0 20px rgba(120,255,100,0.12); }
+  .icon-amber { background: rgba(255,180,50,0.1); box-shadow: 0 0 20px rgba(255,180,50,0.12); }
+  .icon-purple { background: rgba(160,100,255,0.1); box-shadow: 0 0 20px rgba(160,100,255,0.12); }
+
+  .feature-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 19px; font-weight: 700;
+    margin-bottom: 10px; letter-spacing: -0.3px;
+  }
+  .feature-card p {
+    font-size: 13.5px; color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .card-arrow {
+    position: absolute; bottom: 28px; right: 28px;
+    width: 36px; height: 36px;
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: var(--emerald);
+    transition: all 0.3s;
+    opacity: 0; transform: translate(4px, -4px);
+  }
+  .feature-card:hover .card-arrow {
+    opacity: 1; transform: translate(0, 0);
+  }
+
+  /* Shine sweep */
+  .card-shine {
+    position: absolute; inset: 0; border-radius: inherit;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.03) 50%, transparent 60%);
+    transition: transform 0.6s; pointer-events: none;
+    transform: translateX(-100%);
+  }
+  .feature-card:hover .card-shine { transform: translateX(100%); }
+
+  /* ========================
+     WEATHER SECTION
+  ======================== */
+  .weather-section {
+    background: var(--bg-dark);
+  }
+
+  .weather-main-card {
+    background: linear-gradient(135deg, rgba(0,40,28,0.8), rgba(5,14,10,0.9));
+    border: 1px solid rgba(0,229,160,0.12);
+    border-radius: 32px;
+    padding: 48px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+  }
+  .weather-main-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 80% 0%, rgba(0,229,160,0.08), transparent);
+    pointer-events: none;
+  }
+
+  .weather-top {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 40px;
+    flex-wrap: wrap;
+  }
+  .weather-location {
+    font-size: 13px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 12px;
+  }
+  .weather-temp-big {
+    font-family: 'Syne', sans-serif;
+    font-size: 100px; font-weight: 800;
+    line-height: 1; letter-spacing: -4px;
+    background: linear-gradient(135deg, #fff 40%, var(--emerald));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .weather-condition {
+    font-size: 22px; color: var(--text-muted);
+    margin-top: 8px; font-weight: 300;
+  }
+
+  .weather-icon-big {
+    font-size: 120px;
+    animation: weatherIconAnim 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(255,200,50,0.4));
+  }
+  @keyframes weatherIconAnim {
+    0%,100%{transform:rotate(-5deg) scale(1);}
+    50%{transform:rotate(5deg) scale(1.05);}
+  }
+
+  .weather-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin-top: 36px;
+  }
+  .weather-stat {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 18px; padding: 20px;
+    transition: all 0.3s;
+  }
+  .weather-stat:hover {
+    background: rgba(0,229,160,0.06);
+    border-color: rgba(0,229,160,0.2);
+    transform: translateY(-4px);
+  }
+  .stat-icon { font-size: 24px; margin-bottom: 10px; }
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px; font-weight: 700;
+    color: var(--emerald); letter-spacing: -0.5px;
+  }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* Animated bar indicator */
+  .stat-bar {
+    height: 3px; background: rgba(0,229,160,0.1);
+    border-radius: 10px; margin-top: 12px; overflow: hidden;
+  }
+  .stat-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    border-radius: 10px;
+    animation: barGrow 2s ease both;
+  }
+  @keyframes barGrow { from {width:0} }
+
+  /* ========================
+     ABOUT SECTION
+  ======================== */
+  .about-section {
+    background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 100%);
+  }
+
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+
+  .about-visual {
+    position: relative;
+  }
+  .about-img-wrap {
+    width: 100%; aspect-ratio: 4/3;
+    border-radius: 28px; overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, rgba(0,40,28,0.9), rgba(0,60,40,0.6));
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5), var(--glow);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .about-stats-row {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-top: 20px;
+  }
+  .about-stat {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px; padding: 20px 16px;
+    text-align: center;
+  }
+  .about-stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 800;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .about-stat-label {
+    font-size: 11px; color: var(--text-muted);
+    margin-top: 4px; letter-spacing: 0.5px;
+  }
+
+  .about-content .section-sub { margin-bottom: 32px; }
+
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .feature-list li {
+    display: flex; align-items: flex-start; gap: 14px;
+    font-size: 14.5px; color: var(--text-muted); line-height: 1.5;
+  }
+  .feat-check {
+    width: 22px; height: 22px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #050e0a; margin-top: 1px;
+  }
+
+  /* ========================
+     FOOTER
+  ======================== */
+  footer {
+    border-top: 1px solid rgba(0,229,160,0.08);
+    padding: 60px 40px;
+    text-align: center;
+    position: relative; z-index: 1;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 800;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  footer p { font-size: 13px; color: var(--text-muted); }
+
+  /* ========================
+     SECTION DIVIDER
+  ======================== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+    margin: 0 40px;
+  }
+
+  /* ========================
+     SCROLL ANIMATIONS
+  ======================== */
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* Stagger children */
+  .stagger > * { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .stagger.visible > *:nth-child(1) { opacity:1;transform:none;transition-delay:0.0s }
+  .stagger.visible > *:nth-child(2) { opacity:1;transform:none;transition-delay:0.1s }
+  .stagger.visible > *:nth-child(3) { opacity:1;transform:none;transition-delay:0.2s }
+  .stagger.visible > *:nth-child(4) { opacity:1;transform:none;transition-delay:0.3s }
+  .stagger.visible > *:nth-child(5) { opacity:1;transform:none;transition-delay:0.4s }
+  .stagger.visible > *:nth-child(6) { opacity:1;transform:none;transition-delay:0.5s }
+
+  /* ========================
+     TILT 3D
+  ======================== */
+  .tilt-card { transform-style: preserve-3d; }
+
+  /* ========================
+     HAMBURGER MENU
+  ======================== */
+  .hamburger {
+    display: none;
+    flex-direction: column; justify-content: center; align-items: center;
+    gap: 5px; width: 40px; height: 40px;
+    background: rgba(0,229,160,0.06);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px; cursor: pointer;
+    transition: all 0.3s; flex-shrink: 0;
+  }
+  .hamburger span {
+    display: block; width: 18px; height: 2px;
+    background: var(--emerald); border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Mobile Nav Drawer */
+  .mobile-nav {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 990;
+    background: rgba(5,14,10,0.97);
+    backdrop-filter: blur(24px);
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px;
+    transform: translateY(-100%);
+    transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
+  }
+  .mobile-nav.open {
+    display: flex;
+    transform: translateY(0);
+  }
+  .mobile-nav a {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 700;
+    color: var(--text-muted); text-decoration: none;
+    padding: 12px 32px; border-radius: 16px;
+    transition: all 0.3s; letter-spacing: -0.5px;
+  }
+  .mobile-nav a:hover, .mobile-nav a.active {
+    color: var(--emerald);
+    background: rgba(0,229,160,0.07);
+  }
+  .mobile-nav-login {
+    margin-top: 20px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal)) !important;
+    color: #050e0a !important;
+    font-size: 18px !important;
+    box-shadow: 0 8px 32px rgba(0,229,160,0.3);
+  }
+
+  /* ========================
+     RESPONSIVE — TABLET
+  ======================== */
+  @media (max-width: 1024px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-visual { width: 50%; }
+    .hero-content { max-width: 520px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .weather-icon-big { font-size: 80px; }
+  }
+
+  /* ========================
+     RESPONSIVE — MOBILE
+  ======================== */
+  @media (max-width: 768px) {
+    /* Disable custom cursor on touch */
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+
+    /* Navbar */
+    nav {
+      width: calc(100% - 24px);
+      padding: 10px 14px;
+      border-radius: 16px;
+      top: 10px;
+    }
+    .nav-links { display: none; }
+    .nav-user { display: none; }
+    .hamburger { display: flex; }
+
+    /* Hero */
+    .hero {
+      padding: 90px 20px 60px;
+      min-height: auto;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .hero-content {
+      max-width: 100%;
+      width: 100%;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 10vw, 54px);
+      letter-spacing: -1.5px;
+    }
+    .hero p {
+      font-size: 15px;
+      margin-bottom: 32px;
+    }
+    .hero-visual { display: none; }
+    .hero-badge { font-size: 10px; padding: 5px 12px; }
+    .btn-primary { width: 100%; justify-content: center; padding: 15px 24px; font-size: 15px; }
+
+    /* Orbs — shrink for performance */
+    .orb1 { width: 250px; height: 250px; }
+    .orb2 { width: 180px; height: 180px; }
+    .orb3 { width: 150px; height: 150px; }
+
+    /* Section wrap */
+    .section-wrap { padding: 60px 20px; }
+    .divider { margin: 0 20px; }
+
+    /* Features */
+    .features-grid { grid-template-columns: 1fr; gap: 14px; }
+    .feature-card { padding: 28px 22px; }
+    .feature-card h3 { font-size: 17px; }
+    .feature-card p { font-size: 13px; }
+    .section-title { font-size: clamp(26px, 7vw, 40px); letter-spacing: -1px; }
+    .section-sub { font-size: 14px; margin-bottom: 36px; }
+
+    /* Weather */
+    .weather-main-card { padding: 24px 20px; border-radius: 22px; }
+    .weather-top { flex-direction: column; gap: 16px; }
+    .weather-temp-big { font-size: 64px; letter-spacing: -2px; }
+    .weather-condition { font-size: 16px; }
+    .weather-icon-big { font-size: 64px; align-self: flex-end; margin-top: -20px; }
+    .weather-stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .weather-stat { padding: 16px 14px; border-radius: 14px; }
+    .stat-val { font-size: 20px; }
+    .stat-icon { font-size: 20px; margin-bottom: 6px; }
+
+    /* About */
+    .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .about-stats-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .about-stat { padding: 14px 10px; border-radius: 12px; }
+    .about-stat-val { font-size: 22px; }
+    .about-stat-label { font-size: 10px; }
+    .about-img-wrap { aspect-ratio: 16/9; }
+    .feature-list li { font-size: 13.5px; }
+
+    /* Footer */
+    footer { padding: 40px 20px; }
+    .footer-logo { font-size: 22px; }
+  }
+
+  @media (max-width: 400px) {
+    .hero h1 { font-size: 32px; }
+    .about-stats-row { grid-template-columns: 1fr 1fr; }
+    .weather-stats { grid-template-columns: 1fr 1fr; }
+    nav { width: calc(100% - 16px); }
+  }
+
+  /* ========================
+     GRID LINE BG
+  ======================== */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(0,229,160,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.3); border-radius: 10px; }
+</style>
+</head>
+
+
+
+<body>
+<canvas id="particle-canvas"></canvas>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Floating leaves -->
+<div id="leaves-container"></div>
+
+<!-- ======================== NAVBAR ======================== -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">🌿</div>
+    <span>AgroVerse</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#weather">Weather</a></li>
+  </ul>
+  <div class="nav-right">
+    <!-- Dynamic user section: shown when logged in -->
+    <div class="nav-user" id="nav-user-info" style="display:none">
+      <div class="avatar" id="nav-avatar">U</div>
+      <span id="nav-username">User</span>
+    </div>
+    <!-- Login button: shown when logged out -->
+    <a href="/signin" class="btn-login" id="nav-login-btn">Login →</a>
+    <!-- Logout button: shown when logged in -->
+    <a href="/logout" class="btn-login" id="nav-logout-btn" style="display:none;background:rgba(0,229,160,0.1);border:1px solid var(--glass-border);color:var(--emerald);">Logout</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav Drawer -->
+<div class="mobile-nav" id="mobile-nav">
+  <a href="#" class="active" onclick="closeMobileNav()">Home</a>
+  <a href="#features" onclick="closeMobileNav()">Features</a>
+  <a href="#weather" onclick="closeMobileNav()">Weather</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="/signin" class="mobile-nav-login" id="mobile-nav-login">Login →</a>
+  <a href="/logout" class="mobile-nav-login" id="mobile-nav-logout" style="display:none">Logout</a>
+</div>
+
+<!-- ======================== HERO ======================== -->
+<section class="hero grid-bg" id="home">
+  <div class="hero-bg"></div>
+  <div class="parallax-layer">
+    <div class="float-orb orb1"></div>
+    <div class="float-orb orb2"></div>
+    <div class="float-orb orb3"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Next-Gen Agricultural Platform
+    </div>
+    <h1>
+      Smart Farming<br>
+      <span class="line-glow">for the Future</span>
+    </h1>
+    <p>AI-powered crop intelligence, marketplace, and smart tools for modern farmers. Detect diseases, sell produce, rent machinery — all in one platform.</p>
+    <div class="hero-cta">
+      <a href="#features" class="btn-primary">
+        🚀 Explore Platform
+      </a>
+      <a href="/signin" class="btn-primary" id="hero-cta-signup" style="background:transparent;border:1.5px solid var(--glass-border);color:var(--text-main);box-shadow:none;">
+        🌱 Get Started Free
+      </a>
+    </div>
+  </div>
+
+  <!-- Hero Visual / Farm Scene -->
+  <div class="hero-visual">
+    <div class="hero-farm-scene">
+      <div class="farm-svg-wrap">
+        <!-- Inline SVG farm scene -->
+        <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;filter:drop-shadow(0 30px 60px rgba(0,0,0,0.6))">
+          <defs>
+            <radialGradient id="skyGrad" cx="50%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#0a2a1a"/>
+              <stop offset="100%" stop-color="#050e0a"/>
+            </radialGradient>
+            <linearGradient id="fieldGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0a4a28"/>
+              <stop offset="100%" stop-color="#041508"/>
+            </linearGradient>
+            <linearGradient id="glowGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#00e5a0" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#00c9b1" stop-opacity="0.2"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="softGlow">
+              <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- Sky / background -->
+          <rect width="600" height="450" fill="url(#skyGrad)" rx="24"/>
+
+          <!-- Grid lines (field) -->
+          <g opacity="0.15" stroke="#00e5a0" stroke-width="0.5">
+            <line x1="0" y1="320" x2="600" y2="320"/>
+            <line x1="100" y1="320" x2="100" y2="450"/>
+            <line x1="200" y1="320" x2="200" y2="450"/>
+            <line x1="300" y1="320" x2="300" y2="450"/>
+            <line x1="400" y1="320" x2="400" y2="450"/>
+            <line x1="500" y1="320" x2="500" y2="450"/>
+            <!-- perspective lines -->
+            <line x1="300" y1="250" x2="0" y2="450"/>
+            <line x1="300" y1="250" x2="600" y2="450"/>
+            <line x1="300" y1="250" x2="150" y2="450"/>
+            <line x1="300" y1="250" x2="450" y2="450"/>
+          </g>
+
+          <!-- Ground field -->
+          <ellipse cx="300" cy="400" rx="280" ry="50" fill="url(#fieldGrad)" opacity="0.6"/>
+
+          <!-- Crop rows -->
+          <g filter="url(#glow)">
+            <!-- Row 1 -->
+            <g transform="translate(80,340)">
+              <rect x="0" y="-30" width="8" height="30" fill="#00e5a0" rx="4" opacity="0.8"/>
+              <ellipse cx="4" cy="-30" rx="12" ry="8" fill="#00e5a0" opacity="0.6"/>
+            </g>
+            <g transform="translate(120,345)">
+              <rect x="0" y="-35" width="8" height="35" fill="#00e5a0" rx="4" opacity="0.8"/>
+              <ellipse cx="4" cy="-35" rx="14" ry="9" fill="#00e5a0" opacity="0.7"/>
+            </g>
+            <g transform="translate(160,342)">
+              <rect x="0" y="-32" width="8" height="32" fill="#00e5a0" rx="4" opacity="0.8"/>
+              <ellipse cx="4" cy="-32" rx="12" ry="8" fill="#00e5a0" opacity="0.6"/>
+            </g>
+            <g transform="translate(200,348)">
+              <rect x="0" y="-38" width="8" height="38" fill="#2fffb8" rx="4" opacity="0.9"/>
+              <ellipse cx="4" cy="-38" rx="15" ry="10" fill="#2fffb8" opacity="0.7"/>
+            </g>
+            <g transform="translate(240,344)">
+              <rect x="0" y="-34" width="8" height="34" fill="#00e5a0" rx="4" opacity="0.8"/>
+              <ellipse cx="4" cy="-34" rx="12" ry="8" fill="#00e5a0" opacity="0.6"/>
+            </g>
+            <g transform="translate(310,345)">
+              <rect x="0" y="-35" width="8" height="35" fill="#00e5a0" rx="4" opacity="0.8"/>
+              <ellipse cx="4" cy="-35" rx="13" ry="9" fill="#00e5a0" opacity="0.7"/>
+            </g>
+            <g transform="translate(350,348)">
+              <rect x="0" y="-38" width="8" height="38" fill="#2fffb8" rx="4" opacity="0.9"/>
+              <ellipse cx="4" cy="-38" rx="15" ry="10" fill="#2fffb8" opacity="0.7"/>
+            </g>
+            <g transform="translate(390,343)">
+              <rect x="0" y="-33" width="8" height="33" fill="#00e5a0" rx="4" opacity="0.8"/>
+              <ellipse cx="4" cy="-33" rx="12" ry="8" fill="#00e5a0" opacity="0.6"/>
+            </g>
+            <g transform="translate(430,340)">
+              <rect x="0" y="-30" width="8" height="30" fill="#00e5a0" rx="4" opacity="0.7"/>
+              <ellipse cx="4" cy="-30" rx="11" ry="7" fill="#00e5a0" opacity="0.5"/>
+            </g>
+            <g transform="translate(470,342)">
+              <rect x="0" y="-32" width="8" height="32" fill="#00e5a0" rx="4" opacity="0.8"/>
+              <ellipse cx="4" cy="-32" rx="12" ry="8" fill="#00e5a0" opacity="0.6"/>
+            </g>
+          </g>
+
+          <!-- Drone -->
+          <g transform="translate(280,120)" filter="url(#softGlow)">
+            <!-- Drone body -->
+            <rect x="-20" y="-10" width="40" height="20" fill="#0a2a1a" rx="10" stroke="#00e5a0" stroke-width="1.5"/>
+            <rect x="-8" y="-6" width="16" height="12" fill="#00e5a0" rx="4" opacity="0.3"/>
+            <!-- Arms -->
+            <line x1="-20" y1="0" x2="-45" y2="-15" stroke="#00e5a0" stroke-width="2" opacity="0.6"/>
+            <line x1="20" y1="0" x2="45" y2="-15" stroke="#00e5a0" stroke-width="2" opacity="0.6"/>
+            <line x1="-20" y1="0" x2="-45" y2="15" stroke="#00e5a0" stroke-width="2" opacity="0.6"/>
+            <line x1="20" y1="0" x2="45" y2="15" stroke="#00e5a0" stroke-width="2" opacity="0.6"/>
+            <!-- Propellers -->
+            <ellipse cx="-45" cy="-15" rx="12" ry="3" fill="none" stroke="#00e5a0" stroke-width="2" opacity="0.8">
+              <animateTransform attributeName="transform" type="rotate" from="0 -45 -15" to="360 -45 -15" dur="0.3s" repeatCount="indefinite"/>
+            </ellipse>
+            <ellipse cx="45" cy="-15" rx="12" ry="3" fill="none" stroke="#00e5a0" stroke-width="2" opacity="0.8">
+              <animateTransform attributeName="transform" type="rotate" from="0 45 -15" to="360 45 -15" dur="0.25s" repeatCount="indefinite"/>
+            </ellipse>
+            <ellipse cx="-45" cy="15" rx="12" ry="3" fill="none" stroke="#00e5a0" stroke-width="2" opacity="0.8">
+              <animateTransform attributeName="transform" type="rotate" from="360 -45 15" to="0 -45 15" dur="0.28s" repeatCount="indefinite"/>
+            </ellipse>
+            <ellipse cx="45" cy="15" rx="12" ry="3" fill="none" stroke="#00e5a0" stroke-width="2" opacity="0.8">
+              <animateTransform attributeName="transform" type="rotate" from="0 45 15" to="360 45 15" dur="0.32s" repeatCount="indefinite"/>
+            </ellipse>
+            <!-- Scan beam -->
+            <path d="M0 10 L-60 200 L60 200 Z" fill="url(#glowGrad)" opacity="0.12"/>
+            <!-- LED light -->
+            <circle cx="0" cy="0" r="4" fill="#00e5a0" opacity="0.9">
+              <animate attributeName="opacity" values="0.9;0.3;0.9" dur="1s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Drone float -->
+            <animateTransform attributeName="transform" type="translate" values="280,120;280,105;280,120" dur="3s" repeatCount="indefinite" additive="replace"/>
+          </g>
+
+          <!-- Scan ring on field -->
+          <ellipse cx="300" cy="330" rx="80" ry="20" fill="none" stroke="#00e5a0" stroke-width="1" opacity="0.3" stroke-dasharray="8 4">
+            <animate attributeName="rx" values="60;90;60" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite"/>
+          </ellipse>
+
+          <!-- Dashboard overlay panel -->
+          <rect x="400" y="40" width="170" height="110" rx="16" fill="rgba(5,14,10,0.85)" stroke="rgba(0,229,160,0.2)" stroke-width="1"/>
+          <text x="414" y="64" font-family="monospace" font-size="9" fill="#7aa390">CROP HEALTH INDEX</text>
+          <rect x="414" y="72" width="110" height="6" rx="3" fill="rgba(0,229,160,0.15)"/>
+          <rect x="414" y="72" width="85" height="6" rx="3" fill="#00e5a0">
+            <animate attributeName="width" values="60;85;60" dur="3s" repeatCount="indefinite"/>
+          </rect>
+          <text x="414" y="98" font-family="monospace" font-size="9" fill="#7aa390">SOIL MOISTURE</text>
+          <rect x="414" y="106" width="110" height="6" rx="3" fill="rgba(0,229,160,0.15)"/>
+          <rect x="414" y="106" width="70" height="6" rx="3" fill="#00c9b1"/>
+          <text x="414" y="130" font-family="monospace" font-size="9" fill="#7aa390">PEST ALERT</text>
+          <circle cx="420" cy="138" r="4" fill="#ff4d6d">
+            <animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="430" y="141" font-family="monospace" font-size="9" fill="#ff4d6d">LOW RISK</text>
+
+          <!-- Stars / particles -->
+          <g fill="#00e5a0" opacity="0.4">
+            <circle cx="50" cy="50" r="1.5"><animate attributeName="opacity" values="0.4;0;0.4" dur="3s" repeatCount="indefinite"/></circle>
+            <circle cx="150" cy="30" r="1"><animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/></circle>
+            <circle cx="550" cy="80" r="1.5"><animate attributeName="opacity" values="0;0.4;0" dur="4s" repeatCount="indefinite"/></circle>
+            <circle cx="470" cy="200" r="1"><animate attributeName="opacity" values="0.4;0;0.4" dur="2.5s" repeatCount="indefinite"/></circle>
+            <circle cx="60" cy="180" r="1.5"><animate attributeName="opacity" values="0;0.4;0" dur="3.5s" repeatCount="indefinite"/></circle>
+            <circle cx="520" cy="280" r="1"><animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/></circle>
+          </g>
+
+          <!-- Glow rings at bottom -->
+          <ellipse cx="300" cy="420" rx="200" ry="20" fill="none" stroke="#00e5a0" stroke-width="0.5" opacity="0.2"/>
+          <ellipse cx="300" cy="420" rx="140" ry="14" fill="none" stroke="#00e5a0" stroke-width="0.5" opacity="0.3"/>
+        </svg>
+      </div>
+
+      <!-- Floating cards overlay -->
+      <div class="floating-card fc-disease" style="min-width:160px">
+        <div class="fc-icon">🦠</div>
+        <div class="fc-label">Disease Detected</div>
+        <div class="fc-value">Blight</div>
+        <div class="fc-sub">Tomato — Field B2 · 2h ago</div>
+      </div>
+
+      <div class="floating-card fc-weather" style="min-width:160px">
+        <div class="fc-icon">🌤️</div>
+        <div class="fc-label">Today's Weather</div>
+        <div class="fc-value">28°C</div>
+        <div class="fc-sub">Good farming conditions</div>
+      </div>
+
+      <div class="floating-card fc-yield" style="min-width:150px">
+        <div class="fc-icon">📈</div>
+        <div class="fc-label">Yield Forecast</div>
+        <div class="fc-value">+24%</div>
+        <div class="fc-sub">Above avg this season</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== FEATURES ======================== -->
+<section class="features-bg" id="features">
+  <div class="section-wrap">
+    <div class="reveal" style="text-align:center;margin-bottom:60px">
+      <div class="section-tag">What We Offer</div>
+      <h2 class="section-title">Everything a Smart Farmer<br><span>Needs in One Place</span></h2>
+      <p class="section-sub" style="margin:0 auto">From AI-powered disease detection to crop selling and equipment rental — AgroVerse is your complete digital farming partner.</p>
+    </div>
+
+    <div class="features-grid stagger" id="features-grid">
+      <!-- Card 1: Disease Detection -->
+      <a href="#" class="feature-card tilt-card">
+        <div class="card-shine"></div>
+        <div class="fc-icon-wrap icon-green">🔬</div>
+        <h3>Disease Detection</h3>
+        <p>Upload a photo of your crop and get instant AI diagnosis with treatment recommendations.</p>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- Card 2: Crop Selling -->
+      <a href="#" class="feature-card tilt-card">
+        <div class="card-shine"></div>
+        <div class="fc-icon-wrap icon-teal">🌾</div>
+        <h3>Sell Your Crops</h3>
+        <p>List your produce directly to buyers, get fair prices, and track orders in real time.</p>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- Card 3: Machinery Rent -->
+      <a href="#" class="feature-card tilt-card">
+        <div class="card-shine"></div>
+        <div class="fc-icon-wrap icon-cyan">🚜</div>
+        <h3>Machinery on Rent</h3>
+        <p>Browse and rent tractors, harvesters, and farm equipment from verified local providers.</p>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- Card 4: New Farmer -->
+      <a href="#" class="feature-card tilt-card">
+        <div class="card-shine"></div>
+        <div class="fc-icon-wrap icon-lime">🌱</div>
+        <h3>New Farmer Support</h3>
+        <p>Step-by-step onboarding, expert guides, government schemes, and mentorship programs.</p>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- Card 5: Chatbot -->
+      <a href="#" class="feature-card tilt-card">
+        <div class="card-shine"></div>
+        <div class="fc-icon-wrap icon-amber">🤖</div>
+        <h3>AI Chatbot</h3>
+        <p>Ask farming questions in your language, get instant expert guidance 24/7.</p>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <!-- Card 6: Rate Us -->
+      <a href="#" class="feature-card tilt-card">
+        <div class="card-shine"></div>
+        <div class="fc-icon-wrap icon-purple">⭐</div>
+        <h3>Rate & Review</h3>
+        <p>Share your feedback, read community reviews, and help us improve for every farmer.</p>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================== WEATHER ======================== -->
+<section class="weather-section" id="weather">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="section-tag">Live Dashboard</div>
+      <h2 class="section-title">Farm Weather <span>Intelligence</span></h2>
+      <p class="section-sub">Real-time weather data tailored for agricultural decision-making.</p>
+    </div>
+
+    <div class="weather-main-card reveal">
+      <div class="weather-top">
+        <div>
+          <div class="weather-location">
+            📍 Mathura, Uttar Pradesh, IN
+          </div>
+          <div class="weather-temp-big">28°</div>
+          <div class="weather-condition">Partly Cloudy — Ideal for irrigation</div>
+        </div>
+        <div class="weather-icon-big">⛅</div>
+      </div>
+
+      <div class="weather-stats">
+        <div class="weather-stat">
+          <div class="stat-icon">💧</div>
+          <div class="stat-val">67%</div>
+          <div class="stat-label">Humidity</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:67%"></div></div>
+        </div>
+        <div class="weather-stat">
+          <div class="stat-icon">🌬️</div>
+          <div class="stat-val">18 km/h</div>
+          <div class="stat-label">Wind Speed</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:38%"></div></div>
+        </div>
+        <div class="weather-stat">
+          <div class="stat-icon">🌡️</div>
+          <div class="stat-val">22°C</div>
+          <div class="stat-label">Feels Like</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:55%"></div></div>
+        </div>
+        <div class="weather-stat">
+          <div class="stat-icon">☀️</div>
+          <div class="stat-val">9.2 UV</div>
+          <div class="stat-label">UV Index</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:80%"></div></div>
+        </div>
+        <div class="weather-stat">
+          <div class="stat-icon">🌧️</div>
+          <div class="stat-val">12%</div>
+          <div class="stat-label">Rain Chance</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:12%"></div></div>
+        </div>
+        <div class="weather-stat">
+          <div class="stat-icon">👁️</div>
+          <div class="stat-val">8.4 km</div>
+          <div class="stat-label">Visibility</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:70%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================== ABOUT ======================== -->
+<section class="about-section" id="about">
+  <div class="section-wrap">
+    <div class="about-grid">
+      <div class="about-visual reveal-left">
+        <div class="about-img-wrap">
+          <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" style="width:100%">
+            <defs>
+              <linearGradient id="farmBg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#0a2a1a"/>
+                <stop offset="100%" stop-color="#050e0a"/>
+              </linearGradient>
+              <radialGradient id="glowCenter" cx="50%" cy="50%" r="40%">
+                <stop offset="0%" stop-color="#00e5a0" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </radialGradient>
+            </defs>
+            <rect width="480" height="360" fill="url(#farmBg)"/>
+            <rect width="480" height="360" fill="url(#glowCenter)"/>
+
+            <!-- Farmer figure -->
+            <g transform="translate(240,180)" filter="url(#glow)">
+              <!-- Body -->
+              <rect x="-18" y="20" width="36" height="50" rx="8" fill="#0a4a28" stroke="#00e5a0" stroke-width="1"/>
+              <!-- Head -->
+              <circle cx="0" cy="8" r="22" fill="#1a5c38" stroke="#00e5a0" stroke-width="1"/>
+              <!-- Hat -->
+              <ellipse cx="0" cy="-12" rx="28" ry="6" fill="#00e5a0" opacity="0.8"/>
+              <rect x="-14" y="-24" width="28" height="16" rx="6" fill="#00e5a0" opacity="0.9"/>
+              <!-- Face -->
+              <circle cx="-7" cy="8" r="2.5" fill="#00e5a0" opacity="0.6"/>
+              <circle cx="7" cy="8" r="2.5" fill="#00e5a0" opacity="0.6"/>
+              <path d="M-6 18 Q0 22 6 18" stroke="#00e5a0" stroke-width="1.5" fill="none"/>
+              <!-- Arms -->
+              <rect x="-36" y="25" width="20" height="10" rx="5" fill="#0a4a28" stroke="#00e5a0" stroke-width="1"/>
+              <rect x="16" y="25" width="20" height="10" rx="5" fill="#0a4a28" stroke="#00e5a0" stroke-width="1"/>
+              <!-- Tablet in right hand -->
+              <rect x="33" y="18" width="22" height="28" rx="3" fill="#050e0a" stroke="#00e5a0" stroke-width="1.5"/>
+              <rect x="35" y="20" width="18" height="20" rx="2" fill="#0a2a1a"/>
+              <rect x="36" y="21" width="14" height="3" rx="1" fill="#00e5a0" opacity="0.6"/>
+              <rect x="36" y="26" width="10" height="2" rx="1" fill="#7aa390" opacity="0.5"/>
+              <rect x="36" y="30" width="12" height="2" rx="1" fill="#7aa390" opacity="0.5"/>
+              <!-- Legs -->
+              <rect x="-14" y="68" width="12" height="30" rx="5" fill="#0a4a28" stroke="#00e5a0" stroke-width="0.5"/>
+              <rect x="2" y="68" width="12" height="30" rx="5" fill="#0a4a28" stroke="#00e5a0" stroke-width="0.5"/>
+            </g>
+
+            <!-- Data rings around farmer -->
+            <circle cx="240" cy="180" r="100" fill="none" stroke="#00e5a0" stroke-width="0.5" stroke-dasharray="8 6" opacity="0.2">
+              <animateTransform attributeName="transform" type="rotate" from="0 240 180" to="360 240 180" dur="20s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="240" cy="180" r="140" fill="none" stroke="#00c9b1" stroke-width="0.5" stroke-dasharray="4 8" opacity="0.15">
+              <animateTransform attributeName="transform" type="rotate" from="360 240 180" to="0 240 180" dur="30s" repeatCount="indefinite"/>
+            </circle>
+
+            <!-- Data points on ring -->
+            <g fill="#00e5a0" font-family="monospace" font-size="9" opacity="0.6">
+              <circle cx="240" cy="80" r="4"/>
+              <text x="248" y="83">pH: 6.8</text>
+              <circle cx="340" cy="180" r="4"/>
+              <text x="348" y="183">N: 85%</text>
+              <circle cx="240" cy="280" r="4"/>
+              <text x="248" y="283">K: 72%</text>
+              <circle cx="140" cy="180" r="4"/>
+              <text x="60" y="183">P: 91%</text>
+            </g>
+
+            <!-- Corner decorative elements -->
+            <rect x="20" y="20" width="60" height="40" rx="8" fill="rgba(0,229,160,0.05)" stroke="rgba(0,229,160,0.15)" stroke-width="1"/>
+            <text x="30" y="38" font-family="monospace" font-size="8" fill="#00e5a0" opacity="0.7">FIELD A1</text>
+            <text x="30" y="52" font-family="monospace" font-size="8" fill="#7aa390">2.4 ACRES</text>
+
+            <rect x="400" y="300" width="60" height="40" rx="8" fill="rgba(0,229,160,0.05)" stroke="rgba(0,229,160,0.15)" stroke-width="1"/>
+            <text x="410" y="318" font-family="monospace" font-size="8" fill="#00e5a0" opacity="0.7">HARVEST</text>
+            <text x="410" y="332" font-family="monospace" font-size="8" fill="#7aa390">14 DAYS</text>
+          </svg>
+        </div>
+        <div class="about-stats-row">
+          <div class="about-stat">
+            <div class="about-stat-val">50K+</div>
+            <div class="about-stat-label">Farmers</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-val">98%</div>
+            <div class="about-stat-label">Accuracy</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-val">12+</div>
+            <div class="about-stat-label">States</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-content reveal-right">
+        <div class="section-tag">About AgroVerse</div>
+        <h2 class="section-title">Bridging Technology<br>with <span>Agriculture</span></h2>
+        <p class="section-sub">AgroVerse is India's most advanced smart farming platform, designed to empower every farmer with cutting-edge AI tools, real-time data, and a vibrant community marketplace.</p>
+
+        <ul class="feature-list">
+          <li>
+            <span class="feat-check">✓</span>
+            <span>AI-powered crop disease detection with 98% accuracy using deep learning models trained on millions of crop images.</span>
+          </li>
+          <li>
+            <span class="feat-check">✓</span>
+            <span>Direct-to-buyer marketplace eliminating middlemen and ensuring fair prices for your produce.</span>
+          </li>
+          <li>
+            <span class="feat-check">✓</span>
+            <span>Pan-India equipment rental network connecting farmers with affordable machinery on demand.</span>
+          </li>
+          <li>
+            <span class="feat-check">✓</span>
+            <span>Multilingual AI chatbot supporting Hindi, English, Punjabi, Tamil, Telugu, and 8 more languages.</span>
+          </li>
+          <li>
+            <span class="feat-check">✓</span>
+            <span>Government scheme integration helping farmers access subsidies and welfare programs seamlessly.</span>
+          </li>
+        </ul>
+
+        <div style="margin-top:40px">
+          <a href="/signin" class="btn-primary">Get Started Free →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== FOOTER ======================== -->
+<footer>
+  <div class="footer-logo">🌿 AgroVerse</div>
+  <p>Smart Farming for a Better Tomorrow</p>
+  <p style="margin-top:8px;font-size:12px;opacity:0.5">© 2025 AgroVerse Technologies. Built with ❤️ for Indian Farmers.</p>
+</footer>
+
+<script>
+// ── Session check ──────────────────────────────────────────────────────────
+fetch('/api/session')
+  .then(r => r.json())
+  .then(data => {
+    if (data.logged_in) {
+      const name = data.name || 'User';
+      const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      document.getElementById('nav-avatar').textContent = initials;
+      document.getElementById('nav-username').textContent = name;
+      document.getElementById('nav-user-info').style.display = 'flex';
+      document.getElementById('nav-login-btn').style.display = 'none';
+      document.getElementById('nav-logout-btn').style.display = 'inline-block';
+      document.getElementById('mobile-nav-login').style.display = 'none';
+      document.getElementById('mobile-nav-logout').style.display = 'block';
+      // Update CTA to go to dashboard
+      const ctaBtn = document.getElementById('hero-cta-signup');
+      if (ctaBtn) { ctaBtn.href = '/dashboard'; ctaBtn.textContent = '🌾 Go to Dashboard'; }
+    }
+  }).catch(()=>{});
+
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+if (!isTouchDevice) {
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  document.querySelectorAll('a, button, .feature-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2)'; ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.transform = 'translate(-50%,-50%) scale(1)'; });
+  });
+} else {
+  if (cursor) cursor.style.display = 'none';
+  if (ring) ring.style.display = 'none';
+}
+
+// Particle Canvas
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+const particles = Array.from({length:80}, () => ({
+  x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+  r: Math.random() * 1.5 + 0.3,
+  vx: (Math.random()-0.5) * 0.3, vy: (Math.random()-0.5) * 0.3,
+  o: Math.random() * 0.5 + 0.1
+}));
+function drawParticles() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle = `rgba(0,229,160,${p.o})`;
+    ctx.fill();
+    p.x += p.vx; p.y += p.vy;
+    if(p.x<0||p.x>canvas.width) p.vx*=-1;
+    if(p.y<0||p.y>canvas.height) p.vy*=-1;
+  });
+  // Draw connections
+  for(let i=0;i<particles.length;i++) {
+    for(let j=i+1;j<particles.length;j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx*dx+dy*dy);
+      if(d<120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle = `rgba(0,229,160,${0.06*(1-d/120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// Floating Leaves
+const leafContainer = document.getElementById('leaves-container');
+const leafEmojis = ['🍃','🌿','☘️'];
+function spawnLeaf() {
+  const leaf = document.createElement('div');
+  leaf.className = 'leaf';
+  leaf.textContent = leafEmojis[Math.floor(Math.random()*leafEmojis.length)];
+  leaf.style.left = Math.random()*100 + 'vw';
+  leaf.style.fontSize = (14+Math.random()*16)+'px';
+  const dur = 12+Math.random()*18;
+  leaf.style.animation = `leafDrift ${dur}s linear forwards`;
+  leaf.style.animationDelay = Math.random()*5+'s';
+  leafContainer.appendChild(leaf);
+  setTimeout(() => leaf.remove(), (dur+5)*1000);
+}
+setInterval(spawnLeaf, 2500);
+spawnLeaf(); spawnLeaf();
+
+// Scroll Reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.stagger').forEach(el => observer.observe(el));
+
+// 3D Tilt on Feature Cards — desktop only
+if (!isTouchDevice) {
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `translateY(-10px) rotateX(${-y*8}deg) rotateY(${x*8}deg) scale(1.02)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
+
+// Parallax on scroll — desktop only
+if (!isTouchDevice) {
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const orb1 = document.querySelector('.float-orb.orb1');
+    const orb2 = document.querySelector('.float-orb.orb2');
+    if (orb1) orb1.style.transform = `translateY(${scrolled*0.15}px)`;
+    if (orb2) orb2.style.transform = `translateY(${-scrolled*0.1}px)`;
+    const heroVisual = document.querySelector('.hero-visual');
+    if (heroVisual) heroVisual.style.transform = `translateY(calc(-50% + ${scrolled*0.08}px))`;
+  });
+}
+
+// Navbar scroll effect
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  if(window.scrollY > 50) {
+    nav.style.background = 'rgba(5,14,10,0.9)';
+    nav.style.boxShadow = '0 8px 40px rgba(0,0,0,0.6), 0 0 30px rgba(0,229,160,0.05)';
+  } else {
+    nav.style.background = 'rgba(5,14,10,0.6)';
+    nav.style.boxShadow = '0 8px 32px rgba(0,0,0,0.4)';
+  }
+});
+
+// Hamburger Menu
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobile-nav');
+
+function closeMobileNav() {
+  hamburger.classList.remove('open');
+  mobileNav.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+hamburger.addEventListener('click', () => {
+  const isOpen = hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+
+// Close on outside click
+mobileNav.addEventListener('click', e => {
+  if (e.target === mobileNav) closeMobileNav();
+});
+
+// Close on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeMobileNav();
+});
+</script>
+</body>
+</html>
