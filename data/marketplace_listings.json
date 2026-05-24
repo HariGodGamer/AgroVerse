@@ -1,0 +1,16 @@
+[
+  {
+    "id": "967046ce21bfb995",
+    "user_id": "7e90655c631849d5",
+    "seller_name": "Hariom .",
+    "item_name": "moong dal",
+    "crop_type": "dal",
+    "phone": "1234567489",
+    "price": 250.0,
+    "quantity": "50kg",
+    "location": "lucknow",
+    "listing_type": "seeds",
+    "status": "active",
+    "created_at": "2026-05-24T10:14:56.784550"
+  }
+]

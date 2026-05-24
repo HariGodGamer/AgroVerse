@@ -1,0 +1,1048 @@
+[
+  {
+    "id": "wheat",
+    "name": "Wheat",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "clay loam", "alluvial"],
+    "waterNeed": "Moderate",
+    "duration": "120-150 days",
+    "riskLevel": "low",
+    "profitRange": "18,000-28,000/acre",
+    "reason": "Ideal for Rabi season; thrives in cool weather and fertile loamy soil.",
+    "suitScore": 92,
+    "costPerAcre": 15000,
+    "yieldPerAcre": 18,
+    "pricePerKg": 22,
+    "inputs": [
+      { "icon": "🌱", "name": "Wheat Seeds", "qty": "40 kg/acre", "price": 1800, "use": "Sowing phase" },
+      { "icon": "🧪", "name": "DAP Fertilizer", "qty": "50 kg/acre", "price": 1200, "use": "At sowing" },
+      { "icon": "🧪", "name": "Urea", "qty": "60 kg/acre", "price": 900, "use": "After germination" },
+      { "icon": "💧", "name": "Irrigation", "qty": "3-4 waterings", "price": 2000, "use": "Throughout growth" },
+      { "icon": "📦", "name": "Pesticide Kit", "qty": "1 set", "price": 800, "use": "Pre-harvest" }
+    ],
+    "stages": ["Land Preparation", "Sowing", "Germination", "Vegetative", "Flowering", "Harvest Ready"],
+    "guideSteps": [
+      "Seed Selection: Prefer HD 2967, WH 1105, DBW-327, or SMW 5174. Treat seeds with Carbendazim 2.5 g/kg.",
+      "Land Prep: Prepare a fine seedbed with 2-3 ploughings. Irrigate prior to sowing if soil is dry.",
+      "Sowing: Drill seeds at 4-5 cm depth with 22 cm row spacing, using 100-125 kg/ha.",
+      "Fertilizers: Apply DAP 100 kg/ha and Potash 50 kg/ha at sowing, then topdress Urea.",
+      "Irrigation: Focus on critical watering stages: Crown Root Initiation (CRI), tillering, flowering, and grain-fill.",
+      "Harvest: Cut the crop in March-April when stalks turn golden-yellow and grains are hard."
+    ]
+  },
+  {
+    "id": "rice",
+    "name": "Rice",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": ["clay", "alluvial", "clay loam"],
+    "waterNeed": "High",
+    "duration": "90-120 days",
+    "riskLevel": "medium",
+    "profitRange": "20,000-35,000/acre",
+    "reason": "Great for monsoon season; requires high water and heavy alluvial/clayey soils.",
+    "suitScore": 78,
+    "costPerAcre": 18000,
+    "yieldPerAcre": 22,
+    "pricePerKg": 24,
+    "inputs": [
+      { "icon": "🌱", "name": "Paddy Seeds", "qty": "25 kg/acre", "price": 1500, "use": "Transplanting" },
+      { "icon": "🧪", "name": "NPK 14-14-14", "qty": "60 kg/acre", "price": 1400, "use": "Basal dose" },
+      { "icon": "💧", "name": "Flood Irrigation", "qty": "Continuous", "price": 3500, "use": "Entire season" },
+      { "icon": "📦", "name": "Weedicide", "qty": "2L/acre", "price": 600, "use": "After transplant" }
+    ],
+    "stages": ["Nursery", "Land Prep", "Transplanting", "Vegetative", "Panicle", "Harvest Ready"],
+    "guideSteps": [
+      "Seed Selection: Use IR8, Sonalika, Basmati 370, or Pusa 1121. Treat with Carbendazim.",
+      "Nursery: Raise seedlings for 25-30 days while preparing puddled main field with standing water.",
+      "Transplantation: Transplant seedlings in rows with 20 cm spacing to ensure airflow.",
+      "Fertility: Apply NPK 120:60:40 kg/ha and Zinc Sulfate 25 kg/ha. Split Nitrogen applications.",
+      "Watering: Maintain 5 cm standing water until grains ripen; drain 10-12 days before harvest.",
+      "Harvesting: Reclaim grains when golden and moisture content reaches 18-20%."
+    ]
+  },
+  {
+    "id": "maize",
+    "name": "Maize",
+    "emoji": "🌽",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": ["loamy", "alluvial", "clay loam"],
+    "waterNeed": "Moderate",
+    "duration": "90-110 days",
+    "riskLevel": "medium",
+    "profitRange": "16,000-30,000/acre",
+    "reason": "Requires well-drained fertile soils and warm monsoon weather.",
+    "suitScore": 82,
+    "costPerAcre": 13000,
+    "yieldPerAcre": 20,
+    "pricePerKg": 20,
+    "inputs": [
+      { "icon": "🌱", "name": "Hybrid Seeds", "qty": "8 kg/acre", "price": 1600, "use": "Sowing" },
+      { "icon": "🧪", "name": "NPK Fertilizer", "qty": "50 kg/acre", "price": 1400, "use": "Basal dose" },
+      { "icon": "💧", "name": "Irrigation", "qty": "Monsoon support", "price": 1500, "use": "Flowering stage" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Vegetative", "Knee-High", "Tasseling", "Harvest Ready"],
+    "guideSteps": [
+      "Seed Choice: Pick Pioneer 3302, Dekalb 9108, or Syngenta NK6240 hybrid seeds.",
+      "Sowing: Spacing at 60 cm x 20 cm at 3-5 cm depth in well-tilled soil.",
+      "Fertility: Split Urea into three applications (basal, knee-high, and pre-tasseling).",
+      "Pest Alert: Scan for Fall Armyworm regularly. Apply Bacillus thuringiensis if damage is seen.",
+      "Irrigation: Keep field moist during critical knee-high and silking phases.",
+      "Harvest: Harvest when cob sheaths dry to brown and kernels become hard."
+    ]
+  },
+  {
+    "id": "barley",
+    "name": "Barley",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "sandy loam", "alluvial"],
+    "waterNeed": "Low",
+    "duration": "120-140 days",
+    "riskLevel": "low",
+    "profitRange": "14,000-22,000/acre",
+    "reason": "Strong Rabi option for lighter soils and lower irrigation needs.",
+    "suitScore": 74,
+    "costPerAcre": 11000,
+    "yieldPerAcre": 16,
+    "pricePerKg": 22,
+    "inputs": [
+      { "icon": "🌱", "name": "Seeds", "qty": "35 kg/acre", "price": 1500, "use": "Sowing" },
+      { "icon": "🧪", "name": "NPK 12-32-16", "qty": "40 kg/acre", "price": 1200, "use": "Sowing base" },
+      { "icon": "💧", "name": "Waterings", "qty": "2 cycles", "price": 1500, "use": "Tillering + Jointing" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Tillering", "Heading", "Grain Fill", "Harvest Ready"],
+    "guideSteps": [
+      "Preparation: Plow 2-3 times to prepare a clean, fine weed-free seedbed.",
+      "Sowing: Sow seeds at 22 cm row spacing and 4-5 cm depth using a seed drill.",
+      "Irrigation: Give only 2-3 waterings. Focus on tillering and booting stages.",
+      "Weed Control: Spray Pendimethalin 3 days post-sowing to suppress early winter weeds.",
+      "Harvesting: Reap when stems are dry and straw turns brittle-yellow."
+    ]
+  },
+  {
+    "id": "bajra",
+    "name": "Bajra",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": ["sandy", "light loam", "red"],
+    "waterNeed": "Low",
+    "duration": "75-90 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-20,000/acre",
+    "reason": "Highly suitable for dry regions with sandy soils and low rainfall.",
+    "suitScore": 79,
+    "costPerAcre": 9000,
+    "yieldPerAcre": 10,
+    "pricePerKg": 25,
+    "inputs": [
+      { "icon": "🌱", "name": "Bajra Seeds", "qty": "2 kg/acre", "price": 400, "use": "Sowing" },
+      { "icon": "🧪", "name": "Urea", "qty": "30 kg/acre", "price": 500, "use": "Top dressing" },
+      { "icon": "💧", "name": "Minimal Irrigation", "qty": "As needed", "price": 1000, "use": "Dry spells" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Vegetative", "Tillering", "Ear Emergence", "Harvest Ready"],
+    "guideSteps": [
+      "Variety selection: Use drought-resistant hybrid bajra seeds (e.g. HHB 67, MH 179).",
+      "Sowing: Direct sow at a shallow depth of 2 cm. Spacing should be 45 cm x 15 cm.",
+      "Weeding: Hoeing and weeding at 20-25 days after sowing is critical.",
+      "Watering: Can be grown rainfed; provide supplemental watering at flowering if rain fails.",
+      "Harvest: Harvest when grain moisture falls below 20% and seed heads dry out."
+    ]
+  },
+  {
+    "id": "jowar",
+    "name": "Jowar (Sorghum)",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": ["clayey loam", "black", "alluvial"],
+    "waterNeed": "Low",
+    "duration": "100-115 days",
+    "riskLevel": "low",
+    "profitRange": "13,000-24,000/acre",
+    "reason": "Excellent drought-tolerant crop suitable for black cotton and clay loam soils.",
+    "suitScore": 83,
+    "costPerAcre": 9500,
+    "yieldPerAcre": 12,
+    "pricePerKg": 26,
+    "inputs": [
+      { "icon": "🌱", "name": "Jowar Seeds", "qty": "4 kg/acre", "price": 600, "use": "Sowing" },
+      { "icon": "🧪", "name": "NPK Fertilizers", "qty": "40 kg/acre", "price": 1200, "use": "Sowing basal" }
+    ],
+    "stages": ["Sowing", "Seedling", "Tillering", "Flowering", "Dough Stage", "Harvest Ready"],
+    "guideSteps": [
+      "Varieties: Pick CSH-14 or CSV-15 and treat seeds to avoid grain mold and shoot fly.",
+      "Soil: Prepare land well. Clayey or black soils are ideal as they retain moisture.",
+      "Sowing: Space rows at 45 cm. Maintain plant-to-plant distance at 12-15 cm.",
+      "Harvest: Cut the panicles when the grains have hardened and show a black spot at the base."
+    ]
+  },
+  {
+    "id": "ragi",
+    "name": "Ragi (Finger Millet)",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": ["red", "sandy loam", "loamy"],
+    "waterNeed": "Low",
+    "duration": "100-120 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-22,000/acre",
+    "reason": "Highly nutritious millet; extremely hardy in red laterite and sandy soils.",
+    "suitScore": 88,
+    "costPerAcre": 8000,
+    "yieldPerAcre": 14,
+    "pricePerKg": 32,
+    "inputs": [
+      { "icon": "🌱", "name": "Ragi Seeds", "qty": "3 kg/acre", "price": 400, "use": "Transplanting/Sowing" },
+      { "icon": "🧪", "name": "Urea", "qty": "30 kg/acre", "price": 600, "use": "Top dressing" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Vegetative", "Tillering", "Flowering", "Harvest Ready"],
+    "guideSteps": [
+      "Preparation: Sow in nursery or direct sow. Transplanting gives higher yields.",
+      "Nutrition: Apply FYM (Farm Yard Manure) at 4 tonnes/acre during field preparation.",
+      "Weeding: Hand-weed twice at 20 and 40 days to keep the crop clean.",
+      "Harvest: Harvest in two stages. First cut the earheads, then cut the stalks."
+    ]
+  },
+  {
+    "id": "gram",
+    "name": "Gram (Chickpea)",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "black", "sandy loam"],
+    "waterNeed": "Low",
+    "duration": "100-120 days",
+    "riskLevel": "low",
+    "profitRange": "18,000-28,000/acre",
+    "reason": "Pulse crop with high nitrogen fixing; thrives in dry Rabi soils.",
+    "suitScore": 77,
+    "costPerAcre": 10000,
+    "yieldPerAcre": 8,
+    "pricePerKg": 60,
+    "inputs": [
+      { "icon": "🌱", "name": "Chickpea Seeds", "qty": "35 kg/acre", "price": 2200, "use": "Dibbling" },
+      { "icon": "🧪", "name": "SSP Fertilizer", "qty": "50 kg/acre", "price": 800, "use": "At sowing" },
+      { "icon": "💧", "name": "Irrigation", "qty": "1 cycle", "price": 800, "use": "Before flowering" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Branching", "Flowering", "Pod Fill", "Harvest Ready"],
+    "guideSteps": [
+      "Varieties: Select Pusa-362 or RVG-202. Treat seeds with Rhizobium culture.",
+      "Planting: Sow in October-November in rows spaced 30 cm apart.",
+      "Irrigation: Critical watering at branching and pod-filling. Do not overwater.",
+      "Harvesting: Reap when plants dry out, turn brown, and pods rattle when shaken."
+    ]
+  },
+  {
+    "id": "moong",
+    "name": "Moong Dal",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Zaid",
+    "soilTypes": ["loamy", "sandy loam", "alluvial"],
+    "waterNeed": "Low",
+    "duration": "60-75 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-20,000/acre",
+    "reason": "Fast summer pulse crop that naturally fixes nitrogen, restoring soil health.",
+    "suitScore": 86,
+    "costPerAcre": 8000,
+    "yieldPerAcre": 6,
+    "pricePerKg": 70,
+    "inputs": [
+      { "icon": "🌱", "name": "Moong Seeds", "qty": "10 kg/acre", "price": 1200, "use": "Direct sowing" },
+      { "icon": "🧪", "name": "Phosphatic Fertilizer", "qty": "40 kg/acre", "price": 800, "use": "Basal" },
+      { "icon": "💧", "name": "Waterings", "qty": "2 cycles", "price": 1000, "use": "Flowering + Pod fill" }
+    ],
+    "stages": ["Sowing", "Germination", "Branching", "Flowering", "Pod Formation", "Harvest Ready"],
+    "guideSteps": [
+      "Variety selection: Choose SML 668 or IPM 02-3 for short duration summer growth.",
+      "Sowing: Broadcast or drill seeds in mid-March to April, spacing 25 cm x 10 cm.",
+      "Nutrition: Requires minimal nitrogen. Apply Phosphorus to encourage root nodules.",
+      "Harvest: Pick mature pods in 2-3 pickings as they ripen asynchronously."
+    ]
+  },
+  {
+    "id": "urad",
+    "name": "Urad Dal",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Kharif",
+    "soilTypes": ["clay loam", "alluvial", "black"],
+    "waterNeed": "Low",
+    "duration": "70-85 days",
+    "riskLevel": "low",
+    "profitRange": "14,000-24,000/acre",
+    "reason": "Quick-maturing black gram pulse suitable for Rabi rice-fallow or Kharif season.",
+    "suitScore": 80,
+    "costPerAcre": 9000,
+    "yieldPerAcre": 7,
+    "pricePerKg": 65,
+    "inputs": [
+      { "icon": "🌱", "name": "Urad Seeds", "qty": "8 kg/acre", "price": 1000, "use": "Sowing" }
+    ],
+    "stages": ["Sowing", "Germination", "Branching", "Flowering", "Pod Fill", "Harvest Ready"],
+    "guideSteps": [
+      "Variety: Select T-9 or Shekhar-2. Seed treatment with Trichoderma is suggested.",
+      "Spacing: Row spacing of 30 cm, plant spacing of 10 cm. Drill at 3-4 cm depth.",
+      "Watering: Typically rainfed. Supplement during extreme dry spells at flowering.",
+      "Harvest: Cut the crop when 80% of the pods turn black and dry."
+    ]
+  },
+  {
+    "id": "arhar",
+    "name": "Arhar (Pigeon Pea)",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Kharif",
+    "soilTypes": ["loamy", "alluvial", "red"],
+    "waterNeed": "Low",
+    "duration": "150-180 days",
+    "riskLevel": "medium",
+    "profitRange": "22,000-38,000/acre",
+    "reason": "Deep-rooted pulse crop that withstands drought and improves soil fertility.",
+    "suitScore": 79,
+    "costPerAcre": 12000,
+    "yieldPerAcre": 9,
+    "pricePerKg": 75,
+    "inputs": [
+      { "icon": "🌱", "name": "Arhar Seeds", "qty": "6 kg/acre", "price": 1200, "use": "Line sowing" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Vegetative", "Flowering", "Pod Development", "Harvest Ready"],
+    "guideSteps": [
+      "Variety: Use UPAS-120 or Pusa-992. Treat seeds with rhizobial culture.",
+      "Sowing: Plant in June-July. Space widely (60 cm x 15 cm) due to branching habit.",
+      "Weeding: Perform two hand weedings within the first 45 days to control competitor weeds.",
+      "Harvest: Cut entire plants when pods turn brown; stack in bundles to dry before threshing."
+    ]
+  },
+  {
+    "id": "lentil",
+    "name": "Lentil (Masoor)",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Rabi",
+    "soilTypes": ["alluvial", "clay loam", "loamy"],
+    "waterNeed": "Low",
+    "duration": "110-125 days",
+    "riskLevel": "low",
+    "profitRange": "15,000-26,000/acre",
+    "reason": "Cold-hardy Rabi pulse that grows well in clay-loam and alluvial soils.",
+    "suitScore": 81,
+    "costPerAcre": 8500,
+    "yieldPerAcre": 6.5,
+    "pricePerKg": 68,
+    "inputs": [
+      { "icon": "🌱", "name": "Lentil Seeds", "qty": "15 kg/acre", "price": 1100, "use": "Sowing" }
+    ],
+    "stages": ["Sowing", "Seedling", "Vegetative", "Flowering", "Podding", "Harvest Ready"],
+    "guideSteps": [
+      "Variety: Choose Pusa Vaibhav or K-75. Treat with Rhizobium before sowing.",
+      "Sowing: SOW in late October or November with 30 cm row spacing.",
+      "Watering: Typically requires 1-2 light irrigations if winter rains fail.",
+      "Harvest: Cut close to the ground when plants turn golden-brown and dry."
+    ]
+  },
+  {
+    "id": "potato",
+    "name": "Potato",
+    "emoji": "🥔",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": ["sandy loam", "loamy", "alluvial"],
+    "waterNeed": "Moderate",
+    "duration": "75-100 days",
+    "riskLevel": "medium",
+    "profitRange": "25,000-45,000/acre",
+    "reason": "High-value crop with strong market demand; suits cool Rabi weather.",
+    "suitScore": 80,
+    "costPerAcre": 25000,
+    "yieldPerAcre": 100,
+    "pricePerKg": 10,
+    "inputs": [
+      { "icon": "🥔", "name": "Seed Potatoes", "qty": "800 kg/acre", "price": 12000, "use": "Planting" },
+      { "icon": "🧪", "name": "Compost & NPK", "qty": "2 tonnes/acre", "price": 4000, "use": "Soil preparation" },
+      { "icon": "💧", "name": "Irrigation", "qty": "Weekly drip", "price": 5000, "use": "Tuber growth" },
+      { "icon": "📦", "name": "Fungicide", "qty": "2 sprays", "price": 1500, "use": "Blight control" }
+    ],
+    "stages": ["Sprouting", "Planting", "Emergence", "Tuber Initiation", "Tuber Bulking", "Harvest Ready"],
+    "guideSteps": [
+      "Seed Selection: Use disease-free seed tubers like Kufri Bahar or Kufri Pukhraj.",
+      "Planting: Plant tuber pieces on ridges spaced 60 cm apart.",
+      "Earthing Up: Pile soil around the stem base at 30 days to protect tubers from sunlight.",
+      "Fungal Control: Apply Mancozeb or Copper Oxychloride to prevent Early/Late Blight."
+    ]
+  },
+  {
+    "id": "onion",
+    "name": "Onion",
+    "emoji": "🧅",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "alluvial", "sandy loam"],
+    "waterNeed": "Moderate",
+    "duration": "110-130 days",
+    "riskLevel": "medium",
+    "profitRange": "24,000-44,000/acre",
+    "reason": "High demand horticultural crop; thrives in cool Rabi seasons.",
+    "suitScore": 75,
+    "costPerAcre": 20000,
+    "yieldPerAcre": 80,
+    "pricePerKg": 12,
+    "inputs": [
+      { "icon": "🌱", "name": "Onion Nursery Seeds", "qty": "4 kg/acre", "price": 4000, "use": "Nursery rearing" },
+      { "icon": "🧪", "name": "Organic Manure", "qty": "3 tonnes/acre", "price": 4500, "use": "Soil prep" },
+      { "icon": "💧", "name": "Drip/Sprinkler", "qty": "Regular", "price": 5000, "use": "Bulbing stage" }
+    ],
+    "stages": ["Nursery", "Transplanting", "Vegetative", "Bulb Formation", "Maturity", "Harvest Ready"],
+    "guideSteps": [
+      "Sowing: SOW seeds in nursery bed, transplant seedlings after 6-8 weeks.",
+      "Soil preparation: Add well-rotted FYM and compost to get fine, loose loam.",
+      "Watering: Stop watering 10-15 days before harvesting to allow drying.",
+      "Harvest: Lift bulbs when 50% of the leaf tops drop naturally."
+    ]
+  },
+  {
+    "id": "tomato",
+    "name": "Tomato",
+    "emoji": "🍅",
+    "category": "Vegetable",
+    "season": "Zaid",
+    "soilTypes": ["loamy", "sandy loam", "alluvial"],
+    "waterNeed": "Moderate",
+    "duration": "90-120 days",
+    "riskLevel": "medium",
+    "profitRange": "30,000-60,000/acre",
+    "reason": "High-value crop requiring drip irrigation and warm Zaid temperatures.",
+    "suitScore": 72,
+    "costPerAcre": 26000,
+    "yieldPerAcre": 120,
+    "pricePerKg": 10,
+    "inputs": [
+      { "icon": "🌱", "name": "Hybrid Seedlings", "qty": "6000 plants", "price": 6000, "use": "Transplanting" },
+      { "icon": "🧪", "name": "NPK & Micronutrients", "qty": "100 kg/acre", "price": 4000, "use": "Soil enrichment" },
+      { "icon": "💧", "name": "Drip Irrigation", "qty": "Continuous", "price": 7000, "use": "Throughout growth" },
+      { "icon": "📦", "name": "Staking Materials", "qty": "Bamboo & thread", "price": 3000, "use": "Support structure" }
+    ],
+    "stages": ["Nursery", "Transplanting", "Vegetative", "Flowering", "Fruit Development", "Harvest Ready"],
+    "guideSteps": [
+      "Transplanting: Shift seedlings to main field after 4 weeks. Plant on raised beds.",
+      "Staking: Tie plants to wooden stakes to keep fruits off the wet soil.",
+      "Irrigation: Keep soil consistently moist; uneven watering causes blossom-end rot."
+    ]
+  },
+  {
+    "id": "carrot",
+    "name": "Carrot",
+    "emoji": "🥕",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": ["sandy loam", "loamy"],
+    "waterNeed": "Moderate",
+    "duration": "85-110 days",
+    "riskLevel": "low",
+    "profitRange": "18,000-30,000/acre",
+    "reason": "Requires loose, stone-free sandy loam soil to grow straight, sweet roots.",
+    "suitScore": 84,
+    "costPerAcre": 12000,
+    "yieldPerAcre": 80,
+    "pricePerKg": 12,
+    "inputs": [
+      { "icon": "🌱", "name": "Seeds", "qty": "3 kg/acre", "price": 2500, "use": "Sowing" }
+    ],
+    "stages": ["Sowing", "Germination", "Thinning", "Root Bulking", "Maturity", "Harvest Ready"],
+    "guideSteps": [
+      "Land Prep: Remove stones and clods. Till deep to create light, loose sandy-loam.",
+      "Sowing: SOW directly in ridges, thin seedlings to 5 cm spacing at 3 weeks.",
+      "Harvest: Harvest when the root shoulder diameter reaches 2-3 cm."
+    ]
+  },
+  {
+    "id": "garlic",
+    "name": "Garlic",
+    "emoji": "🧄",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "alluvial", "clay loam"],
+    "waterNeed": "Moderate",
+    "duration": "140-160 days",
+    "riskLevel": "medium",
+    "profitRange": "35,000-75,000/acre",
+    "reason": "High-value bulb crop requiring cool winter climate and fertile soils.",
+    "suitScore": 79,
+    "costPerAcre": 28000,
+    "yieldPerAcre": 45,
+    "pricePerKg": 50,
+    "inputs": [
+      { "icon": "🧄", "name": "Garlic Cloves", "qty": "220 kg/acre", "price": 15000, "use": "Planting" }
+    ],
+    "stages": ["Clove Prep", "Planting", "Sprouting", "Vegetative", "Bulb Growth", "Harvest Ready"],
+    "guideSteps": [
+      "Planting: Separate cloves from healthy bulbs. Plant pointed end up, 5 cm deep.",
+      "Earthing: Keep soil weed-free. Shallow hoeing is crucial to protect shallow roots.",
+      "Harvest: Lift garlic when 60% of leaves turn yellow-brown and dry."
+    ]
+  },
+  {
+    "id": "cabbage",
+    "name": "Cabbage",
+    "emoji": "🥬",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "clay loam", "alluvial"],
+    "waterNeed": "Moderate",
+    "duration": "90-110 days",
+    "riskLevel": "medium",
+    "profitRange": "20,000-38,000/acre",
+    "reason": "Cold-hardy cole vegetable requiring moist loam soil and regular nitrogen feeding.",
+    "suitScore": 81,
+    "costPerAcre": 16000,
+    "yieldPerAcre": 120,
+    "pricePerKg": 8,
+    "inputs": [
+      { "icon": "🌱", "name": "Saplings", "qty": "20000 plants", "price": 5000, "use": "Transplant" }
+    ],
+    "stages": ["Nursery", "Transplant", "Heading Start", "Head Formation", "Maturity", "Harvest Ready"],
+    "guideSteps": [
+      "Seedlings: Raise seeds in nursery beds; transplant when 4-5 leaves form.",
+      "Watering: Requires constant moderate moisture; dryness causes head splitting.",
+      "Harvest: Cut heads when they are firm, heavy, and compact."
+    ]
+  },
+  {
+    "id": "cauliflower",
+    "name": "Cauliflower",
+    "emoji": "🥦",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "clay loam", "alluvial"],
+    "waterNeed": "Moderate",
+    "duration": "95-115 days",
+    "riskLevel": "medium",
+    "profitRange": "22,000-40,000/acre",
+    "reason": "Demands rich, moisture-retaining loam soils and careful head protection (blanching).",
+    "suitScore": 80,
+    "costPerAcre": 17000,
+    "yieldPerAcre": 100,
+    "pricePerKg": 10,
+    "inputs": [
+      { "icon": "🌱", "name": "Seedlings", "qty": "18000 plants", "price": 5200, "use": "Transplant" }
+    ],
+    "stages": ["Nursery", "Transplant", "Curd Initiation", "Curd Growth", "Maturity", "Harvest Ready"],
+    "guideSteps": [
+      "Transplanting: Spacing 60 cm x 45 cm. Transplant late afternoon.",
+      "Blanching: Fold outer leaves over the developing curd to protect it from yellowing in sun.",
+      "Harvest: Cut when curds are compact, white, and fully developed."
+    ]
+  },
+  {
+    "id": "mango",
+    "name": "Mango",
+    "emoji": "🥭",
+    "category": "Fruit",
+    "season": "Zaid",
+    "soilTypes": ["alluvial", "loamy", "red laterite"],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "medium",
+    "profitRange": "30,000-80,000/acre",
+    "reason": "Horticultural orchard crop suited to warm climate and deep alluvial/laterite soils.",
+    "suitScore": 69,
+    "costPerAcre": 25000,
+    "yieldPerAcre": 6,
+    "pricePerKg": 40,
+    "inputs": [
+      { "icon": "🌳", "name": "Grafted Saplings", "qty": "70 plants/acre", "price": 10000, "use": "Planting" },
+      { "icon": "🧪", "name": "Compost & NPK", "qty": "500 kg/acre", "price": 3000, "use": "Soil feeding" },
+      { "icon": "💧", "name": "Drip System", "qty": "Yearly support", "price": 6000, "use": "Tree establishment" }
+    ],
+    "stages": ["Planting", "Vegetative", "Flowering", "Fruit Set", "Fruit Development", "Harvest"],
+    "guideSteps": [
+      "Planting: Dig 1m x 1m pits. Mix topsoil with FYM and plant grafted saplings.",
+      "Irrigation: Drip irrigation is highly recommended during early vegetative years.",
+      "Harvesting: Pick mature fruits when color shifts to pale yellow; wash and ripen in hay."
+    ]
+  },
+  {
+    "id": "watermelon",
+    "name": "Watermelon",
+    "emoji": "🍉",
+    "category": "Fruit",
+    "season": "Zaid",
+    "soilTypes": ["sandy", "sandy loam", "alluvial"],
+    "waterNeed": "Low",
+    "duration": "80-90 days",
+    "riskLevel": "medium",
+    "profitRange": "22,000-40,000/acre",
+    "reason": "Grows best in sandy riverbed soils and high summer heat.",
+    "suitScore": 88,
+    "costPerAcre": 14000,
+    "yieldPerAcre": 150,
+    "pricePerKg": 6,
+    "inputs": [
+      { "icon": "🌱", "name": "Watermelon Seeds", "qty": "1.5 kg/acre", "price": 1800, "use": "Direct sowing" },
+      { "icon": "🧪", "name": "Compost & NPK", "qty": "40 kg/acre", "price": 2000, "use": "Basal dose" },
+      { "icon": "💧", "name": "Drip Irrigation", "qty": "Drip line", "price": 4000, "use": "Vining stage" }
+    ],
+    "stages": ["Sowing", "Germination", "Vining", "Flowering", "Fruit Set", "Harvest Ready"],
+    "guideSteps": [
+      "Sowing: SOW directly in light, sandy soil under high sun exposure.",
+      "Watering: Drip irrigate weekly; restrict watering close to harvest to sweeten fruits.",
+      "Harvest: Mature melons sound hollow when tapped and the bottom patch turns yellow."
+    ]
+  },
+  {
+    "id": "banana",
+    "name": "Banana",
+    "emoji": "🍌",
+    "category": "Fruit",
+    "season": "Kharif",
+    "soilTypes": ["clay loam", "alluvial", "loamy"],
+    "waterNeed": "High",
+    "duration": "300-330 days",
+    "riskLevel": "medium",
+    "profitRange": "35,000-65,000/acre",
+    "reason": "Requires high humidity, abundant water, and well-drained clay loam/alluvial soils.",
+    "suitScore": 76,
+    "costPerAcre": 28000,
+    "yieldPerAcre": 180,
+    "pricePerKg": 15,
+    "inputs": [
+      { "icon": "🌱", "name": "Tissue Culture Saplings", "qty": "1200 plants/acre", "price": 12000, "use": "Planting" }
+    ],
+    "stages": ["Planting", "Shooting", "Flowering", "Bunch Formation", "Maturity", "Harvest Ready"],
+    "guideSteps": [
+      "Saplings: Use tissue culture plants like Grand Naine for disease-free high yield.",
+      "Nutrition: Heavy feeder; apply copious compost and split nitrogen/potassium doses.",
+      "Harvest: Cut bundles when green fruits turn plump and ribs become round."
+    ]
+  },
+  {
+    "id": "orange",
+    "name": "Orange",
+    "emoji": "🍊",
+    "category": "Fruit",
+    "season": "Rabi",
+    "soilTypes": ["sandy loam", "loamy", "alluvial"],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "medium",
+    "profitRange": "28,000-50,000/acre",
+    "reason": "Perennial citrus crop; performs well in cool winters and well-drained sandy loams.",
+    "suitScore": 73,
+    "costPerAcre": 22000,
+    "yieldPerAcre": 80,
+    "pricePerKg": 25,
+    "inputs": [
+      { "icon": "🌳", "name": "Budded Plants", "qty": "110 plants/acre", "price": 8000, "use": "Planting" }
+    ],
+    "stages": ["Planting", "Establishment", "Flowering", "Fruit Setting", "Ripening", "Harvest"],
+    "guideSteps": [
+      "Soil: Deep, loose sandy loam is perfect. Citrus cannot stand waterlogged roots.",
+      "Pruning: Keep trees clean; prune deadwood to allow sunlight into the canopy.",
+      "Harvest: Pluck fruits when they turn bright orange and feel heavy."
+    ]
+  },
+  {
+    "id": "apple",
+    "name": "Apple",
+    "emoji": "🍎",
+    "category": "Fruit",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "clay loam"],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "high",
+    "profitRange": "40,000-1,10,000/acre",
+    "reason": "Cold climate crop limited to hilly/mountain slopes and loamy soils.",
+    "suitScore": 55,
+    "costPerAcre": 35000,
+    "yieldPerAcre": 60,
+    "pricePerKg": 60,
+    "inputs": [
+      { "icon": "🌳", "name": "Grafted Saplings", "qty": "150 plants/acre", "price": 18000, "use": "Planting" }
+    ],
+    "stages": ["Dormancy", "Bud Break", "Flowering", "Fruit Set", "Fruit Bulking", "Harvest"],
+    "guideSteps": [
+      "Location: Thrives in temperate zones with chill hours. Plant in winter.",
+      "Pruning: Strict winter pruning is necessary to shape trees and induce fruit spurs.",
+      "Harvest: Pick hand-sorted when color develops fully and seeds turn brown."
+    ]
+  },
+  {
+    "id": "grapes",
+    "name": "Grapes",
+    "emoji": "🍇",
+    "category": "Fruit",
+    "season": "Zaid",
+    "soilTypes": ["sandy loam", "loamy", "red laterite"],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "high",
+    "profitRange": "45,000-90,000/acre",
+    "reason": "Vining crop requiring structured trellises and warm, dry climate.",
+    "suitScore": 68,
+    "costPerAcre": 40000,
+    "yieldPerAcre": 70,
+    "pricePerKg": 45,
+    "inputs": [
+      { "icon": "🌱", "name": "Rooted Cuttings", "qty": "400 plants/acre", "price": 10000, "use": "Planting" }
+    ],
+    "stages": ["Pruning", "Sprouting", "Flowering", "Berry Set", "Berry Growth", "Harvest Ready"],
+    "guideSteps": [
+      "Trellising: Train vines onto telephone or Y-trellis systems.",
+      "Pruning: Twice-yearly pruning (October and April) is key to fruit yield.",
+      "Harvest: Harvest bunches when berries taste sweet and pedicels turn woody."
+    ]
+  },
+  {
+    "id": "papaya",
+    "name": "Papaya",
+    "emoji": " papaya",
+    "category": "Fruit",
+    "season": "Kharif",
+    "soilTypes": ["sandy loam", "alluvial", "loamy"],
+    "waterNeed": "Moderate",
+    "duration": "240-300 days",
+    "riskLevel": "medium",
+    "profitRange": "22,000-45,000/acre",
+    "reason": "Fast fruit crop requiring warm climate and sandy loam with excellent drainage.",
+    "suitScore": 82,
+    "costPerAcre": 16000,
+    "yieldPerAcre": 300,
+    "pricePerKg": 10,
+    "inputs": [
+      { "icon": "🌱", "name": "Papaya Seedlings", "qty": "1000 plants", "price": 4000, "use": "Transplant" }
+    ],
+    "stages": ["Nursery", "Transplant", "Flowering", "Fruit Setting", "Tuber Bulking", "Harvest Ready"],
+    "guideSteps": [
+      "Seedlings: Raise seeds in polybags, transplant at 45 days. Use bisexual strains (e.g. Red Lady).",
+      "Drainage: Extremely sensitive to waterlogging, which causes root rot. Plant on mounds.",
+      "Harvest: Harvest when skin color shows a light yellow streak."
+    ]
+  },
+  {
+    "id": "spinach",
+    "name": "Spinach (Palak)",
+    "emoji": "🥬",
+    "category": "Green Vegetable",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "alluvial", "clay loam"],
+    "waterNeed": "Moderate",
+    "duration": "40-50 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-18,000/acre",
+    "reason": "Fast growing green leafy vegetable; thrives in cool winter climate.",
+    "suitScore": 90,
+    "costPerAcre": 6000,
+    "yieldPerAcre": 40,
+    "pricePerKg": 12,
+    "inputs": [
+      { "icon": "🌱", "name": "Spinach Seeds", "qty": "8 kg/acre", "price": 800, "use": "Direct sowing" },
+      { "icon": "🧪", "name": "Urea", "qty": "20 kg/acre", "price": 400, "use": "Post-cut dressing" }
+    ],
+    "stages": ["Sowing", "Germination", "Vegetative Growth", "First Cut", "Second Cut", "Harvest Ready"],
+    "guideSteps": [
+      "Sowing: SOW directly in lines 20 cm apart. Keep soil moist for germination.",
+      "Cuts: Harvest by cutting leaves above root level. Allow to grow back for 2-3 cuts.",
+      "Nutrition: Apply nitrogen (Urea) after each cut to boost leaf regrowth."
+    ]
+  },
+  {
+    "id": "okra",
+    "name": "Okra (Bhindi)",
+    "emoji": " Okra",
+    "category": "Green Vegetable",
+    "season": "Kharif",
+    "soilTypes": ["loamy", "sandy loam", "alluvial"],
+    "waterNeed": "Moderate",
+    "duration": "70-90 days",
+    "riskLevel": "low",
+    "profitRange": "18,000-32,000/acre",
+    "reason": "Warm-season crop growing successfully in well-drained loamy soils.",
+    "suitScore": 85,
+    "costPerAcre": 11000,
+    "yieldPerAcre": 45,
+    "pricePerKg": 18,
+    "inputs": [
+      { "icon": "🌱", "name": "Okra Seeds", "qty": "4 kg/acre", "price": 1200, "use": "Sowing" }
+    ],
+    "stages": ["Sowing", "Germination", "Vegetative", "Flowering", "Pod Growth", "Harvest Ready"],
+    "guideSteps": [
+      "Sowing: Soak seeds overnight. Sow in rows spaced 45 cm apart.",
+      "Pests: Highly susceptible to yellow vein mosaic virus. Manage whiteflies.",
+      "Harvest: Pick tender green pods every alternate day before they become woody."
+    ]
+  },
+  {
+    "id": "fenugreek",
+    "name": "Fenugreek (Methi)",
+    "emoji": "🌱",
+    "category": "Green Vegetable",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "alluvial", "sandy loam"],
+    "waterNeed": "Low",
+    "duration": "30-40 days",
+    "riskLevel": "low",
+    "profitRange": "10,000-16,000/acre",
+    "reason": "Rapid growth leafy crop; needs cool weather and minimal watering.",
+    "suitScore": 88,
+    "costPerAcre": 5000,
+    "yieldPerAcre": 30,
+    "pricePerKg": 15,
+    "inputs": [
+      { "icon": "🌱", "name": "Methi Seeds", "qty": "10 kg/acre", "price": 600, "use": "Broadcasting" }
+    ],
+    "stages": ["Sowing", "Germination", "Vegetative Growth", "Plucking", "Maturity", "Harvest Ready"],
+    "guideSteps": [
+      "Planting: Broadcast seeds. Rake soil lightly to cover them.",
+      "Irrigation: Keep soil moist but avoid waterlogging. Highly drought tolerant.",
+      "Harvest: Pull out entire plants or cut leaves at 30 days for greens."
+    ]
+  },
+  {
+    "id": "coriander",
+    "name": "Coriander (Dhania)",
+    "emoji": "🌱",
+    "category": "Green Vegetable",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "sandy loam", "alluvial"],
+    "waterNeed": "Low",
+    "duration": "45-60 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-20,000/acre",
+    "reason": "Leafy aromatic crop that thrives in cool winter temperatures.",
+    "suitScore": 85,
+    "costPerAcre": 6000,
+    "yieldPerAcre": 35,
+    "pricePerKg": 20,
+    "inputs": [
+      { "icon": "🌱", "name": "Dhania Seeds", "qty": "8 kg/acre", "price": 800, "use": "Sowing" }
+    ],
+    "stages": ["Sowing", "Germination", "Leaf Growth", "Thickening", "Maturity", "Harvest Ready"],
+    "guideSteps": [
+      "Preparation: Crush coriander seeds into halves before sowing to speed up germination.",
+      "Watering: Maintain light moisture; wet conditions encourage root rot.",
+      "Harvest: Cut leaves at 40-50 days when greens are lush and before flowering."
+    ]
+  },
+  {
+    "id": "sugarcane",
+    "name": "Sugarcane",
+    "emoji": "🎋",
+    "category": "Commercial Crop",
+    "season": "Kharif",
+    "soilTypes": ["clay loam", "alluvial", "loamy", "black"],
+    "waterNeed": "High",
+    "duration": "300-360 days",
+    "riskLevel": "high",
+    "profitRange": "40,000-90,000/acre",
+    "reason": "Perennial crop yielding high profits under abundant water and deep soils.",
+    "suitScore": 75,
+    "costPerAcre": 32000,
+    "yieldPerAcre": 350,
+    "pricePerKg": 3.5,
+    "inputs": [
+      { "icon": "🌱", "name": "Sugarcane Sets", "qty": "30,000 sets/acre", "price": 8000, "use": "Planting" },
+      { "icon": "🧪", "name": "DAP & Potash", "qty": "150 kg/acre", "price": 5000, "use": "Basal feed" },
+      { "icon": "💧", "name": "Heavy Irrigation", "qty": "Continuous", "price": 12000, "use": "Year-round water" }
+    ],
+    "stages": ["Planting", "Sprouting", "Tillering", "Grand Growth", "Maturity", "Harvest Ready"],
+    "guideSteps": [
+      "Planting: Trench planting in deep soils. Treat sets with Carbendazim.",
+      "Earthing: Keep soil weed-free. earth-up at 4 months to prevent lodging.",
+      "Harvest: Harvest when lower leaves dry and cane sugars register high brix."
+    ]
+  },
+  {
+    "id": "cotton",
+    "name": "Cotton",
+    "emoji": "☁️",
+    "category": "Commercial Crop",
+    "season": "Kharif",
+    "soilTypes": ["black cotton soil", "loamy", "clay loam"],
+    "waterNeed": "Moderate",
+    "duration": "150-180 days",
+    "riskLevel": "medium",
+    "profitRange": "28,000-55,000/acre",
+    "reason": "Performs well in deep black cotton soils with moderate rainfall and strong sunshine.",
+    "suitScore": 84,
+    "costPerAcre": 22000,
+    "yieldPerAcre": 12,
+    "pricePerKg": 70,
+    "inputs": [
+      { "icon": "🌱", "name": "Bt Cotton Seed", "qty": "2-4 kg/ha", "price": 2200, "use": "Sowing" },
+      { "icon": "🧪", "name": "NPK & Gypsum", "qty": "80 kg/acre", "price": 3000, "use": "Basal dressing" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Vegetative", "Flowering", "Boll Development", "Harvest Ready"],
+    "guideSteps": [
+      "Variety: Use Bt cotton hybrids. Plant on ridges to prevent water ponding.",
+      "Nutrition: heavy potassium demand at boll stage to support fiber quality.",
+      "Harvest: Pluck opened cotton bolls cleanly, avoid dry leaf contamination."
+    ]
+  },
+  {
+    "id": "jute",
+    "name": "Jute",
+    "emoji": "🌾",
+    "category": "Commercial Crop",
+    "season": "Kharif",
+    "soilTypes": ["alluvial", "clay loam"],
+    "waterNeed": "High",
+    "duration": "120-150 days",
+    "riskLevel": "medium",
+    "profitRange": "18,000-32,000/acre",
+    "reason": "Thrives in warm, humid climates and heavy alluvial deltaic silt soils.",
+    "suitScore": 72,
+    "costPerAcre": 14000,
+    "yieldPerAcre": 15,
+    "pricePerKg": 45,
+    "inputs": [
+      { "icon": "🌱", "name": "Jute Seeds", "qty": "3 kg/acre", "price": 800, "use": "Broadcasting" },
+      { "icon": "🧪", "name": "NPK & Gypsum", "qty": "50 kg/acre", "price": 1500, "use": "Basal feeding" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Thinning", "Growth", "Fiber Cut", "Retting Ready"],
+    "guideSteps": [
+      "Sowing: Broadcast seeds in April-May. Thin out seedlings to 10 cm.",
+      "Retting: Bundle harvested stalks, submerge in clean slow-flowing water for 15 days.",
+      "Extraction: Hand-strip fibers from retted stalks, wash, and dry under shade."
+    ]
+  },
+  {
+    "id": "sesame",
+    "name": "Sesame (Til)",
+    "emoji": "🌱",
+    "category": "Other",
+    "season": "Kharif",
+    "soilTypes": ["sandy loam", "loamy"],
+    "waterNeed": "Low",
+    "duration": "80-95 days",
+    "riskLevel": "low",
+    "profitRange": "15,000-26,000/acre",
+    "reason": "Warm oilseed crop thriving in dry, light sandy soils with minimal rain.",
+    "suitScore": 82,
+    "costPerAcre": 7000,
+    "yieldPerAcre": 4,
+    "pricePerKg": 110,
+    "inputs": [
+      { "icon": "🌱", "name": "Til Seeds", "qty": "2 kg/acre", "price": 500, "use": "Sowing" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Flowering", "Pod Formation", "Maturity", "Harvest Ready"],
+    "guideSteps": [
+      "Planting: SOW seeds shallow (1 cm deep) mixed with dry sand to ensure even spacing.",
+      "Water: Keep field dry; standing water causes immediate crop loss.",
+      "Harvest: Cut plants when leaves turn yellow and pods at the base begin to open."
+    ]
+  },
+  {
+    "id": "sunflower",
+    "name": "Sunflower",
+    "emoji": "🌻",
+    "category": "Other",
+    "season": "Rabi",
+    "soilTypes": ["loamy", "black", "alluvial"],
+    "waterNeed": "Moderate",
+    "duration": "90-100 days",
+    "riskLevel": "medium",
+    "profitRange": "16,000-28,000/acre",
+    "reason": "Highly adaptive oilseed crop; grows well in deep, moisture-retaining soils.",
+    "suitScore": 76,
+    "costPerAcre": 11000,
+    "yieldPerAcre": 8,
+    "pricePerKg": 60,
+    "inputs": [
+      { "icon": "🌱", "name": "Sunflower Seeds", "qty": "3 kg/acre", "price": 1500, "use": "Sowing" }
+    ],
+    "stages": ["Land Prep", "Sowing", "Vegetative", "Budding", "Flowering", "Harvest Ready"],
+    "guideSteps": [
+      "Soil: Deep clay-loams or black cotton soils are best to support heavy heads.",
+      "Protection: Protect flowers from birds during seed hardening phase.",
+      "Harvest: Harvest when the back of the seed heads turn lemon yellow."
+    ]
+  },
+  {
+    "id": "ginger",
+    "name": "Ginger",
+    "emoji": "🫚",
+    "category": "Other",
+    "season": "Kharif",
+    "soilTypes": ["loamy", "red laterite", "clay loam"],
+    "waterNeed": "Moderate",
+    "duration": "240-270 days",
+    "riskLevel": "medium",
+    "profitRange": "35,000-80,000/acre",
+    "reason": "High-value spice requiring rich loamy soils and warm, humid conditions.",
+    "suitScore": 70,
+    "costPerAcre": 30000,
+    "yieldPerAcre": 60,
+    "pricePerKg": 50,
+    "inputs": [
+      { "icon": "🌱", "name": "Ginger Seed Rhizomes", "qty": "600 kg/acre", "price": 18000, "use": "Planting" }
+    ],
+    "stages": ["Land Prep", "Planting", "Sprouting", "Tillering", "Rhizome Bulking", "Harvest Ready"],
+    "guideSteps": [
+      "Seed: Use healthy, disease-free seed rhizomes with at least 1-2 active eyes.",
+      "Planting: Plant in raised beds to ensure water drains away immediately.",
+      "Mulching: Apply green leaf mulch immediately after planting to protect soil moisture."
+    ]
+  },
+  {
+    "id": "tea",
+    "name": "Tea",
+    "emoji": "🍃",
+    "category": "Other",
+    "season": "Kharif",
+    "soilTypes": ["red laterite", "loamy"],
+    "waterNeed": "High",
+    "duration": "Perennial",
+    "riskLevel": "high",
+    "profitRange": "50,000-1,20,000/acre",
+    "reason": "Requires acid-rich laterite soils on well-drained mountain slopes and warm climate.",
+    "suitScore": 65,
+    "costPerAcre": 40000,
+    "yieldPerAcre": 10,
+    "pricePerKg": 180,
+    "inputs": [
+      { "icon": "🌱", "name": "Clonal Saplings", "qty": "4000 plants/acre", "price": 15000, "use": "Planting" }
+    ],
+    "stages": ["Planting", "Maturation", "Plucking Initial", "Pruning", "Flush Plucking", "Harvest"],
+    "guideSteps": [
+      "Establishment: Plant saplings on contour lines of sloping, well-drained land.",
+      "Nutrition: Regularly apply nitrogen and organic fertilizers to boost foliage.",
+      "Plucking: Pluck 'two leaves and a bud' every 7-10 days during flushes."
+    ]
+  },
+  {
+    "id": "coffee",
+    "name": "Coffee",
+    "emoji": "☕",
+    "category": "Other",
+    "season": "Kharif",
+    "soilTypes": ["red laterite", "loamy"],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "high",
+    "profitRange": "40,000-95,000/acre",
+    "reason": "Requires shade and deep loamy laterite soil with well-distributed rain.",
+    "suitScore": 67,
+    "costPerAcre": 38000,
+    "yieldPerAcre": 8,
+    "pricePerKg": 220,
+    "inputs": [
+      { "icon": "🌱", "name": "Seedlings", "qty": "1000 plants/acre", "price": 12000, "use": "Planting" }
+    ],
+    "stages": ["Planting", "Branching", "Blossom", "Berry Set", "Berry Ripening", "Harvest"],
+    "guideSteps": [
+      "Shade: Plant shade trees (e.g. silver oak) prior to planting coffee.",
+      "Blossom: Blossom shower irrigation triggers even flowering across trees.",
+      "Harvest: Hand-pick deep red ripe berries; pulp and dry immediately."
+    ]
+  }
+]

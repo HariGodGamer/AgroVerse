@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+
+dataset/
+disease_uploads/
+
+.venv/
+venv/
+env/

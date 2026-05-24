@@ -1,0 +1,360 @@
+[
+  {
+    "id": "potato",
+    "name": "Potato",
+    "emoji": "🥔",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": [
+      "sandy loam",
+      "loamy",
+      "alluvial"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "75-100 days",
+    "riskLevel": "medium",
+    "profitRange": "25,000-45,000/acre",
+    "reason": "High-value crop with strong market demand; suits cool Rabi weather.",
+    "suitScore": 80,
+    "costPerAcre": 25000,
+    "yieldPerAcre": 100,
+    "pricePerKg": 10,
+    "inputs": [
+      {
+        "icon": "🥔",
+        "name": "Seed Potatoes",
+        "qty": "800 kg/acre",
+        "price": 12000,
+        "use": "Planting"
+      },
+      {
+        "icon": "🧪",
+        "name": "Compost & NPK",
+        "qty": "2 tonnes/acre",
+        "price": 4000,
+        "use": "Soil preparation"
+      },
+      {
+        "icon": "💧",
+        "name": "Irrigation",
+        "qty": "Weekly drip",
+        "price": 5000,
+        "use": "Tuber growth"
+      },
+      {
+        "icon": "📦",
+        "name": "Fungicide",
+        "qty": "2 sprays",
+        "price": 1500,
+        "use": "Blight control"
+      }
+    ],
+    "stages": [
+      "Sprouting",
+      "Planting",
+      "Emergence",
+      "Tuber Initiation",
+      "Tuber Bulking",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Seed Selection: Use disease-free seed tubers like Kufri Bahar or Kufri Pukhraj.",
+      "Planting: Plant tuber pieces on ridges spaced 60 cm apart.",
+      "Earthing Up: Pile soil around the stem base at 30 days to protect tubers from sunlight.",
+      "Fungal Control: Apply Mancozeb or Copper Oxychloride to prevent Early/Late Blight."
+    ]
+  },
+  {
+    "id": "onion",
+    "name": "Onion",
+    "emoji": "🧅",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "alluvial",
+      "sandy loam"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "110-130 days",
+    "riskLevel": "medium",
+    "profitRange": "24,000-44,000/acre",
+    "reason": "High demand horticultural crop; thrives in cool Rabi seasons.",
+    "suitScore": 75,
+    "costPerAcre": 20000,
+    "yieldPerAcre": 80,
+    "pricePerKg": 12,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Onion Nursery Seeds",
+        "qty": "4 kg/acre",
+        "price": 4000,
+        "use": "Nursery rearing"
+      },
+      {
+        "icon": "🧪",
+        "name": "Organic Manure",
+        "qty": "3 tonnes/acre",
+        "price": 4500,
+        "use": "Soil prep"
+      },
+      {
+        "icon": "💧",
+        "name": "Drip/Sprinkler",
+        "qty": "Regular",
+        "price": 5000,
+        "use": "Bulbing stage"
+      }
+    ],
+    "stages": [
+      "Nursery",
+      "Transplanting",
+      "Vegetative",
+      "Bulb Formation",
+      "Maturity",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Sowing: SOW seeds in nursery bed, transplant seedlings after 6-8 weeks.",
+      "Soil preparation: Add well-rotted FYM and compost to get fine, loose loam.",
+      "Watering: Stop watering 10-15 days before harvesting to allow drying.",
+      "Harvest: Lift bulbs when 50% of the leaf tops drop naturally."
+    ]
+  },
+  {
+    "id": "tomato",
+    "name": "Tomato",
+    "emoji": "🍅",
+    "category": "Vegetable",
+    "season": "Zaid",
+    "soilTypes": [
+      "loamy",
+      "sandy loam",
+      "alluvial"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "90-120 days",
+    "riskLevel": "medium",
+    "profitRange": "30,000-60,000/acre",
+    "reason": "High-value crop requiring drip irrigation and warm Zaid temperatures.",
+    "suitScore": 72,
+    "costPerAcre": 26000,
+    "yieldPerAcre": 120,
+    "pricePerKg": 10,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Hybrid Seedlings",
+        "qty": "6000 plants",
+        "price": 6000,
+        "use": "Transplanting"
+      },
+      {
+        "icon": "🧪",
+        "name": "NPK & Micronutrients",
+        "qty": "100 kg/acre",
+        "price": 4000,
+        "use": "Soil enrichment"
+      },
+      {
+        "icon": "💧",
+        "name": "Drip Irrigation",
+        "qty": "Continuous",
+        "price": 7000,
+        "use": "Throughout growth"
+      },
+      {
+        "icon": "📦",
+        "name": "Staking Materials",
+        "qty": "Bamboo & thread",
+        "price": 3000,
+        "use": "Support structure"
+      }
+    ],
+    "stages": [
+      "Nursery",
+      "Transplanting",
+      "Vegetative",
+      "Flowering",
+      "Fruit Development",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Transplanting: Shift seedlings to main field after 4 weeks. Plant on raised beds.",
+      "Staking: Tie plants to wooden stakes to keep fruits off the wet soil.",
+      "Irrigation: Keep soil consistently moist; uneven watering causes blossom-end rot."
+    ]
+  },
+  {
+    "id": "carrot",
+    "name": "Carrot",
+    "emoji": "🥕",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": [
+      "sandy loam",
+      "loamy"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "85-110 days",
+    "riskLevel": "low",
+    "profitRange": "18,000-30,000/acre",
+    "reason": "Requires loose, stone-free sandy loam soil to grow straight, sweet roots.",
+    "suitScore": 84,
+    "costPerAcre": 12000,
+    "yieldPerAcre": 80,
+    "pricePerKg": 12,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Seeds",
+        "qty": "3 kg/acre",
+        "price": 2500,
+        "use": "Sowing"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Germination",
+      "Thinning",
+      "Root Bulking",
+      "Maturity",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Land Prep: Remove stones and clods. Till deep to create light, loose sandy-loam.",
+      "Sowing: SOW directly in ridges, thin seedlings to 5 cm spacing at 3 weeks.",
+      "Harvest: Harvest when the root shoulder diameter reaches 2-3 cm."
+    ]
+  },
+  {
+    "id": "garlic",
+    "name": "Garlic",
+    "emoji": "🧄",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "alluvial",
+      "clay loam"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "140-160 days",
+    "riskLevel": "medium",
+    "profitRange": "35,000-75,000/acre",
+    "reason": "High-value bulb crop requiring cool winter climate and fertile soils.",
+    "suitScore": 79,
+    "costPerAcre": 28000,
+    "yieldPerAcre": 45,
+    "pricePerKg": 50,
+    "inputs": [
+      {
+        "icon": "🧄",
+        "name": "Garlic Cloves",
+        "qty": "220 kg/acre",
+        "price": 15000,
+        "use": "Planting"
+      }
+    ],
+    "stages": [
+      "Clove Prep",
+      "Planting",
+      "Sprouting",
+      "Vegetative",
+      "Bulb Growth",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Planting: Separate cloves from healthy bulbs. Plant pointed end up, 5 cm deep.",
+      "Earthing: Keep soil weed-free. Shallow hoeing is crucial to protect shallow roots.",
+      "Harvest: Lift garlic when 60% of leaves turn yellow-brown and dry."
+    ]
+  },
+  {
+    "id": "cabbage",
+    "name": "Cabbage",
+    "emoji": "🥬",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "clay loam",
+      "alluvial"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "90-110 days",
+    "riskLevel": "medium",
+    "profitRange": "20,000-38,000/acre",
+    "reason": "Cold-hardy cole vegetable requiring moist loam soil and regular nitrogen feeding.",
+    "suitScore": 81,
+    "costPerAcre": 16000,
+    "yieldPerAcre": 120,
+    "pricePerKg": 8,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Saplings",
+        "qty": "20000 plants",
+        "price": 5000,
+        "use": "Transplant"
+      }
+    ],
+    "stages": [
+      "Nursery",
+      "Transplant",
+      "Heading Start",
+      "Head Formation",
+      "Maturity",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Seedlings: Raise seeds in nursery beds; transplant when 4-5 leaves form.",
+      "Watering: Requires constant moderate moisture; dryness causes head splitting.",
+      "Harvest: Cut heads when they are firm, heavy, and compact."
+    ]
+  },
+  {
+    "id": "cauliflower",
+    "name": "Cauliflower",
+    "emoji": "🥦",
+    "category": "Vegetable",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "clay loam",
+      "alluvial"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "95-115 days",
+    "riskLevel": "medium",
+    "profitRange": "22,000-40,000/acre",
+    "reason": "Demands rich, moisture-retaining loam soils and careful head protection (blanching).",
+    "suitScore": 80,
+    "costPerAcre": 17000,
+    "yieldPerAcre": 100,
+    "pricePerKg": 10,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Seedlings",
+        "qty": "18000 plants",
+        "price": 5200,
+        "use": "Transplant"
+      }
+    ],
+    "stages": [
+      "Nursery",
+      "Transplant",
+      "Curd Initiation",
+      "Curd Growth",
+      "Maturity",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Transplanting: Spacing 60 cm x 45 cm. Transplant late afternoon.",
+      "Blanching: Fold outer leaves over the developing curd to protect it from yellowing in sun.",
+      "Harvest: Cut when curds are compact, white, and fully developed."
+    ]
+  }
+]

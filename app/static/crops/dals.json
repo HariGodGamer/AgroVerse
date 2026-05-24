@@ -1,0 +1,250 @@
+[
+  {
+    "id": "gram",
+    "name": "Gram (Chickpea)",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "black",
+      "sandy loam"
+    ],
+    "waterNeed": "Low",
+    "duration": "100-120 days",
+    "riskLevel": "low",
+    "profitRange": "18,000-28,000/acre",
+    "reason": "Pulse crop with high nitrogen fixing; thrives in dry Rabi soils.",
+    "suitScore": 77,
+    "costPerAcre": 10000,
+    "yieldPerAcre": 8,
+    "pricePerKg": 60,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Chickpea Seeds",
+        "qty": "35 kg/acre",
+        "price": 2200,
+        "use": "Dibbling"
+      },
+      {
+        "icon": "🧪",
+        "name": "SSP Fertilizer",
+        "qty": "50 kg/acre",
+        "price": 800,
+        "use": "At sowing"
+      },
+      {
+        "icon": "💧",
+        "name": "Irrigation",
+        "qty": "1 cycle",
+        "price": 800,
+        "use": "Before flowering"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Branching",
+      "Flowering",
+      "Pod Fill",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Varieties: Select Pusa-362 or RVG-202. Treat seeds with Rhizobium culture.",
+      "Planting: Sow in October-November in rows spaced 30 cm apart.",
+      "Irrigation: Critical watering at branching and pod-filling. Do not overwater.",
+      "Harvesting: Reap when plants dry out, turn brown, and pods rattle when shaken."
+    ]
+  },
+  {
+    "id": "moong",
+    "name": "Moong Dal",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Zaid",
+    "soilTypes": [
+      "loamy",
+      "sandy loam",
+      "alluvial"
+    ],
+    "waterNeed": "Low",
+    "duration": "60-75 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-20,000/acre",
+    "reason": "Fast summer pulse crop that naturally fixes nitrogen, restoring soil health.",
+    "suitScore": 86,
+    "costPerAcre": 8000,
+    "yieldPerAcre": 6,
+    "pricePerKg": 70,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Moong Seeds",
+        "qty": "10 kg/acre",
+        "price": 1200,
+        "use": "Direct sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "Phosphatic Fertilizer",
+        "qty": "40 kg/acre",
+        "price": 800,
+        "use": "Basal"
+      },
+      {
+        "icon": "💧",
+        "name": "Waterings",
+        "qty": "2 cycles",
+        "price": 1000,
+        "use": "Flowering + Pod fill"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Germination",
+      "Branching",
+      "Flowering",
+      "Pod Formation",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Variety selection: Choose SML 668 or IPM 02-3 for short duration summer growth.",
+      "Sowing: Broadcast or drill seeds in mid-March to April, spacing 25 cm x 10 cm.",
+      "Nutrition: Requires minimal nitrogen. Apply Phosphorus to encourage root nodules.",
+      "Harvest: Pick mature pods in 2-3 pickings as they ripen asynchronously."
+    ]
+  },
+  {
+    "id": "urad",
+    "name": "Urad Dal",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Kharif",
+    "soilTypes": [
+      "clay loam",
+      "alluvial",
+      "black"
+    ],
+    "waterNeed": "Low",
+    "duration": "70-85 days",
+    "riskLevel": "low",
+    "profitRange": "14,000-24,000/acre",
+    "reason": "Quick-maturing black gram pulse suitable for Rabi rice-fallow or Kharif season.",
+    "suitScore": 80,
+    "costPerAcre": 9000,
+    "yieldPerAcre": 7,
+    "pricePerKg": 65,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Urad Seeds",
+        "qty": "8 kg/acre",
+        "price": 1000,
+        "use": "Sowing"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Germination",
+      "Branching",
+      "Flowering",
+      "Pod Fill",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Variety: Select T-9 or Shekhar-2. Seed treatment with Trichoderma is suggested.",
+      "Spacing: Row spacing of 30 cm, plant spacing of 10 cm. Drill at 3-4 cm depth.",
+      "Watering: Typically rainfed. Supplement during extreme dry spells at flowering.",
+      "Harvest: Cut the crop when 80% of the pods turn black and dry."
+    ]
+  },
+  {
+    "id": "arhar",
+    "name": "Arhar (Pigeon Pea)",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Kharif",
+    "soilTypes": [
+      "loamy",
+      "alluvial",
+      "red"
+    ],
+    "waterNeed": "Low",
+    "duration": "150-180 days",
+    "riskLevel": "medium",
+    "profitRange": "22,000-38,000/acre",
+    "reason": "Deep-rooted pulse crop that withstands drought and improves soil fertility.",
+    "suitScore": 79,
+    "costPerAcre": 12000,
+    "yieldPerAcre": 9,
+    "pricePerKg": 75,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Arhar Seeds",
+        "qty": "6 kg/acre",
+        "price": 1200,
+        "use": "Line sowing"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Vegetative",
+      "Flowering",
+      "Pod Development",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Variety: Use UPAS-120 or Pusa-992. Treat seeds with rhizobial culture.",
+      "Sowing: Plant in June-July. Space widely (60 cm x 15 cm) due to branching habit.",
+      "Weeding: Perform two hand weedings within the first 45 days to control competitor weeds.",
+      "Harvest: Cut entire plants when pods turn brown; stack in bundles to dry before threshing."
+    ]
+  },
+  {
+    "id": "lentil",
+    "name": "Lentil (Masoor)",
+    "emoji": "🌱",
+    "category": "Dal",
+    "season": "Rabi",
+    "soilTypes": [
+      "alluvial",
+      "clay loam",
+      "loamy"
+    ],
+    "waterNeed": "Low",
+    "duration": "110-125 days",
+    "riskLevel": "low",
+    "profitRange": "15,000-26,000/acre",
+    "reason": "Cold-hardy Rabi pulse that grows well in clay-loam and alluvial soils.",
+    "suitScore": 81,
+    "costPerAcre": 8500,
+    "yieldPerAcre": 6.5,
+    "pricePerKg": 68,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Lentil Seeds",
+        "qty": "15 kg/acre",
+        "price": 1100,
+        "use": "Sowing"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Seedling",
+      "Vegetative",
+      "Flowering",
+      "Podding",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Variety: Choose Pusa Vaibhav or K-75. Treat with Rhizobium before sowing.",
+      "Sowing: SOW in late October or November with 30 cm row spacing.",
+      "Watering: Typically requires 1-2 light irrigations if winter rains fail.",
+      "Harvest: Cut close to the ground when plants turn golden-brown and dry."
+    ]
+  }
+]

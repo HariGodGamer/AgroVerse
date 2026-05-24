@@ -876,7 +876,7 @@
 
 <!-- ======================== NAVBAR ======================== -->
 <nav>
-  <a href="#" class="nav-logo">
+  <a href="/" class="nav-logo">
     <div class="nav-logo-icon">🌿</div>
     <span>AgroVerse</span>
   </a>
@@ -1116,10 +1116,10 @@
       </div>
 
       <div class="floating-card fc-weather" style="min-width:160px">
-        <div class="fc-icon">🌤️</div>
+        <div class="fc-icon" id="hero-weather-icon">🌤️</div>
         <div class="fc-label">Today's Weather</div>
-        <div class="fc-value">28°C</div>
-        <div class="fc-sub">Good farming conditions</div>
+        <div class="fc-value" id="hero-weather-temp">--°C</div>
+        <div class="fc-sub" id="hero-weather-cond">Loading…</div>
       </div>
 
       <div class="floating-card fc-yield" style="min-width:150px">
@@ -1213,51 +1213,51 @@
     <div class="weather-main-card reveal">
       <div class="weather-top">
         <div>
-          <div class="weather-location">
-            📍 Mathura, Uttar Pradesh, IN
+          <div class="weather-location" id="wx-location">
+            📍 Detecting location…
           </div>
-          <div class="weather-temp-big">28°</div>
-          <div class="weather-condition">Partly Cloudy — Ideal for irrigation</div>
+          <div class="weather-temp-big" id="wx-temp">--°</div>
+          <div class="weather-condition" id="wx-condition">Loading weather data…</div>
         </div>
-        <div class="weather-icon-big">⛅</div>
+        <div class="weather-icon-big" id="wx-icon">⏳</div>
       </div>
 
       <div class="weather-stats">
         <div class="weather-stat">
           <div class="stat-icon">💧</div>
-          <div class="stat-val">67%</div>
+          <div class="stat-val" id="wx-humidity">--%</div>
           <div class="stat-label">Humidity</div>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:67%"></div></div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="wx-humidity-bar" style="width:0%"></div></div>
         </div>
         <div class="weather-stat">
           <div class="stat-icon">🌬️</div>
-          <div class="stat-val">18 km/h</div>
+          <div class="stat-val" id="wx-wind">-- km/h</div>
           <div class="stat-label">Wind Speed</div>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:38%"></div></div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="wx-wind-bar" style="width:0%"></div></div>
         </div>
         <div class="weather-stat">
           <div class="stat-icon">🌡️</div>
-          <div class="stat-val">22°C</div>
+          <div class="stat-val" id="wx-feels">--°C</div>
           <div class="stat-label">Feels Like</div>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:55%"></div></div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="wx-feels-bar" style="width:0%"></div></div>
         </div>
         <div class="weather-stat">
           <div class="stat-icon">☀️</div>
-          <div class="stat-val">9.2 UV</div>
+          <div class="stat-val" id="wx-uv">-- UV</div>
           <div class="stat-label">UV Index</div>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:80%"></div></div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="wx-uv-bar" style="width:0%"></div></div>
         </div>
         <div class="weather-stat">
           <div class="stat-icon">🌧️</div>
-          <div class="stat-val">12%</div>
-          <div class="stat-label">Rain Chance</div>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:12%"></div></div>
+          <div class="stat-val" id="wx-rain">-- mm</div>
+          <div class="stat-label">Rain</div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="wx-rain-bar" style="width:0%"></div></div>
         </div>
         <div class="weather-stat">
           <div class="stat-icon">👁️</div>
-          <div class="stat-val">8.4 km</div>
+          <div class="stat-val" id="wx-vis">-- km</div>
           <div class="stat-label">Visibility</div>
-          <div class="stat-bar"><div class="stat-bar-fill" style="width:70%"></div></div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="wx-vis-bar" style="width:0%"></div></div>
         </div>
       </div>
     </div>
@@ -1397,7 +1397,7 @@
 
 <!-- ======================== FOOTER ======================== -->
 <footer>
-  <div class="footer-logo">🌿 AgroVerse</div>
+  <a href="/" class="footer-logo" style="text-decoration: none; display: inline-block;">🌿 AgroVerse</a>
   <p>Smart Farming for a Better Tomorrow</p>
   <p style="margin-top:8px;font-size:12px;opacity:0.5">© 2025 AgroVerse Technologies. Built with ❤️ for Indian Farmers.</p>
 </footer>
@@ -1577,6 +1577,96 @@ mobileNav.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeMobileNav();
 });
+
+// ── LIVE WEATHER FETCH ─────────────────────────────────────────────────────
+(function() {
+  const WEATHER_ICONS = {
+    'sunny': '☀️', 'clear': '🌙', 'partly cloudy': '⛅', 'cloudy': '☁️',
+    'overcast': '☁️', 'mist': '🌫️', 'fog': '🌫️', 'rain': '🌧️',
+    'light rain': '🌦️', 'heavy rain': '🌧️', 'drizzle': '🌦️',
+    'thunderstorm': '⛈️', 'thunder': '⛈️', 'snow': '❄️',
+    'sleet': '🌨️', 'haze': '🌫️', 'smoke': '🌫️', 'blizzard': '❄️',
+    'patchy rain': '🌦️', 'moderate rain': '🌧️'
+  };
+
+  function getWeatherIcon(condition) {
+    const c = (condition || '').toLowerCase();
+    for (const [key, emoji] of Object.entries(WEATHER_ICONS)) {
+      if (c.includes(key)) return emoji;
+    }
+    return '🌤️';
+  }
+
+  function getFarmingTip(condition) {
+    const c = (condition || '').toLowerCase();
+    if (c.includes('rain') || c.includes('drizzle') || c.includes('thunder'))
+      return 'Skip irrigation today';
+    if (c.includes('sunny') || c.includes('clear'))
+      return 'Ideal for harvesting';
+    if (c.includes('cloudy') || c.includes('overcast'))
+      return 'Ideal for irrigation';
+    if (c.includes('fog') || c.includes('mist') || c.includes('haze'))
+      return 'Watch for fungal growth';
+    return 'Good farming conditions';
+  }
+
+  function updateWeatherUI(d) {
+    // Main weather section
+    const el = id => document.getElementById(id);
+    el('wx-location').innerHTML = '📍 ' + (d.location || 'Unknown');
+    el('wx-temp').textContent = Math.round(d.temperature) + '°';
+    el('wx-condition').textContent = d.condition + ' — ' + getFarmingTip(d.condition);
+    el('wx-icon').textContent = getWeatherIcon(d.condition);
+
+    el('wx-humidity').textContent = d.humidity + '%';
+    el('wx-humidity-bar').style.width = d.bars.humidity + '%';
+
+    el('wx-wind').textContent = d.wind_speed + ' km/h';
+    el('wx-wind-bar').style.width = d.bars.wind + '%';
+
+    // Feels-like from API
+    const feelsLike = d.feelslike !== undefined ? d.feelslike : d.temperature;
+    el('wx-feels').textContent = Math.round(feelsLike) + '°C';
+    el('wx-feels-bar').style.width = (d.bars.feelslike || d.bars.temp) + '%';
+
+    el('wx-uv').textContent = d.uv_index + ' UV';
+    el('wx-uv-bar').style.width = d.bars.uv + '%';
+
+    el('wx-rain').textContent = d.rain + ' mm';
+    el('wx-rain-bar').style.width = d.bars.rain + '%';
+
+    el('wx-vis').textContent = d.visibility + ' km';
+    el('wx-vis-bar').style.width = d.bars.visibility + '%';
+
+    // Hero floating weather card
+    el('hero-weather-temp').textContent = Math.round(d.temperature) + '°C';
+    el('hero-weather-cond').textContent = getFarmingTip(d.condition);
+    el('hero-weather-icon').textContent = getWeatherIcon(d.condition);
+  }
+
+  function fetchWeather(lat, lon) {
+    fetch('/api/weather?lat=' + lat + '&lon=' + lon)
+      .then(r => r.json())
+      .then(d => {
+        if (d.error) throw new Error(d.error);
+        updateWeatherUI(d);
+      })
+      .catch(err => {
+        console.warn('Weather fetch error:', err);
+        document.getElementById('wx-condition').textContent = 'Could not load weather data';
+      });
+  }
+
+  // Try geolocation, fallback to Delhi
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+      () => fetchWeather(28.6139, 77.2090) // Delhi fallback
+    );
+  } else {
+    fetchWeather(28.6139, 77.2090);
+  }
+})();
 </script>
 </body>
 </html>

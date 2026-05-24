@@ -1,0 +1,11 @@
+{
+  "7e90655c631849d5": {
+    "land_area": 0.0,
+    "soil_moisture": {
+      "value": 0.0,
+      "status": "Sensor-ready placeholder for upcoming hardware integration"
+    },
+    "monthly_revenue": 0.0,
+    "active_alerts": "Under Development"
+  }
+}

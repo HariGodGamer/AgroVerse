@@ -1,0 +1,214 @@
+[
+  {
+    "id": "sesame",
+    "name": "Sesame (Til)",
+    "emoji": "🌱",
+    "category": "Other",
+    "season": "Kharif",
+    "soilTypes": [
+      "sandy loam",
+      "loamy"
+    ],
+    "waterNeed": "Low",
+    "duration": "80-95 days",
+    "riskLevel": "low",
+    "profitRange": "15,000-26,000/acre",
+    "reason": "Warm oilseed crop thriving in dry, light sandy soils with minimal rain.",
+    "suitScore": 82,
+    "costPerAcre": 7000,
+    "yieldPerAcre": 4,
+    "pricePerKg": 110,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Til Seeds",
+        "qty": "2 kg/acre",
+        "price": 500,
+        "use": "Sowing"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Flowering",
+      "Pod Formation",
+      "Maturity",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Planting: SOW seeds shallow (1 cm deep) mixed with dry sand to ensure even spacing.",
+      "Water: Keep field dry; standing water causes immediate crop loss.",
+      "Harvest: Cut plants when leaves turn yellow and pods at the base begin to open."
+    ]
+  },
+  {
+    "id": "sunflower",
+    "name": "Sunflower",
+    "emoji": "🌻",
+    "category": "Other",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "black",
+      "alluvial"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "90-100 days",
+    "riskLevel": "medium",
+    "profitRange": "16,000-28,000/acre",
+    "reason": "Highly adaptive oilseed crop; grows well in deep, moisture-retaining soils.",
+    "suitScore": 76,
+    "costPerAcre": 11000,
+    "yieldPerAcre": 8,
+    "pricePerKg": 60,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Sunflower Seeds",
+        "qty": "3 kg/acre",
+        "price": 1500,
+        "use": "Sowing"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Vegetative",
+      "Budding",
+      "Flowering",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Soil: Deep clay-loams or black cotton soils are best to support heavy heads.",
+      "Protection: Protect flowers from birds during seed hardening phase.",
+      "Harvest: Harvest when the back of the seed heads turn lemon yellow."
+    ]
+  },
+  {
+    "id": "ginger",
+    "name": "Ginger",
+    "emoji": "🫚",
+    "category": "Other",
+    "season": "Kharif",
+    "soilTypes": [
+      "loamy",
+      "red laterite",
+      "clay loam"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "240-270 days",
+    "riskLevel": "medium",
+    "profitRange": "35,000-80,000/acre",
+    "reason": "High-value spice requiring rich loamy soils and warm, humid conditions.",
+    "suitScore": 70,
+    "costPerAcre": 30000,
+    "yieldPerAcre": 60,
+    "pricePerKg": 50,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Ginger Seed Rhizomes",
+        "qty": "600 kg/acre",
+        "price": 18000,
+        "use": "Planting"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Planting",
+      "Sprouting",
+      "Tillering",
+      "Rhizome Bulking",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Seed: Use healthy, disease-free seed rhizomes with at least 1-2 active eyes.",
+      "Planting: Plant in raised beds to ensure water drains away immediately.",
+      "Mulching: Apply green leaf mulch immediately after planting to protect soil moisture."
+    ]
+  },
+  {
+    "id": "tea",
+    "name": "Tea",
+    "emoji": "🍃",
+    "category": "Other",
+    "season": "Kharif",
+    "soilTypes": [
+      "red laterite",
+      "loamy"
+    ],
+    "waterNeed": "High",
+    "duration": "Perennial",
+    "riskLevel": "high",
+    "profitRange": "50,000-1,20,000/acre",
+    "reason": "Requires acid-rich laterite soils on well-drained mountain slopes and warm climate.",
+    "suitScore": 65,
+    "costPerAcre": 40000,
+    "yieldPerAcre": 10,
+    "pricePerKg": 180,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Clonal Saplings",
+        "qty": "4000 plants/acre",
+        "price": 15000,
+        "use": "Planting"
+      }
+    ],
+    "stages": [
+      "Planting",
+      "Maturation",
+      "Plucking Initial",
+      "Pruning",
+      "Flush Plucking",
+      "Harvest"
+    ],
+    "guideSteps": [
+      "Establishment: Plant saplings on contour lines of sloping, well-drained land.",
+      "Nutrition: Regularly apply nitrogen and organic fertilizers to boost foliage.",
+      "Plucking: Pluck 'two leaves and a bud' every 7-10 days during flushes."
+    ]
+  },
+  {
+    "id": "coffee",
+    "name": "Coffee",
+    "emoji": "☕",
+    "category": "Other",
+    "season": "Kharif",
+    "soilTypes": [
+      "red laterite",
+      "loamy"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "high",
+    "profitRange": "40,000-95,000/acre",
+    "reason": "Requires shade and deep loamy laterite soil with well-distributed rain.",
+    "suitScore": 67,
+    "costPerAcre": 38000,
+    "yieldPerAcre": 8,
+    "pricePerKg": 220,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Seedlings",
+        "qty": "1000 plants/acre",
+        "price": 12000,
+        "use": "Planting"
+      }
+    ],
+    "stages": [
+      "Planting",
+      "Branching",
+      "Blossom",
+      "Berry Set",
+      "Berry Ripening",
+      "Harvest"
+    ],
+    "guideSteps": [
+      "Shade: Plant shade trees (e.g. silver oak) prior to planting coffee.",
+      "Blossom: Blossom shower irrigation triggers even flowering across trees.",
+      "Harvest: Hand-pick deep red ripe berries; pulp and dry immediately."
+    ]
+  }
+]

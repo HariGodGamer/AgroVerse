@@ -1,0 +1,423 @@
+[
+  {
+    "id": "wheat",
+    "name": "Wheat",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "clay loam",
+      "alluvial"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "120-150 days",
+    "riskLevel": "low",
+    "profitRange": "18,000-28,000/acre",
+    "reason": "Ideal for Rabi season; thrives in cool weather and fertile loamy soil.",
+    "suitScore": 92,
+    "costPerAcre": 15000,
+    "yieldPerAcre": 18,
+    "pricePerKg": 22,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Wheat Seeds",
+        "qty": "40 kg/acre",
+        "price": 1800,
+        "use": "Sowing phase"
+      },
+      {
+        "icon": "🧪",
+        "name": "DAP Fertilizer",
+        "qty": "50 kg/acre",
+        "price": 1200,
+        "use": "At sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "Urea",
+        "qty": "60 kg/acre",
+        "price": 900,
+        "use": "After germination"
+      },
+      {
+        "icon": "💧",
+        "name": "Irrigation",
+        "qty": "3-4 waterings",
+        "price": 2000,
+        "use": "Throughout growth"
+      },
+      {
+        "icon": "📦",
+        "name": "Pesticide Kit",
+        "qty": "1 set",
+        "price": 800,
+        "use": "Pre-harvest"
+      }
+    ],
+    "stages": [
+      "Land Preparation",
+      "Sowing",
+      "Germination",
+      "Vegetative",
+      "Flowering",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Seed Selection: Prefer HD 2967, WH 1105, DBW-327, or SMW 5174. Treat seeds with Carbendazim 2.5 g/kg.",
+      "Land Prep: Prepare a fine seedbed with 2-3 ploughings. Irrigate prior to sowing if soil is dry.",
+      "Sowing: Drill seeds at 4-5 cm depth with 22 cm row spacing, using 100-125 kg/ha.",
+      "Fertilizers: Apply DAP 100 kg/ha and Potash 50 kg/ha at sowing, then topdress Urea.",
+      "Irrigation: Focus on critical watering stages: Crown Root Initiation (CRI), tillering, flowering, and grain-fill.",
+      "Harvest: Cut the crop in March-April when stalks turn golden-yellow and grains are hard."
+    ]
+  },
+  {
+    "id": "rice",
+    "name": "Rice",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": [
+      "clay",
+      "alluvial",
+      "clay loam"
+    ],
+    "waterNeed": "High",
+    "duration": "90-120 days",
+    "riskLevel": "medium",
+    "profitRange": "20,000-35,000/acre",
+    "reason": "Great for monsoon season; requires high water and heavy alluvial/clayey soils.",
+    "suitScore": 78,
+    "costPerAcre": 18000,
+    "yieldPerAcre": 22,
+    "pricePerKg": 24,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Paddy Seeds",
+        "qty": "25 kg/acre",
+        "price": 1500,
+        "use": "Transplanting"
+      },
+      {
+        "icon": "🧪",
+        "name": "NPK 14-14-14",
+        "qty": "60 kg/acre",
+        "price": 1400,
+        "use": "Basal dose"
+      },
+      {
+        "icon": "💧",
+        "name": "Flood Irrigation",
+        "qty": "Continuous",
+        "price": 3500,
+        "use": "Entire season"
+      },
+      {
+        "icon": "📦",
+        "name": "Weedicide",
+        "qty": "2L/acre",
+        "price": 600,
+        "use": "After transplant"
+      }
+    ],
+    "stages": [
+      "Nursery",
+      "Land Prep",
+      "Transplanting",
+      "Vegetative",
+      "Panicle",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Seed Selection: Use IR8, Sonalika, Basmati 370, or Pusa 1121. Treat with Carbendazim.",
+      "Nursery: Raise seedlings for 25-30 days while preparing puddled main field with standing water.",
+      "Transplantation: Transplant seedlings in rows with 20 cm spacing to ensure airflow.",
+      "Fertility: Apply NPK 120:60:40 kg/ha and Zinc Sulfate 25 kg/ha. Split Nitrogen applications.",
+      "Watering: Maintain 5 cm standing water until grains ripen; drain 10-12 days before harvest.",
+      "Harvesting: Reclaim grains when golden and moisture content reaches 18-20%."
+    ]
+  },
+  {
+    "id": "maize",
+    "name": "Maize",
+    "emoji": "🌽",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": [
+      "loamy",
+      "alluvial",
+      "clay loam"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "90-110 days",
+    "riskLevel": "medium",
+    "profitRange": "16,000-30,000/acre",
+    "reason": "Requires well-drained fertile soils and warm monsoon weather.",
+    "suitScore": 82,
+    "costPerAcre": 13000,
+    "yieldPerAcre": 20,
+    "pricePerKg": 20,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Hybrid Seeds",
+        "qty": "8 kg/acre",
+        "price": 1600,
+        "use": "Sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "NPK Fertilizer",
+        "qty": "50 kg/acre",
+        "price": 1400,
+        "use": "Basal dose"
+      },
+      {
+        "icon": "💧",
+        "name": "Irrigation",
+        "qty": "Monsoon support",
+        "price": 1500,
+        "use": "Flowering stage"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Vegetative",
+      "Knee-High",
+      "Tasseling",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Seed Choice: Pick Pioneer 3302, Dekalb 9108, or Syngenta NK6240 hybrid seeds.",
+      "Sowing: Spacing at 60 cm x 20 cm at 3-5 cm depth in well-tilled soil.",
+      "Fertility: Split Urea into three applications (basal, knee-high, and pre-tasseling).",
+      "Pest Alert: Scan for Fall Armyworm regularly. Apply Bacillus thuringiensis if damage is seen.",
+      "Irrigation: Keep field moist during critical knee-high and silking phases.",
+      "Harvest: Harvest when cob sheaths dry to brown and kernels become hard."
+    ]
+  },
+  {
+    "id": "barley",
+    "name": "Barley",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "sandy loam",
+      "alluvial"
+    ],
+    "waterNeed": "Low",
+    "duration": "120-140 days",
+    "riskLevel": "low",
+    "profitRange": "14,000-22,000/acre",
+    "reason": "Strong Rabi option for lighter soils and lower irrigation needs.",
+    "suitScore": 74,
+    "costPerAcre": 11000,
+    "yieldPerAcre": 16,
+    "pricePerKg": 22,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Seeds",
+        "qty": "35 kg/acre",
+        "price": 1500,
+        "use": "Sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "NPK 12-32-16",
+        "qty": "40 kg/acre",
+        "price": 1200,
+        "use": "Sowing base"
+      },
+      {
+        "icon": "💧",
+        "name": "Waterings",
+        "qty": "2 cycles",
+        "price": 1500,
+        "use": "Tillering + Jointing"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Tillering",
+      "Heading",
+      "Grain Fill",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Preparation: Plow 2-3 times to prepare a clean, fine weed-free seedbed.",
+      "Sowing: Sow seeds at 22 cm row spacing and 4-5 cm depth using a seed drill.",
+      "Irrigation: Give only 2-3 waterings. Focus on tillering and booting stages.",
+      "Weed Control: Spray Pendimethalin 3 days post-sowing to suppress early winter weeds.",
+      "Harvesting: Reap when stems are dry and straw turns brittle-yellow."
+    ]
+  },
+  {
+    "id": "bajra",
+    "name": "Bajra",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": [
+      "sandy",
+      "light loam",
+      "red"
+    ],
+    "waterNeed": "Low",
+    "duration": "75-90 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-20,000/acre",
+    "reason": "Highly suitable for dry regions with sandy soils and low rainfall.",
+    "suitScore": 79,
+    "costPerAcre": 9000,
+    "yieldPerAcre": 10,
+    "pricePerKg": 25,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Bajra Seeds",
+        "qty": "2 kg/acre",
+        "price": 400,
+        "use": "Sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "Urea",
+        "qty": "30 kg/acre",
+        "price": 500,
+        "use": "Top dressing"
+      },
+      {
+        "icon": "💧",
+        "name": "Minimal Irrigation",
+        "qty": "As needed",
+        "price": 1000,
+        "use": "Dry spells"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Vegetative",
+      "Tillering",
+      "Ear Emergence",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Variety selection: Use drought-resistant hybrid bajra seeds (e.g. HHB 67, MH 179).",
+      "Sowing: Direct sow at a shallow depth of 2 cm. Spacing should be 45 cm x 15 cm.",
+      "Weeding: Hoeing and weeding at 20-25 days after sowing is critical.",
+      "Watering: Can be grown rainfed; provide supplemental watering at flowering if rain fails.",
+      "Harvest: Harvest when grain moisture falls below 20% and seed heads dry out."
+    ]
+  },
+  {
+    "id": "jowar",
+    "name": "Jowar (Sorghum)",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": [
+      "clayey loam",
+      "black",
+      "alluvial"
+    ],
+    "waterNeed": "Low",
+    "duration": "100-115 days",
+    "riskLevel": "low",
+    "profitRange": "13,000-24,000/acre",
+    "reason": "Excellent drought-tolerant crop suitable for black cotton and clay loam soils.",
+    "suitScore": 83,
+    "costPerAcre": 9500,
+    "yieldPerAcre": 12,
+    "pricePerKg": 26,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Jowar Seeds",
+        "qty": "4 kg/acre",
+        "price": 600,
+        "use": "Sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "NPK Fertilizers",
+        "qty": "40 kg/acre",
+        "price": 1200,
+        "use": "Sowing basal"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Seedling",
+      "Tillering",
+      "Flowering",
+      "Dough Stage",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Varieties: Pick CSH-14 or CSV-15 and treat seeds to avoid grain mold and shoot fly.",
+      "Soil: Prepare land well. Clayey or black soils are ideal as they retain moisture.",
+      "Sowing: Space rows at 45 cm. Maintain plant-to-plant distance at 12-15 cm.",
+      "Harvest: Cut the panicles when the grains have hardened and show a black spot at the base."
+    ]
+  },
+  {
+    "id": "ragi",
+    "name": "Ragi (Finger Millet)",
+    "emoji": "🌾",
+    "category": "Grain",
+    "season": "Kharif",
+    "soilTypes": [
+      "red",
+      "sandy loam",
+      "loamy"
+    ],
+    "waterNeed": "Low",
+    "duration": "100-120 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-22,000/acre",
+    "reason": "Highly nutritious millet; extremely hardy in red laterite and sandy soils.",
+    "suitScore": 88,
+    "costPerAcre": 8000,
+    "yieldPerAcre": 14,
+    "pricePerKg": 32,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Ragi Seeds",
+        "qty": "3 kg/acre",
+        "price": 400,
+        "use": "Transplanting/Sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "Urea",
+        "qty": "30 kg/acre",
+        "price": 600,
+        "use": "Top dressing"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Vegetative",
+      "Tillering",
+      "Flowering",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Preparation: Sow in nursery or direct sow. Transplanting gives higher yields.",
+      "Nutrition: Apply FYM (Farm Yard Manure) at 4 tonnes/acre during field preparation.",
+      "Weeding: Hand-weed twice at 20 and 40 days to keep the crop clean.",
+      "Harvest: Harvest in two stages. First cut the earheads, then cut the stalks."
+    ]
+  }
+]

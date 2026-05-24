@@ -1,0 +1,541 @@
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <a href="/dashboard" class="sidebar-logo">
+    <div class="sidebar-logo-icon">&#x1F33F;</div>
+    <span class="logo-text">Agro<span class="logo-text-highlight">Verse</span></span>
+  </a>
+
+  <span class="sidebar-section-label" data-sidebar-i18n="sectionDashboard">Dashboard</span>
+  <ul class="sidebar-nav">
+    <li>
+      <a href="/dashboard" data-sidebar-key="overview">
+        <span class="nav-icon">&#x1F33E;</span>
+        <span class="nav-label" data-sidebar-i18n="overview">Overview</span>
+      </a>
+    </li>
+  </ul>
+
+  <span class="sidebar-section-label" data-sidebar-i18n="sectionSuite">Farming Suite</span>
+  <ul class="sidebar-nav">
+    <li>
+      <a href="/newfarmer?page=home" data-sidebar-key="home">
+        <span class="nav-icon">&#x1F3E0;</span>
+        <span class="nav-label" data-sidebar-i18n="home">Home</span>
+      </a>
+    </li>
+    <li>
+      <a href="/newfarmer?page=guide" data-sidebar-key="guide">
+        <span class="nav-icon">&#x1F4D6;</span>
+        <span class="nav-label" data-sidebar-i18n="guide">Farmer Guide</span>
+      </a>
+    </li>
+    <li>
+      <a href="/newfarmer?page=mycrops" data-sidebar-key="mycrops">
+        <span class="nav-icon">&#x1F33F;</span>
+        <span class="nav-label" data-sidebar-i18n="mycrops">My Crops</span>
+      </a>
+    </li>
+    <li>
+      <a href="/newfarmer?page=monitor" data-sidebar-key="monitor">
+        <span class="nav-icon">&#x1F4E1;</span>
+        <span class="nav-label" data-sidebar-i18n="monitor">Monitor Crop</span>
+      </a>
+    </li>
+    <li>
+      <a href="/newfarmer?page=marketplace" data-sidebar-key="marketplace">
+        <span class="nav-icon">&#x1F3EA;</span>
+        <span class="nav-label" data-sidebar-i18n="marketplace">Marketplace</span>
+      </a>
+    </li>
+  </ul>
+
+  <span class="sidebar-section-label" data-sidebar-i18n="sectionServices">Tools &amp; Services</span>
+  <ul class="sidebar-nav">
+    <li>
+      <a href="/market_data" data-sidebar-key="marketdata">
+        <span class="nav-icon">&#x1F4CA;</span>
+        <span class="nav-label" data-sidebar-i18n="marketdata">Market Data</span>
+      </a>
+    </li>
+    <li>
+      <a href="/machinery" data-sidebar-key="machinery">
+        <span class="nav-icon">&#x1F69C;</span>
+        <span class="nav-label" data-sidebar-i18n="machinery">Machinery</span>
+      </a>
+    </li>
+    <li>
+      <a href="/reviews" data-sidebar-key="reviews">
+        <span class="nav-icon">&#x2B50;</span>
+        <span class="nav-label" data-sidebar-i18n="reviews">Reviews</span>
+      </a>
+    </li>
+    <li>
+      <a href="/chat" data-sidebar-key="chatbot">
+        <span class="nav-icon">&#x1F916;</span>
+        <span class="nav-label">AI Chatbot</span>
+        <span class="nav-badge">NEW</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="sidebar-user" id="guideUserBadge" role="button" tabindex="0">
+    <div class="sidebar-avatar" id="dash-avatar"><span id="guide-user-avatar">{{ (session.get('user_name', 'User')[:1] or 'U')|upper }}</span><span class="online-dot"></span></div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-user-name" id="guide-user-name"><span id="dash-username">{{ session.get('user_name', 'User') }}</span></div>
+      <div class="sidebar-user-role" id="guide-user-email">{{ session.get('user_email', 'New Farmer') }}</div>
+    </div>
+    <a
+      href="/logout"
+      id="sidebarLogoutLink"
+      title="Logout"
+      style="color:var(--text-muted);font-size:16px;text-decoration:none;margin-left:auto;flex-shrink:0;"
+    >
+      &#x1F6AA;
+    </a>
+  </div>
+</aside>
+
+<style>
+  :root {
+    --sidebar-w: 220px !important;
+  }
+
+  .sidebar {
+    width: var(--sidebar-w) !important;
+    min-width: var(--sidebar-w) !important;
+    height: 100vh !important;
+    background: var(--bg-mid) !important;
+    border-right: 1px solid rgba(0, 229, 160, 0.15) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    z-index: 100 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    transition: transform 0.3s ease !important;
+    font-family: "DM Sans", sans-serif !important;
+    will-change: transform;
+    backface-visibility: hidden !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0, 229, 160, 0.12);
+    border-radius: 999px;
+  }
+
+  .sidebar-logo {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 22px 20px 16px !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    margin-bottom: 8px !important;
+    backface-visibility: hidden !important;
+    transform: translate3d(0, 0, 0) !important;
+    will-change: transform !important;
+  }
+
+  .sidebar-logo-icon {
+    width: 36px !important;
+    height: 36px !important;
+    background: linear-gradient(135deg, #00e5a0, #00c9b1) !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 17px !important;
+    box-shadow: 0 0 18px rgba(0, 229, 160, 0.35) !important;
+    flex-shrink: 0 !important;
+    backface-visibility: hidden !important;
+    transform: translate3d(0, 0, 0) !important;
+    will-change: transform !important;
+  }
+
+  .sidebar-logo .logo-text {
+    font-family: "Syne", sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 18px !important;
+    background: linear-gradient(90deg, #00e5a0, #00d4ff) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    backface-visibility: hidden !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    will-change: transform !important;
+  }
+
+  .sidebar-logo .logo-text-highlight {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 500 !important;
+    display: inline-block !important;
+  }
+
+  .sidebar-section-label {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    color: var(--text-muted) !important;
+    padding: 14px 20px 6px !important;
+  }
+
+  .sidebar-nav {
+    list-style: none !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+  }
+
+  .sidebar-nav li {
+    margin-bottom: 2px !important;
+  }
+
+  .sidebar-nav a {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 10px !important;
+    text-decoration: none !important;
+    color: var(--text-muted) !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    transition: all 0.25s !important;
+  }
+
+  .sidebar-nav a:hover {
+    background: var(--glass) !important;
+    color: var(--text-main) !important;
+  }
+
+  .sidebar-nav a.active {
+    background: rgba(0, 229, 160, 0.12) !important;
+    color: var(--emerald) !important;
+    font-weight: 600 !important;
+  }
+
+  .sidebar-nav a .nav-icon {
+    font-size: 16px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .sidebar-nav a .nav-label {
+    line-height: 1.2 !important;
+  }
+
+  .nav-badge {
+    margin-left: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 2px 6px !important;
+    border-radius: 20px !important;
+    background: linear-gradient(135deg, #00e5a0, #00c9b1) !important;
+    color: #04120e !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  .sidebar-user {
+    margin-top: auto !important;
+    padding: 14px 14px 20px !important;
+    border-top: 1px solid var(--glass-border) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+  }
+
+  .sidebar-avatar {
+    width: 36px !important;
+    height: 36px !important;
+    background: linear-gradient(135deg, #00e5a0, #00c9b1) !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #04120e !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+  }
+
+  .sidebar-avatar .online-dot {
+    position: absolute !important;
+    right: -2px !important;
+    bottom: -2px !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #4ade80 !important;
+    border: 1.5px solid var(--bg-mid) !important;
+  }
+
+  .sidebar-user-info {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .sidebar-user-name {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: var(--text-main) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .sidebar-user-role {
+    font-size: 11px !important;
+    color: var(--text-muted) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 990;
+  }
+
+  .sidebar-overlay.open {
+    display: block;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      transform: translateX(-100%) !important;
+    }
+
+    .sidebar.open {
+      transform: translateX(0) !important;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const SIDEBAR_I18N = {
+      en: {
+        sectionDashboard: "Dashboard",
+        sectionSuite: "Farming Suite",
+        sectionServices: "Tools & Services",
+        overview: "Overview",
+        home: "Home",
+        guide: "Farmer Guide",
+        mycrops: "My Crops",
+        monitor: "Monitor Crop",
+        marketplace: "Marketplace",
+        marketdata: "Market Data",
+        machinery: "Machinery",
+        reviews: "Reviews",
+        logout: "Logout"
+      },
+      hi: {
+        sectionDashboard: "\u0921\u0948\u0936\u092c\u094b\u0930\u094d\u0921",
+        sectionSuite: "\u0916\u0947\u0924\u0940 \u0938\u0941\u0907\u091f",
+        sectionServices: "\u091f\u0942\u0932\u094d\u0938 \u0914\u0930 \u0938\u0947\u0935\u093e\u090f\u0901",
+        overview: "\u0913\u0935\u0930\u0935\u094d\u092f\u0942",
+        home: "\u0939\u094b\u092e",
+        guide: "\u092b\u093e\u0930\u094d\u092e\u0930 \u0917\u093e\u0907\u0921",
+        mycrops: "\u092e\u0947\u0930\u0940 \u092b\u0938\u0932\u0947\u0902",
+        monitor: "\u092e\u0949\u0928\u093f\u091f\u0930 \u0915\u094d\u0930\u0949\u092a",
+        marketplace: "\u092e\u093e\u0930\u094d\u0915\u0947\u091f\u092a\u094d\u0932\u0947\u0938",
+        marketdata: "\u092e\u093e\u0930\u094d\u0915\u0947\u091f \u0921\u0947\u091f\u093e",
+        machinery: "\u092e\u0936\u0940\u0928\u0930\u0940",
+        reviews: "\u0930\u093f\u0935\u094d\u092f\u0942",
+        logout: "\u0932\u0949\u0917\u0906\u0909\u091f"
+      }
+    };
+
+    const GUIDE_PAGES = new Set([
+      "home",
+      "guide",
+      "mycrops",
+      "monitor",
+      "marketplace",
+      "marketdata",
+      "machineryhub"
+    ]);
+
+    function normalizeGuidePage(page) {
+      return GUIDE_PAGES.has(page) ? page : "guide";
+    }
+
+    function pageToSidebarKey(page) {
+      if (page === "machineryhub") return "machinery";
+      return page;
+    }
+
+    function getActiveSidebarKey() {
+      const path = window.location.pathname;
+      const params = new URLSearchParams(window.location.search);
+
+      if (path.includes("/dashboard")) return "overview";
+      if (path.includes("/newfarmer")) return pageToSidebarKey(normalizeGuidePage(params.get("page") || "guide"));
+      if (path.includes("/market_data")) return "marketdata";
+      if (path.includes("/machinery")) return "machinery";
+      if (path.includes("/reviews")) return "reviews";
+      if (path.includes("/chat")) return "chatbot";
+      if (path.includes("/disease")) return "monitor";
+      return "";
+    }
+
+    function translateSidebar() {
+      const lang = document.documentElement.lang || localStorage.getItem("agroverse_lang") || "en";
+      const copy = SIDEBAR_I18N[lang] || SIDEBAR_I18N.en;
+
+      document.querySelectorAll("[data-sidebar-i18n]").forEach((el) => {
+        const key = el.getAttribute("data-sidebar-i18n");
+        if (copy[key]) el.textContent = copy[key];
+      });
+
+      const logoutLink = document.getElementById("sidebarLogoutLink");
+      if (logoutLink) logoutLink.title = copy.logout || "Logout";
+    }
+
+    function updateActiveSidebarItem(page) {
+      const activeKey = page ? pageToSidebarKey(normalizeGuidePage(page)) : getActiveSidebarKey();
+      document.querySelectorAll("[data-sidebar-key]").forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("data-sidebar-key") === activeKey);
+      });
+    }
+
+    function closeSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebarOverlay");
+      if (sidebar) sidebar.classList.remove("open");
+      if (overlay) overlay.classList.remove("open");
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebarOverlay");
+      if (sidebar) sidebar.classList.toggle("open");
+      if (overlay) overlay.classList.toggle("open");
+    }
+
+    function syncGuideNavigation() {
+      if (!window.location.pathname.includes("/newfarmer")) return;
+      if (typeof window.navigateTo !== "function") return;
+      if (window.navigateTo.__sidebarWrapped) return;
+
+      const originalNavigateTo = window.navigateTo;
+
+      window.navigateTo = function (page, options) {
+        const normalized = normalizeGuidePage(page);
+        const opts = options || {};
+        originalNavigateTo(normalized);
+        updateActiveSidebarItem(normalized);
+
+        if (!opts.skipUrlSync) {
+          const target = "/newfarmer?page=" + normalized;
+          if (window.location.pathname + window.location.search !== target) {
+            window.history.pushState({ page: normalized }, "", target);
+          }
+        }
+      };
+
+      window.navigateTo.__sidebarWrapped = true;
+
+      window.addEventListener("popstate", () => {
+        const params = new URLSearchParams(window.location.search);
+        const page = normalizeGuidePage(params.get("page") || "guide");
+        originalNavigateTo(page);
+        updateActiveSidebarItem(page);
+      });
+    }
+
+    function initSidebar() {
+      translateSidebar();
+      updateActiveSidebarItem();
+      syncGuideNavigation();
+
+      const overlay = document.getElementById("sidebarOverlay");
+      if (overlay) overlay.addEventListener("click", closeSidebar);
+
+      const toggleBtn = document.getElementById("menuToggle") || document.getElementById("hamburger");
+      if (toggleBtn && !toggleBtn.dataset.sidebarBound) {
+        toggleBtn.dataset.sidebarBound = "true";
+        toggleBtn.addEventListener("click", toggleSidebar);
+      }
+
+      document.querySelectorAll("[data-sidebar-key]").forEach((link) => {
+        link.addEventListener("click", function (event) {
+          const href = this.getAttribute("href") || "";
+          const onGuidePage = window.location.pathname.includes("/newfarmer");
+          const internalGuideLink = href.startsWith("/newfarmer?page=");
+
+          if (onGuidePage && internalGuideLink && typeof window.navigateTo === "function") {
+            event.preventDefault();
+            const url = new URL(href, window.location.origin);
+            const page = normalizeGuidePage(url.searchParams.get("page") || "guide");
+            window.navigateTo(page);
+            if (window.innerWidth < 900) closeSidebar();
+            return;
+          }
+
+          if (window.innerWidth < 900) closeSidebar();
+        });
+      });
+
+      const userBadge = document.getElementById("guideUserBadge");
+      if (userBadge) {
+        userBadge.addEventListener("click", function (e) {
+          // Only trigger if the logout icon wasn't clicked
+          if (!e.target.closest("#sidebarLogoutLink")) {
+            window.location.href = "/account";
+          }
+        });
+        userBadge.addEventListener("keydown", function (event) {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            window.location.href = "/account";
+          }
+        });
+      }
+
+      const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.type === "attributes" && mutation.attributeName === "lang") {
+            translateSidebar();
+          }
+        });
+      });
+      observer.observe(document.documentElement, { attributes: true });
+
+      window.updateSharedSidebarSelection = updateActiveSidebarItem;
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initSidebar);
+    } else {
+      initSidebar();
+    }
+  })();
+</script>

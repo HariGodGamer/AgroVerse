@@ -1,0 +1,159 @@
+[
+  {
+    "id": "sugarcane",
+    "name": "Sugarcane",
+    "emoji": "🎋",
+    "category": "Commercial Crop",
+    "season": "Kharif",
+    "soilTypes": [
+      "clay loam",
+      "alluvial",
+      "loamy",
+      "black"
+    ],
+    "waterNeed": "High",
+    "duration": "300-360 days",
+    "riskLevel": "high",
+    "profitRange": "40,000-90,000/acre",
+    "reason": "Perennial crop yielding high profits under abundant water and deep soils.",
+    "suitScore": 75,
+    "costPerAcre": 32000,
+    "yieldPerAcre": 350,
+    "pricePerKg": 3.5,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Sugarcane Sets",
+        "qty": "30,000 sets/acre",
+        "price": 8000,
+        "use": "Planting"
+      },
+      {
+        "icon": "🧪",
+        "name": "DAP & Potash",
+        "qty": "150 kg/acre",
+        "price": 5000,
+        "use": "Basal feed"
+      },
+      {
+        "icon": "💧",
+        "name": "Heavy Irrigation",
+        "qty": "Continuous",
+        "price": 12000,
+        "use": "Year-round water"
+      }
+    ],
+    "stages": [
+      "Planting",
+      "Sprouting",
+      "Tillering",
+      "Grand Growth",
+      "Maturity",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Planting: Trench planting in deep soils. Treat sets with Carbendazim.",
+      "Earthing: Keep soil weed-free. earth-up at 4 months to prevent lodging.",
+      "Harvest: Harvest when lower leaves dry and cane sugars register high brix."
+    ]
+  },
+  {
+    "id": "cotton",
+    "name": "Cotton",
+    "emoji": "☁️",
+    "category": "Commercial Crop",
+    "season": "Kharif",
+    "soilTypes": [
+      "black cotton soil",
+      "loamy",
+      "clay loam"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "150-180 days",
+    "riskLevel": "medium",
+    "profitRange": "28,000-55,000/acre",
+    "reason": "Performs well in deep black cotton soils with moderate rainfall and strong sunshine.",
+    "suitScore": 84,
+    "costPerAcre": 22000,
+    "yieldPerAcre": 12,
+    "pricePerKg": 70,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Bt Cotton Seed",
+        "qty": "2-4 kg/ha",
+        "price": 2200,
+        "use": "Sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "NPK & Gypsum",
+        "qty": "80 kg/acre",
+        "price": 3000,
+        "use": "Basal dressing"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Vegetative",
+      "Flowering",
+      "Boll Development",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Variety: Use Bt cotton hybrids. Plant on ridges to prevent water ponding.",
+      "Nutrition: heavy potassium demand at boll stage to support fiber quality.",
+      "Harvest: Pluck opened cotton bolls cleanly, avoid dry leaf contamination."
+    ]
+  },
+  {
+    "id": "jute",
+    "name": "Jute",
+    "emoji": "🌾",
+    "category": "Commercial Crop",
+    "season": "Kharif",
+    "soilTypes": [
+      "alluvial",
+      "clay loam"
+    ],
+    "waterNeed": "High",
+    "duration": "120-150 days",
+    "riskLevel": "medium",
+    "profitRange": "18,000-32,000/acre",
+    "reason": "Thrives in warm, humid climates and heavy alluvial deltaic silt soils.",
+    "suitScore": 72,
+    "costPerAcre": 14000,
+    "yieldPerAcre": 15,
+    "pricePerKg": 45,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Jute Seeds",
+        "qty": "3 kg/acre",
+        "price": 800,
+        "use": "Broadcasting"
+      },
+      {
+        "icon": "🧪",
+        "name": "NPK & Gypsum",
+        "qty": "50 kg/acre",
+        "price": 1500,
+        "use": "Basal feeding"
+      }
+    ],
+    "stages": [
+      "Land Prep",
+      "Sowing",
+      "Thinning",
+      "Growth",
+      "Fiber Cut",
+      "Retting Ready"
+    ],
+    "guideSteps": [
+      "Sowing: Broadcast seeds in April-May. Thin out seedlings to 10 cm.",
+      "Retting: Bundle harvested stalks, submerge in clean slow-flowing water for 15 days.",
+      "Extraction: Hand-strip fibers from retted stalks, wash, and dry under shade."
+    ]
+  }
+]

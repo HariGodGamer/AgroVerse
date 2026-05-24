@@ -1,0 +1,181 @@
+[
+  {
+    "id": "spinach",
+    "name": "Spinach (Palak)",
+    "emoji": "🥬",
+    "category": "Green Vegetable",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "alluvial",
+      "clay loam"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "40-50 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-18,000/acre",
+    "reason": "Fast growing green leafy vegetable; thrives in cool winter climate.",
+    "suitScore": 90,
+    "costPerAcre": 6000,
+    "yieldPerAcre": 40,
+    "pricePerKg": 12,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Spinach Seeds",
+        "qty": "8 kg/acre",
+        "price": 800,
+        "use": "Direct sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "Urea",
+        "qty": "20 kg/acre",
+        "price": 400,
+        "use": "Post-cut dressing"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Germination",
+      "Vegetative Growth",
+      "First Cut",
+      "Second Cut",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Sowing: SOW directly in lines 20 cm apart. Keep soil moist for germination.",
+      "Cuts: Harvest by cutting leaves above root level. Allow to grow back for 2-3 cuts.",
+      "Nutrition: Apply nitrogen (Urea) after each cut to boost leaf regrowth."
+    ]
+  },
+  {
+    "id": "okra",
+    "name": "Okra (Bhindi)",
+    "emoji": " Okra",
+    "category": "Green Vegetable",
+    "season": "Kharif",
+    "soilTypes": [
+      "loamy",
+      "sandy loam",
+      "alluvial"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "70-90 days",
+    "riskLevel": "low",
+    "profitRange": "18,000-32,000/acre",
+    "reason": "Warm-season crop growing successfully in well-drained loamy soils.",
+    "suitScore": 85,
+    "costPerAcre": 11000,
+    "yieldPerAcre": 45,
+    "pricePerKg": 18,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Okra Seeds",
+        "qty": "4 kg/acre",
+        "price": 1200,
+        "use": "Sowing"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Germination",
+      "Vegetative",
+      "Flowering",
+      "Pod Growth",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Sowing: Soak seeds overnight. Sow in rows spaced 45 cm apart.",
+      "Pests: Highly susceptible to yellow vein mosaic virus. Manage whiteflies.",
+      "Harvest: Pick tender green pods every alternate day before they become woody."
+    ]
+  },
+  {
+    "id": "fenugreek",
+    "name": "Fenugreek (Methi)",
+    "emoji": "🌱",
+    "category": "Green Vegetable",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "alluvial",
+      "sandy loam"
+    ],
+    "waterNeed": "Low",
+    "duration": "30-40 days",
+    "riskLevel": "low",
+    "profitRange": "10,000-16,000/acre",
+    "reason": "Rapid growth leafy crop; needs cool weather and minimal watering.",
+    "suitScore": 88,
+    "costPerAcre": 5000,
+    "yieldPerAcre": 30,
+    "pricePerKg": 15,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Methi Seeds",
+        "qty": "10 kg/acre",
+        "price": 600,
+        "use": "Broadcasting"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Germination",
+      "Vegetative Growth",
+      "Plucking",
+      "Maturity",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Planting: Broadcast seeds. Rake soil lightly to cover them.",
+      "Irrigation: Keep soil moist but avoid waterlogging. Highly drought tolerant.",
+      "Harvest: Pull out entire plants or cut leaves at 30 days for greens."
+    ]
+  },
+  {
+    "id": "coriander",
+    "name": "Coriander (Dhania)",
+    "emoji": "🌱",
+    "category": "Green Vegetable",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "sandy loam",
+      "alluvial"
+    ],
+    "waterNeed": "Low",
+    "duration": "45-60 days",
+    "riskLevel": "low",
+    "profitRange": "12,000-20,000/acre",
+    "reason": "Leafy aromatic crop that thrives in cool winter temperatures.",
+    "suitScore": 85,
+    "costPerAcre": 6000,
+    "yieldPerAcre": 35,
+    "pricePerKg": 20,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Dhania Seeds",
+        "qty": "8 kg/acre",
+        "price": 800,
+        "use": "Sowing"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Germination",
+      "Leaf Growth",
+      "Thickening",
+      "Maturity",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Preparation: Crush coriander seeds into halves before sowing to speed up germination.",
+      "Watering: Maintain light moisture; wet conditions encourage root rot.",
+      "Harvest: Cut leaves at 40-50 days when greens are lush and before flowering."
+    ]
+  }
+]

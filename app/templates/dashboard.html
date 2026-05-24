@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroVerse — Smart Farming Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --emerald: #00e5a0;
+    --teal: #00c9b1;
+    --cyan: #00d4ff;
+    --green-deep: #0a6b4a;
+    --bg-dark: #050e0a;
+    --bg-mid: #091a12;
+    --bg-card: rgba(255,255,255,0.03);
+    --glass: rgba(0, 229, 160, 0.06);
+    --glass-border: rgba(0, 229, 160, 0.15);
+    --text-main: #e8f5ee;
+    --text-muted: #7aa390;
+    --glow: 0 0 40px rgba(0, 229, 160, 0.25);
+    --sidebar-w: 220px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+    display: flex;
+    height: 100vh;
+  }
+
+  /* Sidebar CSS has been unified and moved to templates/sidebar.html */
+
+  /* ======================== MAIN AREA ======================== */
+  .main-area {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ======================== TOP BAR ======================== */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--glass-border);
+    background: var(--bg-dark);
+    flex-shrink: 0;
+  }
+  .topbar-greeting .greet-sub {
+    font-size: 12px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 5px;
+    margin-bottom: 2px;
+  }
+  .topbar-greeting h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
+  }
+  .topbar-greeting h1 span {
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .search-box {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 13px; color: var(--text-muted);
+    width: 220px; cursor: text; transition: all 0.2s;
+  }
+  .search-box:hover { border-color: rgba(0,229,160,0.3); }
+  .search-box input {
+    background: none; border: none; outline: none;
+    color: var(--text-main); font-family: inherit; font-size: 13px; width: 100%;
+  }
+  .search-box input::placeholder { color: var(--text-muted); }
+  .icon-btn {
+    width: 36px; height: 36px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; position: relative;
+  }
+  .icon-btn:hover { background: var(--glass); border-color: rgba(0,229,160,0.3); }
+  .notif-dot {
+    position: absolute; top: 6px; right: 6px;
+    width: 7px; height: 7px; background: #ff6b6b;
+    border-radius: 50%; border: 1.5px solid var(--bg-dark);
+  }
+
+  /* ======================== DASHBOARD SCROLL ======================== */
+  .dashboard-content {
+    flex: 1; overflow-y: auto;
+    padding: 24px 28px 36px;
+    background: radial-gradient(ellipse 60% 40% at 70% 20%, rgba(0,229,160,0.04) 0%, transparent 60%);
+  }
+  .dashboard-content::-webkit-scrollbar { width: 4px; }
+  .dashboard-content::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+
+  /* ======================== SEASON BANNER ======================== */
+  .season-banner {
+    background: linear-gradient(135deg, rgba(0,40,28,0.85), rgba(5,14,10,0.95));
+    border: 1px solid rgba(0,229,160,0.18);
+    border-radius: 18px;
+    padding: 18px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; margin-bottom: 22px;
+    position: relative; overflow: hidden;
+  }
+  .season-banner::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 50% 80% at 80% 50%, rgba(0,229,160,0.07), transparent);
+    pointer-events: none;
+  }
+  .season-banner-left { display: flex; align-items: center; gap: 16px; }
+  .season-icon { font-size: 32px; flex-shrink: 0; filter: drop-shadow(0 0 10px rgba(0,229,160,0.4)); }
+  .season-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px;
+  }
+  .season-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .season-title em {
+    font-style: italic;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .season-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+  .btn-report {
+    flex-shrink: 0; background: transparent;
+    border: 1px solid var(--glass-border); border-radius: 10px;
+    padding: 10px 18px; font-size: 12.5px; font-weight: 600; color: var(--text-main);
+    cursor: pointer; transition: all 0.25s; white-space: nowrap;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-report:hover { background: var(--glass); border-color: var(--emerald); color: var(--emerald); }
+
+  /* ======================== STAT CARDS ======================== */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin-bottom: 22px;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 16px; padding: 20px 18px;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .stat-card:hover {
+    border-color: rgba(0,229,160,0.22); transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0,229,160,0.06);
+  }
+  .stat-card-icon {
+    font-size: 20px; margin-bottom: 12px; width: 40px; height: 40px;
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    background: rgba(0,229,160,0.08);
+  }
+  .stat-card-val {
+    font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -1px;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1;
+  }
+  .stat-card-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .stat-card-change { font-size: 11px; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+  .change-good { color: var(--emerald); }
+  .change-warn { color: #ffb84d; }
+  .change-bad  { color: #ff6b6b; }
+
+  /* ======================== CONTENT GRID ======================== */
+  .content-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 22px; }
+  .card-panel {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 18px; padding: 22px;
+  }
+  .card-panel-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+  }
+  .card-panel-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  .card-panel-title::before { content: '•'; color: var(--emerald); font-size: 16px; }
+
+  /* Field Conditions */
+  .condition-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .condition-icon { font-size: 18px; flex-shrink: 0; }
+  .condition-label { font-size: 12.5px; color: var(--text-muted); min-width: 72px; }
+  .condition-bar-wrap { flex: 1; }
+  .condition-bar { height: 5px; background: rgba(0,229,160,0.08); border-radius: 10px; overflow: hidden; }
+  .condition-bar-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    animation: barFill 1.2s ease both;
+    transition: width 0.6s ease;
+  }
+  @keyframes barFill { from { width: 0 !important; } }
+  .condition-val { font-size: 12px; font-weight: 600; color: var(--text-main); min-width: 55px; text-align: right; }
+
+  /* ======================== FEATURE CARDS ======================== */
+  .features-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 16px; padding: 20px;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+    text-decoration: none; color: inherit; display: block;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::after {
+    content: ''; position: absolute;
+    top: -1px; left: 20%; right: 20%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--emerald), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .feature-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0,229,160,0.25);
+    box-shadow: 0 16px 50px rgba(0,0,0,0.5), 0 0 30px rgba(0,229,160,0.07);
+  }
+  .feature-card:hover::after { opacity: 1; }
+  .fc-icon-wrap {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 14px;
+  }
+  .icon-green  { background: rgba(0,229,160,0.12); }
+  .icon-teal   { background: rgba(0,201,177,0.12); }
+  .icon-cyan   { background: rgba(0,212,255,0.12); }
+  .icon-lime   { background: rgba(120,255,100,0.1); }
+  .icon-amber  { background: rgba(255,180,50,0.1); }
+  .icon-purple { background: rgba(160,100,255,0.1); }
+  .feature-card h3 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .feature-card p  { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .card-arrow {
+    position: absolute; top: 18px; right: 18px;
+    font-size: 13px; color: var(--emerald);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .feature-card:hover .card-arrow { opacity: 1; }
+
+  /* ======================== CHATBOT PANEL ======================== */
+  /* Floating FAB button */
+  .chat-fab {
+    position: fixed; bottom: 28px; right: 28px;
+    width: 54px; height: 54px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; cursor: pointer; z-index: 500;
+    box-shadow: 0 4px 20px rgba(0,229,160,0.4);
+    transition: all 0.3s;
+    border: none; color: #050e0a;
+  }
+  .chat-fab:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(0,229,160,0.55); }
+  .chat-fab .fab-badge {
+    position: absolute; top: -3px; right: -3px;
+    background: #ff6b6b; color: #fff;
+    font-size: 9px; font-weight: 700;
+    width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--bg-dark);
+  }
+
+  /* Chat drawer */
+  .chat-drawer {
+    position: fixed; bottom: 94px; right: 28px;
+    width: 360px; max-height: 520px;
+    background: var(--bg-mid);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    display: flex; flex-direction: column;
+    z-index: 499;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(0,229,160,0.08);
+    transform: scale(0.85) translateY(30px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+    transform-origin: bottom right;
+  }
+  .chat-drawer.open {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  .chat-drawer-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
+  .chat-drawer-avatar {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .chat-drawer-info { flex: 1; }
+  .chat-drawer-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; }
+  .chat-drawer-status { font-size: 11px; color: var(--emerald); display: flex; align-items: center; gap: 4px; }
+  .chat-drawer-status::before {
+    content: ''; display: inline-block; width: 6px; height: 6px;
+    background: var(--emerald); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .chat-close {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 18px; cursor: pointer; padding: 4px;
+    transition: color 0.2s; line-height: 1;
+  }
+  .chat-close:hover { color: var(--text-main); }
+
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
+    min-height: 200px;
+  }
+  .chat-messages::-webkit-scrollbar { width: 3px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.2); border-radius: 10px; }
+
+  .chat-msg { display: flex; gap: 8px; }
+  .chat-msg.user { flex-direction: row-reverse; }
+  .chat-msg-avatar {
+    width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+  }
+  .chat-msg.bot .chat-msg-avatar { background: rgba(0,229,160,0.15); }
+  .chat-msg.user .chat-msg-avatar { background: rgba(0,212,255,0.15); }
+  .chat-msg-bubble {
+    max-width: 75%; padding: 9px 13px;
+    border-radius: 14px; font-size: 12.5px; line-height: 1.55;
+  }
+  .chat-msg.bot .chat-msg-bubble {
+    background: rgba(0,229,160,0.07);
+    border: 1px solid rgba(0,229,160,0.12);
+    color: var(--text-main);
+    border-bottom-left-radius: 4px;
+  }
+  .chat-msg.user .chat-msg-bubble {
+    background: linear-gradient(135deg, rgba(0,229,160,0.2), rgba(0,212,255,0.15));
+    border: 1px solid rgba(0,229,160,0.2);
+    color: var(--text-main);
+    border-bottom-right-radius: 4px;
+  }
+  .chat-msg-time { font-size: 9px; color: var(--text-muted); margin-top: 3px; text-align: right; }
+  .chat-msg.user .chat-msg-time { text-align: left; }
+
+  .chat-typing { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+  .chat-typing span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--emerald); opacity: 0.6;
+    animation: typingDot 1.2s infinite;
+  }
+  .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingDot { 0%,80%,100%{transform:scale(1)} 40%{transform:scale(1.4);opacity:1} }
+
+  .chat-input-row {
+    padding: 12px 14px;
+    border-top: 1px solid var(--glass-border);
+    display: flex; gap: 8px; align-items: flex-end;
+    flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1; background: rgba(0,229,160,0.05);
+    border: 1px solid var(--glass-border); border-radius: 12px;
+    padding: 10px 13px; color: var(--text-main);
+    font-family: inherit; font-size: 12.5px;
+    resize: none; outline: none; min-height: 40px; max-height: 100px;
+    transition: border-color 0.2s;
+  }
+  .chat-input:focus { border-color: rgba(0,229,160,0.35); }
+  .chat-input::placeholder { color: var(--text-muted); }
+  .chat-send-btn {
+    width: 38px; height: 38px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border: none; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; cursor: pointer; color: #050e0a;
+    transition: all 0.2s;
+  }
+  .chat-send-btn:hover { box-shadow: 0 4px 15px rgba(0,229,160,0.4); transform: scale(1.05); }
+  .chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* Suggestion chips */
+  .chat-suggestions {
+    padding: 0 14px 10px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .chip {
+    font-size: 10.5px; padding: 4px 10px;
+    background: rgba(0,229,160,0.07);
+    border: 1px solid rgba(0,229,160,0.15);
+    border-radius: 20px; color: var(--emerald);
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .chip:hover { background: rgba(0,229,160,0.15); }
+
+  /* ======================== CANVAS BG ======================== */
+  #particle-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 0.55;
+  }
+
+  /* ======================== MOBILE ======================== */
+  .mobile-topbar {
+    display: none; align-items: center; justify-content: space-between;
+    padding: 14px 16px; background: var(--bg-mid);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky; top: 0; z-index: 200;
+  }
+  .hamburger { display: flex; flex-direction: column; gap: 4px; cursor: pointer; padding: 6px; }
+  .hamburger span { display: block; width: 20px; height: 2px; background: var(--text-muted); border-radius: 2px; transition: all 0.3s; }
+  /* ======================== RESPONSIVE ======================== */
+  @media (max-width: 1100px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .features-row { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .main-area { margin-left: 0 !important; }
+    .mobile-topbar { display: flex !important; }
+    .topbar { display: none !important; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .features-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .dashboard-content { padding: 16px; }
+    .season-banner { flex-direction: column; align-items: flex-start; }
+    .chat-drawer { width: calc(100vw - 32px); right: 16px; }
+    .chat-fab { right: 16px; bottom: 20px; }
+  }
+  @media (max-width: 480px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .features-row { grid-template-columns: 1fr; }
+    .search-box { display: none; }
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+
+  /* ======================== REPORT MODAL STYLING ======================== */
+  .report-modal {
+    position: fixed; inset: 0; z-index: 1000;
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .report-modal-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .report-modal-content {
+    position: relative; z-index: 1010;
+    background: linear-gradient(180deg, rgba(9, 26, 18, 0.98), rgba(5, 14, 10, 0.98));
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    width: 100%; max-width: 780px;
+    max-height: 85vh;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 50px rgba(0, 229, 160, 0.1);
+    animation: modalPop 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  @keyframes modalPop {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .report-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex; align-items: center; gap: 16px;
+    flex-shrink: 0;
+  }
+  .report-modal-icon { font-size: 28px; }
+  .report-modal-title {
+    font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+    color: var(--text-main);
+  }
+  .report-modal-title span {
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .report-modal-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .report-modal-close {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 28px; cursor: pointer; transition: color 0.2s;
+    line-height: 1; padding: 4px;
+  }
+  .report-modal-close:hover { color: var(--text-main); }
+  
+  .report-modal-body {
+    padding: 24px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .report-modal-body::-webkit-scrollbar { width: 4px; }
+  .report-modal-body::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+  
+  .report-section { display: flex; flex-direction: column; gap: 12px; }
+  .report-section h3 {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--emerald); letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .card-dark {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(0, 229, 160, 0.1);
+    border-radius: 16px; padding: 18px 20px;
+  }
+  .metrics-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    margin-bottom: 12px;
+  }
+  .metric-item { display: flex; flex-direction: column; gap: 4px; }
+  .metric-item span { font-size: 11.5px; color: var(--text-muted); }
+  .metric-item strong { font-size: 14px; color: var(--text-main); font-weight: 600; }
+  .recommendation-notice {
+    font-size: 13px; line-height: 1.6; color: #bcecd5;
+    padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .section-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .matrix-table-wrapper {
+    width: 100%; overflow-x: auto;
+    border: 1px solid var(--glass-border); border-radius: 14px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .matrix-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12.5px; }
+  .matrix-table th {
+    background: rgba(0, 229, 160, 0.07); color: var(--emerald);
+    font-weight: 700; padding: 12px 14px;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .matrix-table td {
+    padding: 12px 14px; border-bottom: 1px solid rgba(0, 229, 160, 0.08);
+    color: #d1e2da; vertical-align: middle;
+  }
+  .matrix-table tr:last-child td { border-bottom: none; }
+  .season-cell {
+    border-right: 1px solid rgba(0, 229, 160, 0.08);
+    background: rgba(0, 0, 0, 0.15);
+    font-size: 13px;
+  }
+  .season-sub { font-size: 10.5px; color: var(--text-muted); font-weight: normal; margin-top: 2px; display: block; }
+  
+  .crop-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 11px;
+  }
+  .crop-badge.rice { background: rgba(255, 223, 102, 0.1); color: #ffe680; border: 1px solid rgba(255, 223, 102, 0.2); }
+  .crop-badge.cotton { background: rgba(162, 238, 239, 0.1); color: #87e8de; border: 1px solid rgba(162, 238, 239, 0.2); }
+  .crop-badge.maize { background: rgba(255, 178, 102, 0.1); color: #ffc080; border: 1px solid rgba(255, 178, 102, 0.2); }
+  .crop-badge.bajra { background: rgba(230, 184, 156, 0.1); color: #e6b89c; border: 1px solid rgba(230, 184, 156, 0.2); }
+  .crop-badge.wheat { background: rgba(212, 175, 55, 0.1); color: #e5c158; border: 1px solid rgba(212, 175, 55, 0.2); }
+  .crop-badge.mustard { background: rgba(253, 227, 167, 0.1); color: #f5d76e; border: 1px solid rgba(253, 227, 167, 0.2); }
+  .crop-badge.gram { background: rgba(144, 238, 144, 0.1); color: #90ee90; border: 1px solid rgba(144, 238, 144, 0.2); }
+  .crop-badge.watermelon { background: rgba(255, 105, 180, 0.1); color: #ff69b4; border: 1px solid rgba(255, 105, 180, 0.2); }
+  .crop-badge.cucumber { background: rgba(186, 220, 88, 0.1); color: #badc58; border: 1px solid rgba(186, 220, 88, 0.2); }
+  .crop-badge.moong { background: rgba(120, 224, 143, 0.1); color: #78e08f; border: 1px solid rgba(120, 224, 143, 0.2); }
+
+  @media (max-width: 768px) {
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+    .report-modal-content { max-height: 90vh; }
+  }
+
+  /* Interactive Stat Cards */
+  .stat-card {
+    cursor: pointer !important;
+    transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1) !important;
+  }
+  .stat-card:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    border-color: rgba(0, 229, 160, 0.35) !important;
+    box-shadow: 0 12px 40px rgba(0, 229, 160, 0.15), 0 0 20px rgba(0, 229, 160, 0.08) !important;
+  }
+
+  /* Modal Wrapper style matching newfarmer.html */
+  .custom-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 12, 10, 0.72);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .custom-modal.open { display: flex; }
+  .custom-modal-panel {
+    width: min(100%, 640px);
+    max-height: 85vh;
+    overflow-y: auto;
+    background: linear-gradient(180deg, rgba(13, 28, 24, 0.98), rgba(8, 20, 17, 0.98));
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: modalPopUp 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  @keyframes modalPopUp {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .custom-modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 12px;
+  }
+  .custom-modal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 800;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .custom-modal-close {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background: var(--bg-card);
+    cursor: pointer; color: var(--text-main);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; transition: all 0.2s;
+  }
+  .custom-modal-close:hover { background: var(--glass); }
+
+  /* Table styling */
+  .modal-table {
+    width: 100%; border-collapse: collapse; text-align: left;
+    margin-top: 10px; font-size: 13px;
+  }
+  .modal-table th {
+    padding: 10px 12px; background: rgba(0, 229, 160, 0.08);
+    border-bottom: 1px solid var(--glass-border); color: var(--emerald);
+    font-family: 'Syne', sans-serif; font-weight: 700;
+  }
+  .modal-table td {
+    padding: 10px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+  }
+  .modal-table tr:hover td { background: var(--glass); }
+
+  /* Logger Form style */
+  .logger-form {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    background: rgba(255,255,255,0.02); padding: 16px;
+    border-radius: 16px; border: 1px solid var(--glass-border);
+  }
+  .logger-form .form-group {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .logger-form label {
+    font-size: 10px; font-weight: 600; color: var(--text-muted);
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .logger-form input, .logger-form select {
+    background: rgba(0, 229, 160, 0.03); border: 1px solid var(--glass-border);
+    border-radius: 8px; padding: 8px 12px; color: var(--text-main);
+    font-family: inherit; font-size: 13px; outline: none;
+  }
+  .logger-form input:focus, .logger-form select:focus { border-color: var(--emerald); }
+  .logger-form select option {
+    background: var(--bg-mid); color: var(--text-main);
+  }
+  .btn-action-primary {
+    padding: 8px 16px; background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border: none; border-radius: 8px; color: #050e0a;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-action-primary:hover { box-shadow: 0 4px 12px rgba(0, 229, 160, 0.3); }
+
+  /* Alerts List style */
+  .alerts-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .alert-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255, 80, 80, 0.04); border: 1px solid rgba(255, 80, 80, 0.15);
+    border-radius: 12px; padding: 12px 16px; gap: 12px;
+  }
+  .alert-item-left { display: flex; align-items: center; gap: 10px; }
+  .alert-item-text { font-size: 13px; color: #ff9e9e; }
+  .btn-alert-action {
+    background: rgba(255, 80, 80, 0.15); border: 1px solid rgba(255, 80, 80, 0.3);
+    border-radius: 8px; padding: 6px 12px; color: #ff9e9e; font-size: 11px;
+    font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-alert-action:hover { background: rgba(255, 80, 80, 0.25); }
+</style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+{% include 'sidebar.html' %}
+
+<!-- ======================== MAIN AREA ======================== -->
+<div class="main-area">
+
+  <!-- Mobile top bar -->
+  <div class="mobile-topbar">
+    <a href="/dashboard" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+      <div class="sidebar-logo-icon" style="width:28px;height:28px;font-size:14px;">🌿</div>
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:16px;background:linear-gradient(90deg,var(--emerald),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">AgroVerse</span>
+    </a>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-greeting">
+      <div class="greet-sub" id="greet-sub">🌤️ Farm Intelligence</div>
+      <h1 id="greeting-line">Good morning, <span id="topbar-username">User 🌾</span></h1>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" placeholder="Search crops, diseases...">
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <!-- Dashboard Scrollable Content -->
+  <div class="dashboard-content">
+
+    <!-- Season Banner -->
+    <div class="season-banner">
+      <div class="season-banner-left">
+        <div class="season-icon" id="seasonIcon">🌱</div>
+        <div>
+          <div class="season-tag" id="seasonTag">Today's Kharif Season Update</div>
+          <div class="season-title" id="seasonTitle">Today's <em>Kharif Season</em> Update</div>
+          <div class="season-desc" id="seasonDesc">Your wheat field in Block B shows 94% health index. Optimal watering window: 6–8 AM. Expected yield +12% above last season.</div>
+        </div>
+      </div>
+      <a href="javascript:void(0)" class="btn-report" id="btnViewReport" onclick="openReportModal()">View Full Report →</a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-row">
+      <div class="stat-card" onclick="openCustomModal('activeCropsModal')">
+        <div class="stat-card-icon">🌾</div>
+        <div class="stat-card-val" id="stat-acres">--</div>
+        <div class="stat-card-label">Acres Under Crop</div>
+        <div class="stat-card-change change-good" id="stat-acres-sub">Loading...</div>
+      </div>
+      <div class="stat-card" onclick="openCustomModal('alertsModal')">
+        <div class="stat-card-icon">💧</div>
+        <div class="stat-card-val" id="stat-humidity">--%</div>
+        <div class="stat-card-label">Soil Moisture</div>
+        <div class="stat-card-change change-good" id="stat-moisture-sub">Loading...</div>
+      </div>
+      <div class="stat-card" onclick="openCustomModal('salesLoggerModal')">
+        <div class="stat-card-icon">📈</div>
+        <div class="stat-card-val" id="stat-revenue">₹--</div>
+        <div class="stat-card-label">Est. Month Revenue</div>
+        <div class="stat-card-change change-good" id="stat-revenue-sub">Loading...</div>
+      </div>
+      <div class="stat-card" onclick="openCustomModal('alertsModal')">
+        <div class="stat-card-icon">⚠️</div>
+        <div class="stat-card-val" id="stat-alerts">0</div>
+        <div class="stat-card-label">Active Alerts</div>
+        <div class="stat-card-change change-warn" id="stat-alerts-sub">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Field Conditions -->
+    <div class="content-grid">
+      <div class="card-panel">
+        <div class="card-panel-header">
+          <div class="card-panel-title">Field Conditions</div>
+          <div id="weather-location" style="font-size:11px;color:var(--emerald);margin-left:auto;display:flex;align-items:center;gap:5px;">
+            <span>📍</span><span id="location-text">Detecting location…</span>
+          </div>
+        </div>
+
+        <!-- Condition label/weather tag -->
+        <div id="weather-condition-tag" style="font-size:12px;color:var(--text-muted);margin-bottom:14px;padding:6px 10px;background:rgba(0,229,160,0.06);border-radius:8px;border:1px solid rgba(0,229,160,0.1);display:none;"></div>
+
+        <!-- Temp -->
+        <div class="condition-row">
+          <div class="condition-icon">🌡️</div>
+          <div class="condition-label">Temp</div>
+          <div class="condition-bar-wrap">
+            <div class="condition-bar"><div class="condition-bar-fill" id="bar-temp" style="width:72%"></div></div>
+          </div>
+          <div class="condition-val" id="val-temp">32°C</div>
+        </div>
+        <!-- Humidity -->
+        <div class="condition-row">
+          <div class="condition-icon">💧</div>
+          <div class="condition-label">Humidity</div>
+          <div class="condition-bar-wrap">
+            <div class="condition-bar"><div class="condition-bar-fill" id="bar-humidity" style="width:75%"></div></div>
+          </div>
+          <div class="condition-val" id="val-humidity">75%</div>
+        </div>
+        <!-- Wind -->
+        <div class="condition-row">
+          <div class="condition-icon">🌬️</div>
+          <div class="condition-label">Wind</div>
+          <div class="condition-bar-wrap">
+            <div class="condition-bar"><div class="condition-bar-fill" id="bar-wind" style="width:38%"></div></div>
+          </div>
+          <div class="condition-val" id="val-wind">18 km/h</div>
+        </div>
+        <!-- Rain -->
+        <div class="condition-row">
+          <div class="condition-icon">🌧️</div>
+          <div class="condition-label">Rain</div>
+          <div class="condition-bar-wrap">
+            <div class="condition-bar"><div class="condition-bar-fill" id="bar-rain" style="width:12%"></div></div>
+          </div>
+          <div class="condition-val" id="val-rain">0 mm</div>
+        </div>
+        <!-- UV Index -->
+        <div class="condition-row">
+          <div class="condition-icon">☀️</div>
+          <div class="condition-label">UV Index</div>
+          <div class="condition-bar-wrap">
+            <div class="condition-bar"><div class="condition-bar-fill" id="bar-uv" style="width:80%"></div></div>
+          </div>
+          <div class="condition-val" id="val-uv">9.2</div>
+        </div>
+        <!-- Visibility -->
+        <div class="condition-row">
+          <div class="condition-icon">👁️</div>
+          <div class="condition-label">Visibility</div>
+          <div class="condition-bar-wrap">
+            <div class="condition-bar"><div class="condition-bar-fill" id="bar-vis" style="width:70%"></div></div>
+          </div>
+          <div class="condition-val" id="val-vis">8.4 km</div>
+        </div>
+
+        <div id="weather-error" style="display:none;font-size:12px;color:#ff6b6b;margin-top:10px;padding:8px 10px;background:rgba(255,80,80,0.08);border-radius:8px;border:1px solid rgba(255,80,80,0.15);">
+          ⚠️ Could not load live weather. Showing last known values.
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Cards -->
+    <div class="features-row">
+      <a href="/disease" class="feature-card">
+        <div class="fc-icon-wrap icon-green">🔬</div>
+        <h3>Disease Detection</h3>
+        <p>Upload a photo and get instant AI diagnosis with treatment recommendations.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="/market_data" class="feature-card">
+        <div class="fc-icon-wrap icon-teal">📊</div>
+        <h3>Market Data</h3>
+        <p>Check live mandi prices, crop rates per kg, and market trends across India.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="/machinery" class="feature-card">
+        <div class="fc-icon-wrap icon-cyan">🚜</div>
+        <h3>Machinery on Rent</h3>
+        <p>Browse and rent tractors, harvesters, and farm equipment from local providers.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="/newfarmer?page=guide" class="feature-card">
+        <div class="fc-icon-wrap icon-lime">🌱</div>
+        <h3>New Farmer Support</h3>
+        <p>Step-by-step onboarding, expert guides, and government schemes.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <!-- AI Chatbot card — opens chat drawer -->
+      <a href="#" class="feature-card" onclick="openChat(); return false;">
+        <div class="fc-icon-wrap icon-amber">🤖</div>
+        <h3>AI Chatbot</h3>
+        <p>Ask farming questions in your language, get expert guidance 24/7.</p>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="/reviews" class="feature-card">
+        <div class="fc-icon-wrap icon-purple">⭐</div>
+        <h3>Rate &amp; Review</h3>
+        <p>Share your feedback and help improve the platform for every farmer.</p>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+
+  </div><!-- end dashboard-content -->
+</div><!-- end main-area -->
+
+<!-- ======================== VIEW FULL REPORT MODAL ======================== -->
+<div class="report-modal" id="reportModal">
+  <div class="report-modal-backdrop" onclick="closeReportModal()"></div>
+  <div class="report-modal-content">
+    <div class="report-modal-header">
+      <div class="report-modal-icon">📊</div>
+      <div style="flex:1;">
+        <h2 class="report-modal-title">Farm Intelligence <span>Report</span></h2>
+        <p class="report-modal-subtitle">Dynamic crop compatibility & season insights</p>
+      </div>
+      <button class="report-modal-close" onclick="closeReportModal()">&times;</button>
+    </div>
+    
+    <div class="report-modal-body">
+      <!-- Section 1: Active Farm Metrics -->
+      <div class="report-section card-dark">
+        <h3>Active Location & Weather</h3>
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span>Location</span>
+            <strong id="reportLocation">-</strong>
+          </div>
+          <div class="metric-item">
+            <span>Detected Soil</span>
+            <strong id="reportSoil">-</strong>
+          </div>
+          <div class="metric-item">
+            <span>Current Season</span>
+            <strong id="reportSeason">-</strong>
+          </div>
+          <div class="metric-item">
+            <span>Temperature</span>
+            <strong id="reportTemp">-</strong>
+          </div>
+          <div class="metric-item">
+            <span>Humidity</span>
+            <strong id="reportHumidity">-</strong>
+          </div>
+          <div class="metric-item">
+            <span>Best Crop Choice</span>
+            <strong id="reportBestCrop" style="color:var(--emerald);">-</strong>
+          </div>
+        </div>
+        <p class="recommendation-notice" id="reportNotice"></p>
+      </div>
+      
+      <!-- Section 2: Complete Possibility Matrix -->
+      <div class="report-section">
+        <h3>Crop Compatibility Matrix</h3>
+        <p class="section-desc">Here is the optimal crop suggestion mapping for all seasons, temperatures, and soil conditions:</p>
+        
+        <div class="matrix-table-wrapper">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>Season</th>
+                <th>Avg Temp</th>
+                <th>Soil Type</th>
+                <th>Recommended Crop</th>
+                <th>Optimal Condition & Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Kharif -->
+              <tr class="row-kharif">
+                <td rowspan="4" class="season-cell"><strong>Kharif</strong><br><span class="season-sub">June - Oct</span></td>
+                <td>28°C - 35°C</td>
+                <td>Alluvial / Clayey</td>
+                <td><span class="crop-badge rice">🌾 Rice (Paddy)</span></td>
+                <td>Requires high humidity, water retention, and heavy soils.</td>
+              </tr>
+              <tr class="row-kharif">
+                <td>25°C - 32°C</td>
+                <td>Black Cotton Soil</td>
+                <td><span class="crop-badge cotton">🌾 Cotton</span></td>
+                <td>Needs high temperature and clay/regur soil which retains moisture.</td>
+              </tr>
+              <tr class="row-kharif">
+                <td>22°C - 30°C</td>
+                <td>Loamy / Alluvial</td>
+                <td><span class="crop-badge maize">🌽 Maize</span></td>
+                <td>Requires well-drained warm fertile soil with moderate rain.</td>
+              </tr>
+              <tr class="row-kharif">
+                <td>25°C - 35°C</td>
+                <td>Sandy / Dry Soil</td>
+                <td><span class="crop-badge bajra">🌾 Bajra (Millet)</span></td>
+                <td>Extremely drought-resistant; thrives in light, coarse sandy soils.</td>
+              </tr>
+              
+              <!-- Rabi -->
+              <tr class="row-rabi">
+                <td rowspan="3" class="season-cell"><strong>Rabi</strong><br><span class="season-sub">Nov - Mar</span></td>
+                <td>15°C - 22°C</td>
+                <td>Clayey / Loamy</td>
+                <td><span class="crop-badge wheat">🌾 Wheat</span></td>
+                <td>Needs cool temperatures and clay-loam fertile soils.</td>
+              </tr>
+              <tr class="row-rabi">
+                <td>18°C - 25°C</td>
+                <td>Sandy Loam / Alluvial</td>
+                <td><span class="crop-badge mustard">🌼 Mustard</span></td>
+                <td>Grows best in cool temperatures with light sandy-loam and low water.</td>
+              </tr>
+              <tr class="row-rabi">
+                <td>15°C - 24°C</td>
+                <td>Sandy / Loamy</td>
+                <td><span class="crop-badge gram">🌱 Gram (Chickpea)</span></td>
+                <td>Thrives in dry, well-aerated soils with minimal moisture.</td>
+              </tr>
+              
+              <!-- Zaid -->
+              <tr class="row-zaid">
+                <td rowspan="3" class="season-cell"><strong>Zaid</strong><br><span class="season-sub">Apr - May</span></td>
+                <td>30°C - 42°C</td>
+                <td>Sandy Soil / Riverbeds</td>
+                <td><span class="crop-badge watermelon">🍉 Watermelon</span></td>
+                <td>Requires very hot weather and sandy well-drained soils.</td>
+              </tr>
+              <tr class="row-zaid">
+                <td>28°C - 38°C</td>
+                <td>Loamy Soil</td>
+                <td><span class="crop-badge cucumber">🥒 Cucumber</span></td>
+                <td>Fast-growing warm crop requiring quick drainage and moderate water.</td>
+              </tr>
+              <tr class="row-zaid">
+                <td>30°C - 40°C</td>
+                <td>Loamy / Sandy Loam</td>
+                <td><span class="crop-badge moong">🌱 Moong Dal</span></td>
+                <td>Fast-growing summer legume; drought-hardy and restores soil nitrogen.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== CHAT DRAWER ======================== -->
+<div class="chat-drawer" id="chatDrawer">
+  <div class="chat-drawer-header">
+    <div class="chat-drawer-avatar">🤖</div>
+    <div class="chat-drawer-info">
+      <div class="chat-drawer-name">AgroBot</div>
+      <div class="chat-drawer-status">Online · AI Farming Expert</div>
+    </div>
+    <button class="chat-close" id="chatClose" title="Close">✕</button>
+  </div>
+
+  <div class="chat-messages" id="chatMessages">
+    <!-- Welcome message -->
+    <div class="chat-msg bot">
+      <div class="chat-msg-avatar">🤖</div>
+      <div>
+        <div class="chat-msg-bubble">
+          Namaste! 🌾 I'm AgroBot. Ask me anything about farming, crop diseases, weather, soil health, or government schemes!
+        </div>
+        <div class="chat-msg-time" id="welcome-time"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick suggestions -->
+  <div class="chat-suggestions" id="chatSuggestions">
+    <span class="chip" onclick="sendSuggestion('Best crops for Kharif season?')">🌾 Kharif crops</span>
+    <span class="chip" onclick="sendSuggestion('How to detect crop diseases?')">🔬 Disease help</span>
+    <span class="chip" onclick="sendSuggestion('Current weather tips for farming?')">🌤️ Weather tips</span>
+  </div>
+
+  <div class="chat-input-row">
+    <textarea class="chat-input" id="chatInput" placeholder="Ask about farming…" rows="1"></textarea>
+    <button class="chat-send-btn" id="chatSendBtn" title="Send">➤</button>
+  </div>
+</div>
+
+<!-- Floating AI button (scroll-bottom style) -->
+<button class="chat-fab" id="chatFab" title="Open AgroBot">
+  🤖
+  <span class="fab-badge" id="fabBadge" style="display:none;">1</span>
+</button>
+
+<!-- ACTIVE CROPS MODAL -->
+<div class="custom-modal" id="activeCropsModal">
+  <div class="custom-modal-panel">
+    <div class="custom-modal-head">
+      <h2 class="custom-modal-title">🌾 Active Cultivated Crops</h2>
+      <button class="custom-modal-close" onclick="closeCustomModal('activeCropsModal')">✕</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="modal-table">
+        <thead>
+          <tr>
+            <th>Crop</th>
+            <th>Area</th>
+            <th>Location</th>
+            <th>Start Date</th>
+            <th>Expected Harvest</th>
+          </tr>
+        </thead>
+        <tbody id="activeCropsTableBody">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SALES LOGGER MODAL (REVENUE) -->
+<div class="custom-modal" id="salesLoggerModal">
+  <div class="custom-modal-panel" style="width: min(100%, 720px);">
+    <div class="custom-modal-head">
+      <h2 class="custom-modal-title">💰 Crop Sales &amp; Revenue Logger</h2>
+      <button class="custom-modal-close" onclick="closeCustomModal('salesLoggerModal')">✕</button>
+    </div>
+    
+    <div style="font-size: 15px; font-weight: 700; color: var(--emerald); margin-bottom: 8px;">
+      Total Logged Revenue: <span id="totalLoggedRevenueText">₹0</span>
+    </div>
+
+    <!-- Sales log form -->
+    <form id="salesLogForm" onsubmit="submitSalesLog(event)" class="logger-form">
+      <div class="form-group">
+        <label>Crop Name</label>
+        <select id="salesCropSelect" required>
+          <!-- Options populated dynamically -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Buyer Name</label>
+        <input type="text" id="salesBuyerInput" placeholder="e.g. Ramesh Mandi / Buyer" required>
+      </div>
+      <div class="form-group">
+        <label>Price per kg (₹)</label>
+        <input type="number" step="0.01" min="0.1" id="salesPriceInput" placeholder="e.g. 24.50" required>
+      </div>
+      <div class="form-group">
+        <label>Quantity sold (kg)</label>
+        <input type="number" step="1" min="1" id="salesQtyInput" placeholder="e.g. 500" required>
+      </div>
+      <div class="form-group" style="grid-column: span 2; display: flex; justify-content: flex-end; margin-top: 6px;">
+        <button type="submit" class="btn-action-primary" id="btnSubmitSale">Log Transaction</button>
+      </div>
+    </form>
+
+    <!-- Past logs -->
+    <div style="font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-top: 8px;">
+      TRANSACTION HISTORY
+    </div>
+    <div style="overflow-y:auto; max-height: 25vh; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.15);">
+      <table class="modal-table" style="margin-top:0;">
+        <thead>
+          <tr>
+            <th>Crop</th>
+            <th>Buyer</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="salesLogsTableBody">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ACTIVE ALERTS MODAL -->
+<div class="custom-modal" id="alertsModal">
+  <div class="custom-modal-panel">
+    <div class="custom-modal-head">
+      <h2 class="custom-modal-title">⚠️ Soil &amp; System Alerts</h2>
+      <button class="custom-modal-close" onclick="closeCustomModal('alertsModal')">✕</button>
+    </div>
+    <div class="alerts-list" id="alertsListContainer">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Time-based greeting ───────────────────────────────────────────────────────
+function updateGreeting(firstName) {
+  const h = new Date().getHours();
+  let greet, icon, sub;
+  if (h >= 5 && h < 12)       { greet = 'Good morning';   icon = '🌅'; sub = '🌤️ Farm Intelligence'; }
+  else if (h >= 12 && h < 17) { greet = 'Good afternoon'; icon = '☀️'; sub = '☀️ Farm Intelligence'; }
+  else if (h >= 17 && h < 21) { greet = 'Good evening';   icon = '🌇'; sub = '🌆 Farm Intelligence'; }
+  else                         { greet = 'Good night';     icon = '🌙'; sub = '🌙 Farm Intelligence'; }
+
+  const greetLine = document.getElementById('greeting-line');
+  const greetSub  = document.getElementById('greet-sub');
+  const name      = firstName || 'User';
+  if (greetLine) greetLine.innerHTML = `${greet}, <span id="topbar-username">${name} ${icon}</span>`;
+  if (greetSub)  greetSub.textContent = sub;
+}
+
+// ── Weather helpers ───────────────────────────────────────────────────────────
+function setBar(id, pct) {
+  const el = document.getElementById(id);
+  if (el) el.style.width = Math.max(2, pct) + '%';
+}
+function setVal(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+window.currentCropReport = {
+  location: 'Mathura, Uttar Pradesh, India',
+  soilType: 'Alluvial / Loamy',
+  season: 'Rabi',
+  temperature: '22°C',
+  humidity: '55%',
+  bestCrop: '🌾 Wheat',
+  reason: 'Optimal choice for cool winter temperatures and fertile clayey/loamy alluvial soil.'
+};
+
+function updateDashboardCropSuggestion(location, temp, humidity) {
+  const parts = location.split(', ');
+  const stateName = parts[1] || 'Uttar Pradesh';
+  
+  const soilMap = {
+    "Uttar Pradesh": "Alluvial / Loamy", "Punjab": "Loamy", "Haryana": "Sandy Loam",
+    "Maharashtra": "Black Cotton Soil", "Karnataka": "Red Laterite", "Rajasthan": "Sandy",
+    "West Bengal": "Alluvial", "Madhya Pradesh": "Black / Loamy"
+  };
+  const soilType = soilMap[stateName] || "Loamy";
+  
+  const month = new Date().getMonth() + 1;
+  let season = "Rabi";
+  if ([6,7,8,9,10].includes(month)) season = "Kharif";
+  else if ([3,4,5].includes(month)) season = "Zaid";
+  
+  const soil = soilType.toLowerCase();
+  let cropName = 'Wheat';
+  let cropIcon = '🌾';
+  let cropReason = '';
+  
+  if (season === 'Kharif') {
+    cropIcon = '🌾';
+    if (soil.includes('black')) {
+      cropName = 'Cotton';
+      cropReason = 'Thrives in warm temperatures and Black Cotton soil which maintains excellent moisture levels.';
+    } else if (soil.includes('sandy')) {
+      cropName = 'Bajra (Pearl Millet)';
+      cropReason = 'Drought-resistant variety that matures successfully in sandy soil and low moisture.';
+    } else if (humidity > 70 && (soil.includes('alluvial') || soil.includes('clayey') || soil.includes('loamy'))) {
+      cropName = 'Rice (Paddy)';
+      cropReason = 'Requires high humidity, standing water, and heavy clayey/alluvial soils.';
+    } else {
+      cropName = 'Maize (Corn)';
+      cropIcon = '🌽';
+      cropReason = 'Requires well-drained loamy/alluvial soil and warm monsoon rains.';
+    }
+  } else if (season === 'Rabi') {
+    if (soil.includes('sandy') || soil.includes('loam')) {
+      if (temp < 20) {
+        cropName = 'Mustard';
+        cropIcon = '🌼';
+        cropReason = 'Optimized for cool weather and sandy loam soil with low water usage.';
+      } else {
+        cropName = 'Gram (Chickpea)';
+        cropIcon = '🌱';
+        cropReason = 'Excellent for winter season and well-aerated sandy loam soil.';
+      }
+    } else {
+      cropName = 'Wheat';
+      cropIcon = '🌾';
+      cropReason = 'Optimal choice for cool winter temperatures and fertile clayey/loamy alluvial soil.';
+    }
+  } else { // Zaid
+    if (soil.includes('sandy')) {
+      cropName = 'Watermelon';
+      cropIcon = '🍉';
+      cropReason = 'Thrives in dry, hot weather and sandy well-drained riverbed soils.';
+    } else if (soil.includes('loamy') || soil.includes('alluvial')) {
+      cropName = 'Moong Dal (Green Gram)';
+      cropIcon = '🌱';
+      cropReason = 'Fast-growing nitrogen-fixing summer legume ideal for loamy soils.';
+    } else {
+      cropName = 'Cucumber';
+      cropIcon = '🥒';
+      cropReason = 'Thrives in high temperatures with light, frequent irrigation in loamy soils.';
+    }
+  }
+
+  const tagEl = document.getElementById('seasonTag');
+  const titleEl = document.getElementById('seasonTitle');
+  const descEl = document.getElementById('seasonDesc');
+  const iconEl = document.getElementById('seasonIcon');
+  
+  // Custom soil-intelligent prompts based on settings NPK/moisture
+  let soilIntelMsg = "";
+  if (window.userData) {
+    const uN = parseFloat(window.userData.soil_n) || 0;
+    const uMoist = parseFloat(window.userData.soil_moisture) || 0;
+    if (uN > 0 && uN < 50) {
+      soilIntelMsg += ` Nitrogen levels are low (${uN} mg/kg); sowing leguminous varieties or applying organic compost is suggested.`;
+    }
+    if (uMoist > 0 && uMoist < 20) {
+      soilIntelMsg += ` Also, soil moisture is dry at ${uMoist}%, so pre-irrigation is advised.`;
+    }
+  }
+
+  if (tagEl) tagEl.textContent = `Today's ${season} Season Recommendation`;
+  if (titleEl) titleEl.innerHTML = `Best Crop: <em>${cropName}</em> Recommended`;
+  if (iconEl) iconEl.textContent = cropIcon;
+  if (descEl) {
+    descEl.textContent = `Based on your location (${stateName}) and detected ${soilType} soil: the current season is ${season}, temperature is ${temp}°C, and humidity is ${humidity}%. In these conditions, ${cropName} is the best crop you can grow. ${cropReason}${soilIntelMsg}`;
+  }
+  
+  window.currentCropReport = {
+    location: parts[0] + ', ' + stateName,
+    soilType: soilType,
+    season: season,
+    temperature: temp + '°C',
+    humidity: humidity + '%',
+    bestCrop: cropIcon + ' ' + cropName,
+    reason: cropReason
+  };
+}
+
+function openReportModal() {
+  document.getElementById('reportLocation').textContent = window.currentCropReport.location;
+  document.getElementById('reportSoil').textContent = window.currentCropReport.soilType;
+  document.getElementById('reportSeason').textContent = window.currentCropReport.season + ' Season';
+  document.getElementById('reportTemp').textContent = window.currentCropReport.temperature;
+  document.getElementById('reportHumidity').textContent = window.currentCropReport.humidity;
+  document.getElementById('reportBestCrop').textContent = window.currentCropReport.bestCrop;
+  document.getElementById('reportNotice').textContent = window.currentCropReport.reason;
+  
+  document.getElementById('reportModal').style.display = 'flex';
+}
+
+function closeReportModal() {
+  document.getElementById('reportModal').style.display = 'none';
+}
+
+function applyWeather(w) {
+  const locEl = document.getElementById('location-text');
+  if (locEl) locEl.textContent = w.location || 'Unknown location';
+
+  const condTag = document.getElementById('weather-condition-tag');
+  if (condTag && w.condition) {
+    condTag.textContent = '🌍 ' + w.condition;
+    condTag.style.display = 'block';
+  }
+
+  const b = w.bars;
+  setBar('bar-temp',     b.temp);       setVal('val-temp',     w.temperature + '°C');
+  setBar('bar-humidity', b.humidity);   setVal('val-humidity', w.humidity + '%');
+  setBar('bar-wind',     b.wind);       setVal('val-wind',     w.wind_speed + ' km/h');
+  setBar('bar-rain',     b.rain);       setVal('val-rain',     w.rain + ' mm');
+  setBar('bar-uv',       b.uv);         setVal('val-uv',       w.uv_index);
+  setBar('bar-vis',      b.visibility); setVal('val-vis',      w.visibility + ' km');
+
+
+
+  // Dynamic Suggestion evaluation
+  updateDashboardCropSuggestion(w.location || 'Mathura, Uttar Pradesh, India', w.temperature, w.humidity);
+}
+
+function fetchWeather(lat, lon) {
+  fetch(`/api/weather?lat=${lat}&lon=${lon}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error);
+      applyWeather(data);
+    })
+    .catch(err => {
+      console.warn('Weather error:', err);
+      document.getElementById('weather-error').style.display = 'block';
+      document.getElementById('location-text').textContent = 'Location unavailable';
+    });
+}
+
+function initWeather() {
+  const locEl = document.getElementById('location-text');
+  if (!navigator.geolocation) {
+    if (locEl) locEl.textContent = 'Geolocation not supported';
+    fetchWeather(27.5, 77.6);
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    pos => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+    err => {
+      console.warn('Geolocation denied:', err.message);
+      if (locEl) locEl.textContent = 'Location permission denied';
+      document.getElementById('weather-error').style.display = 'block';
+      fetchWeather(27.5, 77.6);
+    },
+    { timeout: 8000 }
+  );
+}
+
+let globalCropsList = [];
+let globalSalesList = [];
+
+function loadDashboardStats(sessionData, cropsData) {
+  const activeCrops = cropsData.filter(c => c.status !== 'harvested');
+  
+  // 1. Acres Under Crop
+  const activeAcres = activeCrops.reduce((acc, c) => acc + (parseFloat(c.area) || 0), 0);
+  const landOwned = parseFloat(sessionData.land_owned) || 0;
+  
+  const acresValEl = document.getElementById('stat-acres');
+  const acresSubEl = document.getElementById('stat-acres-sub');
+  if (acresValEl) {
+    if (landOwned > 0) {
+      acresValEl.textContent = `${activeAcres.toFixed(1)} / ${landOwned.toFixed(1)}`;
+      const pct = Math.min(100, Math.round((activeAcres / landOwned) * 100));
+      if (acresSubEl) acresSubEl.textContent = `${pct}% of owned land cultivated`;
+    } else {
+      acresValEl.textContent = `${activeAcres.toFixed(1)}`;
+      if (acresSubEl) acresSubEl.textContent = `Cultivated • Add total land in settings`;
+    }
+  }
+
+  // 2. Soil Moisture
+  const moistureValEl = document.getElementById('stat-humidity');
+  const moistureSubEl = document.getElementById('stat-moisture-sub');
+  const moisture = parseFloat(sessionData.soil_moisture) || 0;
+  if (moistureValEl) {
+    moistureValEl.textContent = `${moisture.toFixed(1)}%`;
+    if (moistureSubEl) {
+      if (moisture < 20) {
+        moistureSubEl.innerHTML = `<span style="color:#ff6b6b">↓ Critical: Very Dry</span>`;
+      } else if (moisture < 40) {
+        moistureSubEl.innerHTML = `<span style="color:#ffb84d">→ Low moisture</span>`;
+      } else if (moisture < 80) {
+        moistureSubEl.innerHTML = `<span style="color:#00e5a0">↑ Optimal range</span>`;
+      } else {
+        moistureSubEl.innerHTML = `<span style="color:#00d4ff">↑ Wet / Saturated</span>`;
+      }
+    }
+  }
+
+  // 3. Logged Sales Revenue
+  const revenueValEl = document.getElementById('stat-revenue');
+  const revenueSubEl = document.getElementById('stat-revenue-sub');
+  const totalSales = globalSalesList.reduce((acc, s) => acc + (parseFloat(s.total_amount) || 0), 0);
+  if (revenueValEl) {
+    if (totalSales >= 100000) {
+      revenueValEl.textContent = `₹${(totalSales / 100000).toFixed(2)}L`;
+    } else {
+      revenueValEl.textContent = `₹${totalSales.toLocaleString('en-IN')}`;
+    }
+    if (revenueSubEl) {
+      revenueSubEl.textContent = `Logged revenue from ${globalSalesList.length} transaction${globalSalesList.length === 1 ? '' : 's'}`;
+    }
+  }
+
+  // 4. Alerts
+  const alertsValEl = document.getElementById('stat-alerts');
+  const alertsSubEl = document.getElementById('stat-alerts-sub');
+  const alerts = [];
+  
+  if (moisture < 20) {
+    alerts.push('Low Soil Moisture - irrigation required.');
+  }
+  const nVal = parseFloat(sessionData.soil_n) || 0;
+  const pVal = parseFloat(sessionData.soil_p) || 0;
+  const kVal = parseFloat(sessionData.soil_k) || 0;
+  if (nVal > 0 && nVal < 50) {
+    alerts.push('Low Soil Nitrogen - leguminous crops or Nitrogen fertilizer recommended.');
+  }
+  if (pVal > 0 && pVal < 30) {
+    alerts.push('Low Soil Phosphorus - DAP application recommended.');
+  }
+  
+  if (alertsValEl) {
+    alertsValEl.textContent = alerts.length;
+    if (alertsSubEl) {
+      if (alerts.length > 0) {
+        alertsSubEl.className = 'stat-card-change change-bad';
+        alertsSubEl.textContent = `${alerts.length} action item${alerts.length === 1 ? '' : 's'} need attention`;
+      } else {
+        alertsSubEl.className = 'stat-card-change change-good';
+        alertsSubEl.textContent = `No critical issues detected`;
+      }
+    }
+  }
+}
+
+// ── Custom Modals and Logging Logic ──────────────────────────────────────────
+function openCustomModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.classList.add('open');
+    if (id === 'salesLoggerModal') {
+      loadSalesLogsIntoModal();
+    } else if (id === 'activeCropsModal') {
+      loadActiveCropsIntoModal();
+    } else if (id === 'alertsModal') {
+      loadAlertsIntoModal();
+    }
+  }
+}
+
+function closeCustomModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.classList.remove('open');
+}
+
+// Close on outside click
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.custom-modal').forEach(m => {
+    m.addEventListener('click', e => {
+      if (e.target.classList.contains('custom-modal')) {
+        e.target.classList.remove('open');
+      }
+    });
+  });
+});
+
+function loadActiveCropsIntoModal() {
+  const tbody = document.getElementById('activeCropsTableBody');
+  if (!tbody) return;
+  const activeCrops = globalCropsList.filter(c => c.status !== 'harvested');
+  
+  if (activeCrops.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px 0;">No active cultivated crops. Start a crop plan in the Farming Suite!</td></tr>`;
+    return;
+  }
+  
+  tbody.innerHTML = activeCrops.map(c => `
+    <tr>
+      <td><strong>${c.emoji || '🌱'} ${c.cropName}</strong></td>
+      <td>${c.area} acres</td>
+      <td>Block ${c.location?.district || 'A'}</td>
+      <td>${c.startDate}</td>
+      <td>${c.harvestDate}</td>
+    </tr>
+  `).join('');
+}
+
+function loadSalesLogsIntoModal() {
+  const select = document.getElementById('salesCropSelect');
+  if (select) {
+    const cropNames = new Set(globalCropsList.map(c => c.cropName));
+    if (cropNames.size === 0) {
+      cropNames.add('Wheat');
+      cropNames.add('Rice');
+      cropNames.add('Mustard');
+    }
+    select.innerHTML = Array.from(cropNames).map(name => `<option value="${name}">${name}</option>`).join('');
+  }
+  renderSalesHistory();
+}
+
+function renderSalesHistory() {
+  const tbody = document.getElementById('salesLogsTableBody');
+  const totalText = document.getElementById('totalLoggedRevenueText');
+  if (!tbody) return;
+
+  const total = globalSalesList.reduce((acc, s) => acc + (parseFloat(s.total_amount) || 0), 0);
+  if (totalText) totalText.textContent = `₹${total.toLocaleString('en-IN')}`;
+
+  if (globalSalesList.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px 0;">No transaction logs saved yet. Use the form above to add one!</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = globalSalesList.map(s => `
+    <tr>
+      <td><strong>${s.crop_name}</strong></td>
+      <td>${s.buyer_name}</td>
+      <td>₹${s.price_per_kg}/kg</td>
+      <td>${s.quantity} kg</td>
+      <td style="color:var(--emerald);font-weight:700;">₹${s.total_amount.toLocaleString('en-IN')}</td>
+      <td>${s.date}</td>
+    </tr>
+  `).join('');
+}
+
+async function submitSalesLog(event) {
+  event.preventDefault();
+  
+  const crop_name = document.getElementById('salesCropSelect').value;
+  const buyer_name = document.getElementById('salesBuyerInput').value.trim();
+  const price_per_kg = document.getElementById('salesPriceInput').value;
+  const quantity = document.getElementById('salesQtyInput').value;
+
+  const btn = document.getElementById('btnSubmitSale');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  try {
+    const res = await fetch('/api/dashboard/sales', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ crop_name, buyer_name, price_per_kg, quantity })
+    });
+    const data = await res.json();
+    if (data.success) {
+      globalSalesList = data.sales || [];
+      renderSalesHistory();
+      
+      document.getElementById('salesBuyerInput').value = '';
+      document.getElementById('salesPriceInput').value = '';
+      document.getElementById('salesQtyInput').value = '';
+      
+      // Update stats cards
+      if (window.userData) {
+        loadDashboardStats(window.userData, globalCropsList);
+      }
+    } else {
+      alert(data.message || 'Failed to save sales transaction.');
+    }
+  } catch (err) {
+    alert('Error connecting to server. Please try again.');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Log Transaction';
+  }
+}
+
+function loadAlertsIntoModal() {
+  const container = document.getElementById('alertsListContainer');
+  if (!container) return;
+
+  const moisture = parseFloat(window.userData?.soil_moisture) || 0;
+  const nVal = parseFloat(window.userData?.soil_n) || 0;
+  const pVal = parseFloat(window.userData?.soil_p) || 0;
+  
+  const alerts = [];
+  
+  if (moisture < 20) {
+    alerts.push({
+      title: 'Low Soil Moisture',
+      desc: `Your connected soil sensor reports critical moisture levels: ${moisture}%. Irrigation is urgently required to keep crops growing.`,
+      actionText: 'Open Farmer Guide',
+      actionUrl: '/newfarmer?page=guide'
+    });
+  }
+  if (nVal > 0 && nVal < 50) {
+    alerts.push({
+      title: 'Nitrogen Deficiency Suspected',
+      desc: `Soil Nitrogen is low at ${nVal} mg/kg. It is recommended to apply Nitrogen-rich fertilizer (Urea/Compost) or rotate with leguminous crops.`,
+      actionText: 'Connect Seller',
+      actionUrl: '/newfarmer?page=marketplace'
+    });
+  }
+  if (pVal > 0 && pVal < 30) {
+    alerts.push({
+      title: 'Phosphorus Deficiency',
+      desc: `Soil Phosphorus is low at ${pVal} mg/kg. Applying Diammonium Phosphate (DAP) will improve root health and establishment.`,
+      actionText: 'Buy Fertilizer',
+      actionUrl: '/newfarmer?page=marketplace'
+    });
+  }
+
+  if (alerts.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding: 24px; color: var(--text-muted); font-size:13px;">
+        ✅ No critical soil or nutrient warnings at this time. All indicators look healthy!
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = alerts.map(a => `
+    <div class="alert-item">
+      <div class="alert-item-left">
+        <span style="font-size: 20px;">⚠️</span>
+        <div>
+          <strong style="color:#ff8a8a; font-size:14px;">${a.title}</strong>
+          <p style="font-size:12px; color:var(--text-muted); margin-top:2px; line-height: 1.4;">${a.desc}</p>
+        </div>
+      </div>
+      <button class="btn-alert-action" onclick="handleAlertAction('${a.actionUrl}')">${a.actionText}</button>
+    </div>
+  `).join('');
+}
+
+function handleAlertAction(url) {
+  window.location.href = url;
+}
+
+// ── Session init ──────────────────────────────────────────────────────────────
+fetch('/api/session')
+  .then(r => r.json())
+  .then(data => {
+    if (!data.logged_in) { window.location.href = '/signin'; return; }
+    const name     = data.name || 'User';
+    const first    = name.split(' ')[0];
+    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+    const dashAvatar = document.getElementById('dash-avatar');
+    if (dashAvatar) dashAvatar.childNodes[0].textContent = initials[0] || 'U';
+    const dashUsername = document.getElementById('dash-username');
+    if (dashUsername) dashUsername.textContent = name;
+
+    updateGreeting(first);
+    window.userData = data;
+
+    // Fetch crops data and sales logs in parallel
+    Promise.all([
+      fetch('/api/guide/crops').then(res => res.json()),
+      fetch('/api/dashboard/sales').then(res => res.json())
+    ])
+    .then(([cropsData, salesData]) => {
+      globalCropsList = cropsData.crops || [];
+      globalSalesList = salesData.sales || [];
+      loadDashboardStats(data, globalCropsList);
+    })
+    .catch(err => {
+      console.warn('Dashboard data fetch error:', err);
+      loadDashboardStats(data, []);
+    });
+
+    initWeather();
+  })
+  .catch(() => { window.location.href = '/signin'; });
+
+// ── Chatbot Logic ─────────────────────────────────────────────────────────────
+const chatDrawer    = document.getElementById('chatDrawer');
+const chatFab       = document.getElementById('chatFab');
+const chatClose     = document.getElementById('chatClose');
+const chatInput     = document.getElementById('chatInput');
+const chatSendBtn   = document.getElementById('chatSendBtn');
+const chatMessages  = document.getElementById('chatMessages');
+const fabBadge      = document.getElementById('fabBadge');
+const suggestions   = document.getElementById('chatSuggestions');
+
+let chatHistory     = [];
+let chatOpen        = false;
+let hasNewMsg       = false;
+
+// Set welcome time
+document.getElementById('welcome-time').textContent = formatTime(new Date());
+
+function formatTime(d) {
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function openChat() {
+  chatOpen = true;
+  chatDrawer.classList.add('open');
+  fabBadge.style.display = 'none';
+  hasNewMsg = false;
+  setTimeout(() => chatInput.focus(), 300);
+  // mark chatbot nav as active
+  const btn = document.getElementById('nav-chatbot-btn') || document.querySelector('[data-sidebar-key="chatbot"]');
+  if (btn) btn.classList.add('active');
+}
+
+function closeChat() {
+  chatOpen = false;
+  chatDrawer.classList.remove('open');
+  const btn = document.getElementById('nav-chatbot-btn') || document.querySelector('[data-sidebar-key="chatbot"]');
+  if (btn) btn.classList.remove('active');
+}
+
+chatFab.addEventListener('click',  openChat);
+chatClose.addEventListener('click', closeChat);
+
+function scrollToBottom() {
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addMessage(role, text) {
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+  const isBot = role === 'bot';
+  div.innerHTML = `
+    <div class="chat-msg-avatar">${isBot ? '🤖' : '👤'}</div>
+    <div>
+      <div class="chat-msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+      <div class="chat-msg-time">${formatTime(new Date())}</div>
+    </div>`;
+  chatMessages.appendChild(div);
+  scrollToBottom();
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'chat-msg bot';
+  div.id = 'typing-indicator';
+  div.innerHTML = `
+    <div class="chat-msg-avatar">🤖</div>
+    <div class="chat-msg-bubble" style="padding:10px 14px;">
+      <div class="chat-typing"><span></span><span></span><span></span></div>
+    </div>`;
+  chatMessages.appendChild(div);
+  scrollToBottom();
+}
+
+function hideTyping() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+async function sendMessage(message) {
+  if (!message.trim()) return;
+  suggestions.style.display = 'none';
+
+  // Add user message
+  addMessage('user', message);
+  chatHistory.push({ role: 'user', content: message });
+
+  // Disable input
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
+  chatSendBtn.disabled = true;
+
+  showTyping();
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, history: chatHistory.slice(-10) })
+    });
+    const data = await res.json();
+    hideTyping();
+    const reply = data.reply || '⚠️ No response received.';
+    addMessage('bot', reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    // Show badge if chat is closed
+    if (!chatOpen) {
+      fabBadge.style.display = 'flex';
+      hasNewMsg = true;
+    }
+  } catch (err) {
+    hideTyping();
+    addMessage('bot', '⚠️ Could not reach AgroBot. Please check your connection.');
+  } finally {
+    chatSendBtn.disabled = false;
+    chatInput.focus();
+  }
+}
+
+function sendSuggestion(text) {
+  openChat();
+  setTimeout(() => sendMessage(text), 200);
+}
+
+chatSendBtn.addEventListener('click', () => sendMessage(chatInput.value));
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage(chatInput.value);
+  }
+});
+// Auto-resize textarea
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 100) + 'px';
+});
+
+// ── Particle / canvas background ─────────────────────────────────────────────
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+const EMOJIS = ['🌿','🌱','🍀','🌸','🌼','🌺','🌻','✨','💫','⭐','🌾','🍃','🌷'];
+const floaters = Array.from({length: 55}, () => ({
+  x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+  emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+  size: Math.random() * 14 + 8,
+  vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+  opacity: Math.random() * 0.45 + 0.1,
+  rotation: Math.random() * Math.PI * 2, rotSpeed: (Math.random() - 0.5) * 0.01,
+  pulse: Math.random() * Math.PI * 2,
+}));
+const sparkles = Array.from({length: 40}, () => ({
+  x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+  r: Math.random() * 1.5 + 0.5, o: Math.random(),
+  phase: Math.random() * Math.PI * 2, speed: Math.random() * 0.04 + 0.02,
+}));
+
+function drawBg() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  sparkles.forEach(s => {
+    s.phase += s.speed;
+    const alpha = (Math.sin(s.phase) + 1) / 2 * 0.7;
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,229,160,${alpha})`; ctx.fill();
+  });
+  floaters.forEach(f => {
+    f.pulse += 0.012; f.rotation += f.rotSpeed;
+    f.x += f.vx; f.y += f.vy;
+    if (f.x < -30) f.x = canvas.width + 30;
+    if (f.x > canvas.width + 30) f.x = -30;
+    if (f.y < -30) f.y = canvas.height + 30;
+    if (f.y > canvas.height + 30) f.y = -30;
+    const scale = 1 + Math.sin(f.pulse) * 0.06;
+    ctx.save(); ctx.globalAlpha = f.opacity;
+    ctx.translate(f.x, f.y); ctx.rotate(f.rotation); ctx.scale(scale, scale);
+    ctx.font = `${f.size}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(f.emoji, 0, 0); ctx.restore();
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+
+</script>
+</body>
+</html>

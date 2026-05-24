@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Data — AgroVerse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --emerald: #00e5a0;
+    --teal: #00c9b1;
+    --cyan: #00d4ff;
+    --green-deep: #0a6b4a;
+    --bg-dark: #050e0a;
+    --bg-mid: #091a12;
+    --bg-card: rgba(255,255,255,0.03);
+    --glass: rgba(0, 229, 160, 0.06);
+    --glass-border: rgba(0, 229, 160, 0.15);
+    --text-main: #e8f5ee;
+    --text-muted: #7aa390;
+    --sidebar-w: 220px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+    display: flex;
+    height: 100vh;
+  }
+
+  /* ======================== SIDEBAR ======================== */
+.main-area {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ======================== TOP BAR ======================== */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--glass-border);
+    background: var(--bg-dark);
+    flex-shrink: 0;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 14px; }
+  .back-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--text-muted); font-size: 12.5px;
+    text-decoration: none; cursor: pointer; transition: all 0.2s;
+  }
+  .back-btn:hover { background: var(--glass); color: var(--emerald); border-color: var(--emerald); }
+  .topbar-title {
+    font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .topbar-subtitle { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+
+  /* ======================== PAGE CONTENT ======================== */
+  .page-content {
+    flex: 1; overflow-y: auto;
+    padding: 24px 28px 36px;
+    background: radial-gradient(ellipse 60% 40% at 70% 20%, rgba(0,229,160,0.04) 0%, transparent 60%);
+  }
+  .page-content::-webkit-scrollbar { width: 4px; }
+  .page-content::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+
+  /* ======================== FILTER SECTION ======================== */
+  .filter-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+    position: relative; overflow: hidden;
+  }
+  .filter-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 70% at 90% 20%, rgba(0,229,160,0.05), transparent);
+    pointer-events: none;
+  }
+  .filter-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+  }
+  .filter-header-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: rgba(0,229,160,0.1);
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .filter-header-text h2 {
+    font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+  }
+  .filter-header-text p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .filter-row {
+    display: grid; grid-template-columns: 1fr 1fr auto;
+    gap: 14px; align-items: end;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  .form-select {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text-main);
+    font-family: inherit; font-size: 13.5px;
+    outline: none; cursor: pointer;
+    transition: all 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237aa390' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 34px;
+  }
+  .form-select:focus { border-color: rgba(0,229,160,0.4); box-shadow: 0 0 0 3px rgba(0,229,160,0.07); }
+  .form-select:disabled { opacity: 0.5; cursor: not-allowed; }
+  .form-select option { background: #091a12; color: var(--text-main); }
+
+  .fetch-btn {
+    padding: 11px 24px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border: none; border-radius: 10px;
+    color: #050e0a; font-family: inherit;
+    font-size: 13.5px; font-weight: 700;
+    cursor: pointer; white-space: nowrap;
+    transition: all 0.25s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .fetch-btn:hover { box-shadow: 0 6px 20px rgba(0,229,160,0.4); transform: translateY(-1px); }
+  .fetch-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+  .fetch-btn .btn-spinner {
+    width: 14px; height: 14px; border: 2px solid rgba(5,14,10,0.3);
+    border-top-color: #050e0a; border-radius: 50%;
+    animation: spin 0.8s linear infinite; display: none;
+  }
+  .fetch-btn.loading .btn-spinner { display: block; }
+  .fetch-btn.loading .btn-text { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ======================== SUMMARY STATS ======================== */
+  .summary-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin-bottom: 22px;
+  }
+  .summary-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 14px; padding: 16px 18px;
+    transition: all 0.3s;
+  }
+  .summary-card:hover { border-color: rgba(0,229,160,0.22); transform: translateY(-2px); }
+  .summary-card-icon { font-size: 20px; margin-bottom: 8px; }
+  .summary-card-val {
+    font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1.1;
+  }
+  .summary-card-label { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; }
+
+  /* ======================== RESULTS PANEL ======================== */
+  .results-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .results-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--text-muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .results-title::before { content: '•'; color: var(--emerald); font-size: 16px; }
+  .results-count {
+    font-size: 11px; color: var(--emerald);
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.15);
+    padding: 3px 10px; border-radius: 20px;
+  }
+
+  /* Search bar for results */
+  .results-search {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 8px 14px; margin-bottom: 14px;
+  }
+  .results-search input {
+    background: none; border: none; outline: none;
+    color: var(--text-main); font-family: inherit; font-size: 13px; width: 100%;
+  }
+  .results-search input::placeholder { color: var(--text-muted); }
+
+  /* ======================== TABLE ======================== */
+  .table-wrap {
+    background: var(--bg-card);
+    border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .mandi-table {
+    width: 100%; border-collapse: collapse;
+  }
+  .mandi-table thead th {
+    background: rgba(0,229,160,0.05);
+    padding: 13px 18px;
+    text-align: left;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text-muted);
+    border-bottom: 1px solid rgba(0,229,160,0.1);
+    white-space: nowrap;
+  }
+  .mandi-table tbody tr {
+    border-bottom: 1px solid rgba(0,229,160,0.05);
+    transition: background 0.2s;
+  }
+  .mandi-table tbody tr:last-child { border-bottom: none; }
+  .mandi-table tbody tr:hover { background: rgba(0,229,160,0.03); }
+  .mandi-table tbody td {
+    padding: 13px 18px; font-size: 13px; vertical-align: middle;
+  }
+
+  /* Crop cell */
+  .crop-cell { display: flex; align-items: center; gap: 9px; }
+  .crop-emoji {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: rgba(0,229,160,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .crop-name { font-weight: 600; font-size: 13px; }
+
+  /* Mandi badge */
+  .mandi-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px;
+    background: rgba(0,212,255,0.07);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 20px;
+    font-size: 11.5px; color: var(--cyan);
+    font-weight: 500;
+  }
+
+  /* State pill */
+  .state-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(0,201,177,0.07);
+    border: 1px solid rgba(0,201,177,0.15);
+    border-radius: 20px;
+    font-size: 11.5px; color: var(--teal);
+    font-weight: 500;
+  }
+
+  /* Price */
+  .price-quintal {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--emerald);
+  }
+  .price-kg {
+    font-size: 11.5px; color: var(--text-muted); margin-top: 2px;
+  }
+
+  /* ======================== STATES ======================== */
+  .state-placeholder {
+    text-align: center; padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .state-placeholder .placeholder-icon { font-size: 48px; margin-bottom: 14px; opacity: 0.6; }
+  .state-placeholder h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+  .state-placeholder p { font-size: 13px; line-height: 1.6; }
+
+  .loading-state {
+    text-align: center; padding: 50px 20px;
+  }
+  .loading-spinner {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(0,229,160,0.15);
+    border-top-color: var(--emerald);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    margin: 0 auto 16px;
+  }
+  .loading-state p { color: var(--text-muted); font-size: 13px; }
+
+  .error-state {
+    text-align: center; padding: 50px 20px;
+    color: #ff6b6b;
+  }
+  .error-state .error-icon { font-size: 40px; margin-bottom: 12px; }
+  .error-state p { font-size: 13px; line-height: 1.6; max-width: 400px; margin: 0 auto; }
+
+  /* ======================== CANVAS BG ======================== */
+  #particle-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 0.4;
+  }
+
+  /* ======================== MOBILE ======================== */
+  .mobile-topbar {
+    display: none; align-items: center; justify-content: space-between;
+    padding: 14px 16px; background: var(--bg-mid);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky; top: 0; z-index: 200;
+  }
+  .hamburger { display: flex; flex-direction: column; gap: 4px; cursor: pointer; padding: 6px; }
+  .hamburger span { display: block; width: 20px; height: 2px; background: var(--text-muted); border-radius: 2px; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 90; }
+  .sidebar-overlay.open { display: block; }
+
+  @media (max-width: 1100px) {
+    .summary-row { grid-template-columns: repeat(2, 1fr); }
+    .filter-row { grid-template-columns: 1fr 1fr; }
+    .filter-row .fetch-btn { grid-column: 1 / -1; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s; z-index: 100; }
+    .sidebar.open { transform: translateX(0); }
+    .main-area { margin-left: 0; }
+    .mobile-topbar { display: flex; }
+    .topbar { display: none; }
+    .page-content { padding: 16px; }
+    .filter-row { grid-template-columns: 1fr; }
+    .summary-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .mandi-table { font-size: 12px; }
+    .mandi-table thead th, .mandi-table tbody td { padding: 10px 12px; }
+  }
+  @media (max-width: 480px) {
+    .summary-row { grid-template-columns: 1fr 1fr; }
+    .mandi-table .hide-mobile { display: none; }
+  }
+
+  /* ======================== RESPONSIVE DESIGN ======================== */
+  @media (max-width: 768px) {
+    :root { --sidebar-w: 0px; }
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+    .sidebar.open { transform: translateX(0); }
+    .main-area { margin-left: 0; }
+    .topbar { padding: 14px 20px; }
+    .dashboard-content { padding: 16px 20px 24px; }
+    .filter-row { grid-template-columns: 1fr; gap: 12px; }
+    .summary-row { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+    .mandi-table { font-size: 13px; }
+    .mandi-table thead th, .mandi-table tbody td { padding: 8px 10px; }
+  }
+
+  @media (max-width: 480px) {
+    .topbar-greeting { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .topbar-greeting h1 { font-size: 16px; }
+    .topbar-right { gap: 8px; }
+    .icon-btn { width: 32px; height: 32px; font-size: 14px; }
+    .filter-row { grid-template-columns: 1fr; }
+    .summary-row { grid-template-columns: 1fr; }
+    .mandi-table { font-size: 12px; }
+    .mandi-table thead th, .mandi-table tbody td { padding: 6px 8px; }
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+</style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+{% include 'sidebar.html' %}
+
+
+<!-- ======================== MAIN AREA ======================== -->
+<div class="main-area">
+
+  <!-- Mobile top bar -->
+  <div class="mobile-topbar">
+    <a href="/dashboard" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+      <div class="sidebar-logo-icon" style="width:28px;height:28px;font-size:14px;">🌿</div>
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:16px;background:linear-gradient(90deg,var(--emerald),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">AgroVerse</span>
+    </a>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="/dashboard" class="back-btn">← Back</a>
+      <div>
+        <div class="topbar-title">📊 Market Data</div>
+        <div class="topbar-subtitle">Live Mandi prices powered by data.gov.in</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:5px;">
+        <span style="width:7px;height:7px;background:var(--emerald);border-radius:50%;display:inline-block;animation:pulse 2s infinite;"></span>
+        Live Data • Agmarknet
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-content">
+
+    <!-- Filter Card -->
+    <div class="filter-card">
+      <div class="filter-header">
+        <div class="filter-header-icon">🗺️</div>
+        <div class="filter-header-text">
+          <h2>Select State & District</h2>
+          <p>Choose your location to fetch live mandi crop prices</p>
+        </div>
+      </div>
+      <div class="filter-row">
+        <div class="form-group">
+          <label class="form-label">State</label>
+          <select class="form-select" id="stateSelect" onchange="onStateChange()">
+            <option value="">— Select State —</option>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+            <option value="Assam">Assam</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Chhattisgarh">Chhattisgarh</option>
+            <option value="Goa">Goa</option>
+            <option value="Gujarat">Gujarat</option>
+            <option value="Haryana">Haryana</option>
+            <option value="Himachal Pradesh">Himachal Pradesh</option>
+            <option value="Jharkhand">Jharkhand</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Manipur">Manipur</option>
+            <option value="Meghalaya">Meghalaya</option>
+            <option value="Mizoram">Mizoram</option>
+            <option value="Nagaland">Nagaland</option>
+            <option value="Odisha">Odisha</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Sikkim">Sikkim</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Telangana">Telangana</option>
+            <option value="Tripura">Tripura</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+            <option value="Uttarakhand">Uttarakhand</option>
+            <option value="West Bengal">West Bengal</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+            <option value="Ladakh">Ladakh</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">District</label>
+          <select class="form-select" id="districtSelect" disabled>
+            <option value="">— Select State First —</option>
+          </select>
+        </div>
+        <button class="fetch-btn" id="fetchBtn" onclick="fetchPrices()" disabled>
+          <div class="btn-spinner"></div>
+          <span class="btn-text">🔍 Fetch Prices</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary Stats (shown after fetch) -->
+    <div class="summary-row" id="summaryRow" style="display:none;">
+      <div class="summary-card">
+        <div class="summary-card-icon">📦</div>
+        <div class="summary-card-val" id="stat-total">0</div>
+        <div class="summary-card-label">Total Records</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-icon">🏪</div>
+        <div class="summary-card-val" id="stat-mandis">0</div>
+        <div class="summary-card-label">Unique Mandis</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-icon">🌾</div>
+        <div class="summary-card-val" id="stat-crops">0</div>
+        <div class="summary-card-label">Crop Varieties</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-icon">💰</div>
+        <div class="summary-card-val" id="stat-avg">₹0</div>
+        <div class="summary-card-label">Avg Price/Kg</div>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection">
+      <!-- Placeholder State -->
+      <div class="state-placeholder" id="placeholderState">
+        <div class="placeholder-icon">🌾</div>
+        <h3>Select State & District</h3>
+        <p>Choose a state and district above, then click "Fetch Prices" to see live mandi crop prices from Agmarknet government database.</p>
+      </div>
+    </div>
+
+  </div><!-- end page-content -->
+</div><!-- end main-area -->
+
+{% include 'chat_widget.html' %}
+
+<script>
+// ── Load India data ───────────────────────────────────────────────────────────
+let INDIA_DATA = {};
+
+async function loadIndiaData() {
+  try {
+    const response = await fetch('/india_data.json');
+    const data = await response.json();
+    data.forEach(state => {
+      INDIA_DATA[state.state] = state.districts || [];
+    });
+    console.log("✅ India data loaded for market data");
+    populateStates();
+  } catch (error) {
+    console.error("❌ Failed to load India data:", error);
+  }
+}
+
+// ── Populate states ───────────────────────────────────────────────────────────
+function populateStates() {
+  const stateSelect = document.getElementById('stateSelect');
+  stateSelect.innerHTML = '<option value="">— Select State —</option>';
+  Object.keys(INDIA_DATA).sort().forEach(state => {
+    const opt = document.createElement('option');
+    opt.value = state;
+    opt.textContent = state;
+    stateSelect.appendChild(opt);
+  });
+}
+//   "Karnataka": ["Bagalkote","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban","Bidar","Chamarajanagara","Chikkaballapura","Chikkamagaluru","Chitradurga","Dakshina Kannada","Davanagere","Dharwad","Gadag","Hassan","Haveri","Kalaburagi","Kodagu","Kolar","Koppal","Mandya","Mysuru","Raichur","Ramanagara","Shivamogga","Tumkur","Udupi","Uttara Kannada","Vijayapura","Yadgir"],
+//   "Tamil Nadu": ["Ariyalur","Chengalpattu","Chennai","Coimbatore","Cuddalore","Dharmapuri","Dindigul","Erode","Kallakurichi","Kancheepuram","Kanyakumari","Karur","Krishnagiri","Madurai","Mayiladuthurai","Nagapattinam","Namakkal","Nilgiris","Perambalur","Pudukkottai","Ramanathapuram","Ranipet","Salem","Sivaganga","Tenkasi","Thanjavur","Theni","Thoothukudi","Tiruchirappalli","Tirunelveli","Tirupattur","Tiruppur","Tiruvallur","Tiruvannamalai","Tiruvarur","Vellore","Viluppuram","Virudhunagar"],
+//   "Andhra Pradesh": ["Alluri Sitharama Raju","Anakapalli","Ananthapuramu","Bapatla","Chittoor","East Godavari","Eluru","Guntur","Kadapa","Kakinada","Konaseema","Krishna","Kurnool","Nandyal","Nellore","NTR","Palnadu","Parvathipuram Manyam","Prakasam","Srikakulam","Sri Potti Sriramulu Nellore","Tirupati","Visakhapatnam","Vizianagaram","West Godavari","YSR Kadapa"],
+//   "Telangana": ["Adilabad","Bhadradri Kothagudem","Hanumakonda","Hyderabad","Jagitial","Jangaon","Jayashankar Bhupalpally","Jogulamba Gadwal","Kamareddy","Karimnagar","Khammam","Kumuram Bheem","Mahabubabad","Mahabubnagar","Mancherial","Medak","Medchal Malkajgiri","Mulugu","Nagarkurnool","Nalgonda","Narayanpet","Nirmal","Nizamabad","Peddapalli","Rajanna Sircilla","Rangareddy","Sangareddy","Siddipet","Suryapet","Vikarabad","Wanaparthy","Warangal","Yadadri Bhuvanagiri"],
+//   "West Bengal": ["Alipurduar","Bankura","Birbhum","Cooch Behar","Dakshin Dinajpur","Darjeeling","Hooghly","Howrah","Jalpaiguri","Jhargram","Kalimpong","Kolkata","Malda","Murshidabad","Nadia","North 24 Parganas","Paschim Bardhaman","Paschim Medinipur","Purba Bardhaman","Purba Medinipur","Purulia","South 24 Parganas","Uttar Dinajpur"],
+//   "Bihar": ["Araria","Arwal","Aurangabad","Banka","Begusarai","Bhagalpur","Bhojpur","Buxar","Darbhanga","East Champaran","Gaya","Gopalganj","Jamui","Jehanabad","Kaimur","Katihar","Khagaria","Kishanganj","Lakhisarai","Madhepura","Madhubani","Munger","Muzaffarpur","Nalanda","Nawada","Patna","Purnia","Rohtas","Saharsa","Samastipur","Saran","Sheikhpura","Sheohar","Sitamarhi","Siwan","Supaul","Vaishali","West Champaran"],
+//   "Odisha": ["Angul","Balangir","Balasore","Bargarh","Bhadrak","Boudh","Cuttack","Deogarh","Dhenkanal","Gajapati","Ganjam","Jagatsinghpur","Jajpur","Jharsuguda","Kalahandi","Kandhamal","Kendrapara","Kendujhar","Khordha","Koraput","Malkangiri","Mayurbhanj","Nabarangpur","Nayagarh","Nuapada","Puri","Rayagada","Sambalpur","Subarnapur","Sundergarh"],
+//   "Kerala": ["Alappuzha","Ernakulam","Idukki","Kannur","Kasaragod","Kollam","Kottayam","Kozhikode","Malappuram","Palakkad","Pathanamthitta","Thiruvananthapuram","Thrissur","Wayanad"],
+//   "Himachal Pradesh": ["Bilaspur","Chamba","Hamirpur","Kangra","Kinnaur","Kullu","Lahaul and Spiti","Mandi","Shimla","Sirmaur","Solan","Una"],
+//   "Uttarakhand": ["Almora","Bageshwar","Chamoli","Champawat","Dehradun","Haridwar","Nainital","Pauri Garhwal","Pithoragarh","Rudraprayag","Tehri Garhwal","Udham Singh Nagar","Uttarkashi"],
+//   "Jharkhand": ["Bokaro","Chatra","Deoghar","Dhanbad","Dumka","East Singhbhum","Garhwa","Giridih","Godda","Gumla","Hazaribagh","Jamtara","Khunti","Koderma","Latehar","Lohardaga","Pakur","Palamu","Ramgarh","Ranchi","Sahebganj","Seraikela Kharsawan","Simdega","West Singhbhum"],
+//   "Chhattisgarh": ["Balod","Baloda Bazar","Balrampur","Bastar","Bemetara","Bijapur","Bilaspur","Dantewada","Dhamtari","Durg","Gariaband","Gaurela Pendra Marwahi","Janjgir Champa","Jashpur","Kabirdham","Kanker","Khairagarh","Kondagaon","Korba","Koriya","Mahasamund","Manendragarh","Mohla Manpur","Mungeli","Narayanpur","Raigarh","Raipur","Rajnandgaon","Sakti","Sarangarh Bilaigarh","Sukma","Surajpur","Surguja"],
+//   "Assam": ["Bajali","Baksa","Barpeta","Biswanath","Bongaigaon","Cachar","Charaideo","Chirang","Darrang","Dhemaji","Dhubri","Dibrugarh","Dima Hasao","Goalpara","Golaghat","Hailakandi","Hojai","Jorhat","Kamrup","Kamrup Metropolitan","Karbi Anglong","Karimganj","Kokrajhar","Lakhimpur","Majuli","Morigaon","Nagaon","Nalbari","Sivasagar","Sonitpur","South Salmara Mankachar","Tamulpur","Tinsukia","Udalguri","West Karbi Anglong"],
+//   "Delhi": ["Central Delhi","East Delhi","New Delhi","North Delhi","North East Delhi","North West Delhi","Shahdara","South Delhi","South East Delhi","South West Delhi","West Delhi"],
+// };
+
+// ── State change handler ─────────────────────────────────────────────────────────
+function onStateChange() {
+  const state = document.getElementById('stateSelect').value;
+  const districtSelect = document.getElementById('districtSelect');
+  const fetchBtn = document.getElementById('fetchBtn');
+
+  districtSelect.innerHTML = '<option value="">— Select District —</option>';
+  districtSelect.disabled = !state;
+  fetchBtn.disabled = true;
+
+  if (state && INDIA_DATA[state]) {
+    INDIA_DATA[state].forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d; opt.textContent = d;
+      districtSelect.appendChild(opt);
+    });
+    districtSelect.onchange = () => {
+      fetchBtn.disabled = !districtSelect.value;
+    };
+  } else if (state) {
+    // State exists but no district data — allow fetch without district
+    districtSelect.innerHTML = '<option value="">— All Districts —</option>';
+    fetchBtn.disabled = false;
+  }
+}
+
+// ── Crop emoji map ────────────────────────────────────────────────────────────────
+function getCropEmoji(crop) {
+  const c = (crop || '').toLowerCase();
+  if (c.includes('wheat') || c.includes('gehun')) return '🌾';
+  if (c.includes('rice') || c.includes('paddy') || c.includes('dhan')) return '🍚';
+  if (c.includes('maize') || c.includes('corn') || c.includes('makka')) return '🌽';
+  if (c.includes('tomato')) return '🍅';
+  if (c.includes('onion') || c.includes('pyaz')) return '🧅';
+  if (c.includes('potato') || c.includes('aloo')) return '🥔';
+  if (c.includes('sugarcane') || c.includes('ganna')) return '🎋';
+  if (c.includes('cotton') || c.includes('kapas')) return '🌸';
+  if (c.includes('soyabean') || c.includes('soybean')) return '🫘';
+  if (c.includes('groundnut') || c.includes('moongphali')) return '🥜';
+  if (c.includes('mustard') || c.includes('sarson')) return '🌼';
+  if (c.includes('sunflower')) return '🌻';
+  if (c.includes('banana') || c.includes('kela')) return '🍌';
+  if (c.includes('mango') || c.includes('aam')) return '🥭';
+  if (c.includes('apple') || c.includes('seb')) return '🍎';
+  if (c.includes('chilli') || c.includes('mirch')) return '🌶️';
+  if (c.includes('garlic') || c.includes('lahsun')) return '🧄';
+  if (c.includes('cauliflower') || c.includes('phool gobi')) return '🥦';
+  if (c.includes('cabbage')) return '🥬';
+  if (c.includes('brinjal') || c.includes('baingan')) return '🍆';
+  if (c.includes('lentil') || c.includes('dal') || c.includes('arhar') || c.includes('moong') || c.includes('urad') || c.includes('masur')) return '🫘';
+  if (c.includes('jowar') || c.includes('sorghum')) return '🌾';
+  if (c.includes('bajra') || c.includes('millet')) return '🌾';
+  if (c.includes('turmeric') || c.includes('haldi')) return '🟡';
+  if (c.includes('ginger') || c.includes('adrak')) return '🫚';
+  if (c.includes('pea') || c.includes('matar')) return '🫛';
+  return '🌿';
+}
+
+// ── Fetch prices ─────────────────────────────────────────────────────────────────
+let allData = [];
+
+async function fetchPrices() {
+  const state = document.getElementById('stateSelect').value;
+  const district = document.getElementById('districtSelect').value;
+  if (!state) { alert('Please select a state first.'); return; }
+
+  const fetchBtn = document.getElementById('fetchBtn');
+  fetchBtn.classList.add('loading');
+  fetchBtn.disabled = true;
+
+  // Show loading
+  document.getElementById('resultsSection').innerHTML = `
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Fetching live mandi prices from Agmarknet…</p>
+    </div>`;
+  document.getElementById('summaryRow').style.display = 'none';
+
+  try {
+    let url = `/prices?state=${encodeURIComponent(state)}`;
+    if (district) url += `&district=${encodeURIComponent(district)}`;
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error);
+
+    allData = data;
+    renderResults(data, state, district);
+  } catch (err) {
+    document.getElementById('resultsSection').innerHTML = `
+      <div class="error-state">
+        <div class="error-icon">⚠️</div>
+        <p>Could not fetch market data. Please ensure the backend server (app.py) is running on port 5000, and your API key is valid.<br><br><small>${err.message}</small></p>
+      </div>`;
+  } finally {
+    fetchBtn.classList.remove('loading');
+    fetchBtn.disabled = false;
+  }
+}
+
+// ── Render results ────────────────────────────────────────────────────────────────
+function renderResults(data, state, district) {
+  if (!data.length) {
+    document.getElementById('resultsSection').innerHTML = `
+      <div class="state-placeholder">
+        <div class="placeholder-icon">🔍</div>
+        <h3>No Records Found</h3>
+        <p>No mandi price data available for <strong>${district || state}</strong>. Try a different state or district.</p>
+      </div>`;
+    return;
+  }
+
+  // Compute stats
+  const mandis  = new Set(data.map(r => r.mandi)).size;
+  const crops   = new Set(data.map(r => r.crop)).size;
+  const prices  = data.map(r => parseFloat(r.price_per_kg)).filter(p => p > 0);
+  const avgKg   = prices.length ? (prices.reduce((a,b)=>a+b,0)/prices.length).toFixed(2) : 0;
+
+  document.getElementById('stat-total').textContent  = data.length;
+  document.getElementById('stat-mandis').textContent = mandis;
+  document.getElementById('stat-crops').textContent  = crops;
+  document.getElementById('stat-avg').textContent    = `₹${avgKg}`;
+  document.getElementById('summaryRow').style.display = 'grid';
+
+  // Build table
+  const rows = data.map(item => `
+    <tr>
+      <td>
+        <div class="crop-cell">
+          <div class="crop-emoji">${getCropEmoji(item.crop)}</div>
+          <div class="crop-name">${item.crop || '—'}</div>
+        </div>
+      </td>
+      <td>
+        <div class="mandi-badge">🏪 ${item.mandi || '—'}</div>
+      </td>
+      <td class="hide-mobile">
+        <div class="state-pill">${item.district || item.state || '—'}</div>
+      </td>
+      <td>
+        <div class="price-quintal">₹${item.price_per_quintal || '—'}/qtl</div>
+        <div class="price-kg">₹${item.price_per_kg}/kg</div>
+      </td>
+    </tr>
+  `).join('');
+
+  document.getElementById('resultsSection').innerHTML = `
+    <div>
+      <div class="results-header">
+        <div class="results-title">Live Mandi Prices — ${district || state}</div>
+        <div class="results-count">${data.length} records</div>
+      </div>
+      <div class="results-search">
+        <span style="color:var(--text-muted);">🔍</span>
+        <input type="text" placeholder="Filter by crop name, mandi…" oninput="filterTable(this.value)" id="filterInput">
+      </div>
+      <div class="table-wrap">
+        <table class="mandi-table" id="mandiTable">
+          <thead>
+            <tr>
+              <th>Crop</th>
+              <th>Mandi</th>
+              <th class="hide-mobile">District / State</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody id="mandiTableBody">
+            ${rows}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+// ── Filter table ─────────────────────────────────────────────────────────────────
+function filterTable(query) {
+  const q = query.toLowerCase();
+  const filtered = allData.filter(r =>
+    (r.crop || '').toLowerCase().includes(q) ||
+    (r.mandi || '').toLowerCase().includes(q) ||
+    (r.district || '').toLowerCase().includes(q)
+  );
+  const body = document.getElementById('mandiTableBody');
+  if (!body) return;
+  body.innerHTML = filtered.map(item => `
+    <tr>
+      <td>
+        <div class="crop-cell">
+          <div class="crop-emoji">${getCropEmoji(item.crop)}</div>
+          <div class="crop-name">${item.crop || '—'}</div>
+        </div>
+      </td>
+      <td>
+        <div class="mandi-badge">🏪 ${item.mandi || '—'}</div>
+      </td>
+      <td class="hide-mobile">
+        <div class="state-pill">${item.district || item.state || '—'}</div>
+      </td>
+      <td>
+        <div class="price-quintal">₹${item.price_per_quintal || '—'}/qtl</div>
+        <div class="price-kg">₹${item.price_per_kg}/kg</div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ── Session & avatar ──────────────────────────────────────────────────────────────
+loadIndiaData();  // Load India data first
+
+fetch('/api/session')
+  .then(r => r.json())
+  .then(data => {
+    if (!data.logged_in) { window.location.href = '/signin'; return; }
+    const name     = data.name || 'User';
+    const initials = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    const avatar = document.getElementById('guide-user-avatar');
+    if (avatar) avatar.textContent = initials || 'U';
+    const uname = document.getElementById('dash-username');
+    if (uname) uname.textContent = name;
+  })
+  .catch(() => { /* Allow offline preview */ });
+
+// ── Particle background ───────────────────────────────────────────────────────────
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+const EMOJIS = ['🌿','🌱','🍀','🌾','🍃','✨','💫','🌼'];
+const floaters = Array.from({length: 35}, () => ({
+  x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+  emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+  size: Math.random() * 12 + 7,
+  vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+  opacity: Math.random() * 0.35 + 0.08,
+  rotation: Math.random() * Math.PI * 2, rotSpeed: (Math.random() - 0.5) * 0.008,
+  pulse: Math.random() * Math.PI * 2,
+}));
+function drawBg() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  floaters.forEach(f => {
+    f.pulse += 0.01; f.rotation += f.rotSpeed;
+    f.x += f.vx; f.y += f.vy;
+    if (f.x < -30) f.x = canvas.width + 30;
+    if (f.x > canvas.width + 30) f.x = -30;
+    if (f.y < -30) f.y = canvas.height + 30;
+    if (f.y > canvas.height + 30) f.y = -30;
+    ctx.save(); ctx.globalAlpha = f.opacity;
+    ctx.translate(f.x, f.y); ctx.rotate(f.rotation);
+    ctx.font = `${f.size}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(f.emoji, 0, 0); ctx.restore();
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+
+
+// ── Pulse animation ───────────────────────────────────────────────────────────────
+const style = document.createElement('style');
+style.textContent = `@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>

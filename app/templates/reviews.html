@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rate &amp; Review — AgroVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --emerald: #00e5a0;
+      --teal: #00c9b1;
+      --cyan: #00d4ff;
+      --green-deep: #0a6b4a;
+      --bg-dark: #050e0a;
+      --bg-mid: #091a12;
+      --bg-card: rgba(255,255,255,0.03);
+      --glass: rgba(0, 229, 160, 0.06);
+      --glass-border: rgba(0, 229, 160, 0.15);
+      --text-main: #e8f5ee;
+      --text-muted: #7aa390;
+      --glow: 0 0 40px rgba(0, 229, 160, 0.25);
+      --sidebar-w: 220px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      display: flex;
+      height: 100vh;
+    }
+
+    /* ======================== SIDEBAR ======================== */
+    .main-area {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ======================== TOP BAR ======================== */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--glass-border);
+      background: var(--bg-dark);
+      flex-shrink: 0;
+    }
+    .topbar h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px; font-weight: 700;
+    }
+    .topbar h1 span {
+      background: linear-gradient(90deg, var(--emerald), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .back-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: 9px;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px; transition: all 0.2s;
+      text-decoration: none; color: var(--text-main);
+    }
+    .back-btn:hover { background: var(--glass); border-color: rgba(0,229,160,0.3); }
+
+    /* ======================== CONTENT AREA ======================== */
+    .content-area {
+      flex: 1; overflow-y: auto;
+      padding: 24px 28px 36px;
+      background: radial-gradient(ellipse 60% 40% at 70% 20%, rgba(0,229,160,0.04) 0%, transparent 60%);
+    }
+
+    /* ======================== REVIEW FORM ======================== */
+    .review-form-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(0,229,160,0.08);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 28px;
+      max-width: 800px;
+    }
+
+    .form-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px; font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .form-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-size: 13px; font-weight: 600;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ======================== STAR RATING ======================== */
+    .star-rating {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .star {
+      font-size: 36px;
+      cursor: pointer;
+      /* Unselected: outline star, semi-transparent */
+      color: rgba(255, 255, 255, 0.3);
+      transition: color 0.15s ease, transform 0.15s ease, text-shadow 0.15s ease;
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* Hover preview — bright warm gold and filled */
+    .star.hovered {
+      color: #fbbf24;
+      text-shadow:
+        0 0 10px rgba(251, 191, 36, 0.85),
+        0 0 25px rgba(251, 191, 36, 0.5);
+      transform: scale(1.22);
+    }
+
+    /* Selected / confirmed — rich amber gold + layered glow */
+    .star.active {
+      color: #f59e0b;
+      text-shadow:
+        0 0 8px  rgba(251, 191, 36, 1),
+        0 0 20px rgba(245, 158, 11, 0.9),
+        0 0 35px rgba(251, 191, 36, 0.5);
+      transform: scale(1.1);
+    }
+
+    .star-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 130px;
+      margin-left: 8px;
+      transition: color 0.2s;
+    }
+
+    /* Feature Checkboxes */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .feature-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: rgba(0,229,160,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .feature-checkbox:hover {
+      background: rgba(0,229,160,0.08);
+      border-color: rgba(0,229,160,0.25);
+    }
+
+    .feature-checkbox input {
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--emerald);
+    }
+
+    .feature-checkbox label {
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    /* Text Area */
+    .form-textarea {
+      width: 100%;
+      background: rgba(0,229,160,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      resize: vertical;
+      min-height: 120px;
+      transition: border-color 0.2s;
+    }
+
+    .form-textarea:focus {
+      border-color: rgba(0,229,160,0.35);
+    }
+
+    .form-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--emerald), var(--teal));
+      border: none;
+      border-radius: 10px;
+      padding: 14px 24px;
+      color: #050e0a;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-submit:hover {
+      box-shadow: 0 8px 24px rgba(0,229,160,0.35);
+      transform: translateY(-2px);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* ======================== REVIEWS LIST ======================== */
+    .reviews-section {
+      max-width: 800px;
+    }
+
+    .reviews-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px; font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-main);
+    }
+
+    .reviews-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .review-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(0,229,160,0.08);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 14px;
+      transition: all 0.3s;
+    }
+
+    .review-card:hover {
+      border-color: rgba(0,229,160,0.22);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .review-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .review-avatar {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--emerald), var(--cyan));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #050e0a;
+      flex-shrink: 0;
+    }
+
+    .review-user-info h4 {
+      font-size: 13px; font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .review-user-info p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Stars in review cards */
+    .review-rating {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+    }
+
+    .r-star {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .r-star.filled {
+      color: #f59e0b;
+      text-shadow: 0 0 6px rgba(251,191,36,0.6);
+    }
+
+    .r-star.empty {
+      color: rgba(255,255,255,0.2);
+    }
+
+    .review-body {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .review-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .review-feature-tag {
+      font-size: 10px;
+      padding: 4px 10px;
+      background: rgba(0,229,160,0.1);
+      border: 1px solid rgba(0,229,160,0.2);
+      border-radius: 12px;
+      color: var(--emerald);
+      font-weight: 600;
+    }
+
+    .review-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ======================== RESPONSIVE ======================== */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+      .main-area { margin-left: 0; }
+      .topbar { padding: 14px 16px; }
+      .content-area { padding: 16px; }
+      .review-form-card { padding: 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    .content-area::-webkit-scrollbar { width: 4px; }
+    .content-area::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+<!-- ======================== SIDEBAR ======================== -->
+{% include 'sidebar.html' %}
+
+
+<!-- ======================== MAIN AREA ======================== -->
+<div class="main-area">
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <a href="/dashboard" class="back-btn" title="Back to Dashboard">←</a>
+      <h1>Rate &amp; <span>Review</span></h1>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content-area">
+    
+    <!-- Review Form -->
+    <div class="review-form-card">
+      <div class="form-title">📝 Share Your Feedback</div>
+      <div class="form-subtitle">Help us improve AgroVerse by sharing your experience and rating</div>
+
+      <form id="reviewForm">
+        <!-- Rating -->
+        <div class="form-group">
+          <label class="form-label">Rate Your Experience</label>
+          <div class="star-rating">
+            <span class="star" data-rating="1">☆</span>
+            <span class="star" data-rating="2">☆</span>
+            <span class="star" data-rating="3">☆</span>
+            <span class="star" data-rating="4">☆</span>
+            <span class="star" data-rating="5">☆</span>
+            <div class="star-label" id="ratingLabel">Select rating</div>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="form-group">
+          <label class="form-label">What did you like? (Optional)</label>
+          <div class="features-grid">
+            <div class="feature-checkbox">
+              <input type="checkbox" id="f-user-friendly" value="User Friendly">
+              <label for="f-user-friendly">User Friendly</label>
+            </div>
+            <div class="feature-checkbox">
+              <input type="checkbox" id="f-accurate-data" value="Accurate Data">
+              <label for="f-accurate-data">Accurate Data</label>
+            </div>
+            <div class="feature-checkbox">
+              <input type="checkbox" id="f-helpful-features" value="Helpful Features">
+              <label for="f-helpful-features">Helpful Features</label>
+            </div>
+            <div class="feature-checkbox">
+              <input type="checkbox" id="f-weather-accurate" value="Weather Accurate">
+              <label for="f-weather-accurate">Weather Accurate</label>
+            </div>
+            <div class="feature-checkbox">
+              <input type="checkbox" id="f-market-data" value="Market Data">
+              <label for="f-market-data">Market Data</label>
+            </div>
+            <div class="feature-checkbox">
+              <input type="checkbox" id="f-ai-chatbot" value="AI Chatbot">
+              <label for="f-ai-chatbot">AI Chatbot Helpful</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review Text -->
+        <div class="form-group">
+          <label class="form-label">Your Review</label>
+          <textarea id="reviewText" class="form-textarea" placeholder="Share your thoughts about your experience with AgroVerse. What did you like? What can be improved?..."></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Review</button>
+        <div id="successMsg" style="display:none;margin-top:14px;padding:12px 14px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:8px;color:#4ade80;font-size:13px;text-align:center;font-weight:600;">✓ Review submitted successfully!</div>
+      </form>
+    </div>
+
+    <!-- Reviews List -->
+    <div class="reviews-section">
+      <div class="reviews-title">★ Community Reviews</div>
+      <div id="reviewsList" class="reviews-list">
+        <div class="reviews-empty">Loading reviews...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% include 'chat_widget.html' %}
+
+<script>
+// ── Star Rating Logic ─────────────────────────────────────────────────────────
+let selectedRating = 0;
+const stars        = document.querySelectorAll('.star');
+const ratingLabel  = document.getElementById('ratingLabel');
+
+const RATING_LABELS = ['', 'Poor 😞', 'Fair 😐', 'Good 🙂', 'Great 😊', 'Excellent! ✨'];
+
+// Hover: light up stars up to hovered index
+stars.forEach(star => {
+  star.addEventListener('mouseover', () => {
+    const hoverRating = parseInt(star.dataset.rating);
+    stars.forEach((s, i) => {
+      s.classList.remove('active');
+      if (i < hoverRating) {
+        s.classList.add('hovered');
+        s.textContent = '★';
+      } else {
+        s.classList.remove('hovered');
+        s.textContent = '☆';
+      }
+    });
+    ratingLabel.textContent = RATING_LABELS[hoverRating] || '';
+    ratingLabel.style.color = '#fbbf24';
+  });
+
+  // Click: lock in selection
+  star.addEventListener('click', () => {
+    selectedRating = parseInt(star.dataset.rating);
+    updateStars();
+  });
+});
+
+// Mouse leaves the row: restore confirmed selection
+document.querySelector('.star-rating').addEventListener('mouseleave', () => {
+  updateStars();
+});
+
+function updateStars() {
+  stars.forEach((s, i) => {
+    s.classList.remove('hovered');
+    if (i < selectedRating) {
+      s.classList.add('active');
+      s.textContent = '★';
+    } else {
+      s.classList.remove('active');
+      s.textContent = '☆';
+    }
+  });
+  if (selectedRating > 0) {
+    ratingLabel.textContent = `${RATING_LABELS[selectedRating]} (${selectedRating}/5)`;
+    ratingLabel.style.color = '#f59e0b';
+  } else {
+    ratingLabel.textContent = 'Select rating';
+    ratingLabel.style.color = '';
+  }
+}
+
+// ── Form Submission ───────────────────────────────────────────────────────────
+const reviewForm = document.getElementById('reviewForm');
+const submitBtn  = document.getElementById('submitBtn');
+const successMsg = document.getElementById('successMsg');
+
+reviewForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  if (selectedRating === 0) {
+    alert('Please select a star rating before submitting.');
+    return;
+  }
+
+  const reviewText = document.getElementById('reviewText').value.trim();
+  if (!reviewText) {
+    alert('Please write a short review.');
+    return;
+  }
+
+  const features = Array.from(document.querySelectorAll('.feature-checkbox input:checked'))
+    .map(cb => cb.value);
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  try {
+    const res = await fetch('/api/reviews/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rating: selectedRating, review: reviewText, features })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      successMsg.style.display = 'block';
+      reviewForm.reset();
+      selectedRating = 0;
+      updateStars();
+      setTimeout(() => { successMsg.style.display = 'none'; }, 4000);
+      loadReviews();
+    } else {
+      alert(data.message || 'Error submitting review');
+    }
+  } catch (err) {
+    alert('Error: ' + err.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Review';
+  }
+});
+
+// ── Load Reviews ──────────────────────────────────────────────────────────────
+function formatTimeAgo(dateStr) {
+  const then = new Date(dateStr);
+  const now  = new Date();
+  const secs = Math.floor((now - then) / 1000);
+  if (secs < 60) return 'Just now';
+  const mins = Math.floor(secs / 60);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return `${days}d ago`;
+  return then.toLocaleDateString();
+}
+
+function buildStars(rating) {
+  return Array(5).fill().map((_, i) =>
+    `<span class="r-star ${i < rating ? 'filled' : 'empty'}">★</span>`
+  ).join('');
+}
+
+async function loadReviews() {
+  try {
+    const res  = await fetch('/api/reviews');
+    const data = await res.json();
+    const list = document.getElementById('reviewsList');
+
+    if (!data.reviews || data.reviews.length === 0) {
+      list.innerHTML = '<div class="reviews-empty">No reviews yet. Be the first to share your feedback! 🌱</div>';
+      return;
+    }
+
+    list.innerHTML = data.reviews.map(r => `
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-user">
+            <div class="review-avatar">${r.user_initial}</div>
+            <div class="review-user-info">
+              <h4>${r.user_name}</h4>
+              <p>${formatTimeAgo(r.created_at)}</p>
+            </div>
+          </div>
+          <div class="review-rating">${buildStars(r.rating)}</div>
+        </div>
+        ${r.features && r.features.length > 0 ? `
+          <div class="review-features">
+            ${r.features.map(f => `<span class="review-feature-tag">${f}</span>`).join('')}
+          </div>
+        ` : ''}
+        <div class="review-body">${r.review}</div>
+        <div class="review-time">Rating: <strong style="color:var(--text-main);">${r.rating}/5</strong></div>
+      </div>
+    `).join('');
+  } catch (err) {
+    document.getElementById('reviewsList').innerHTML =
+      `<div class="reviews-empty">Error loading reviews: ${err.message}</div>`;
+  }
+}
+
+// ── Session & Init ────────────────────────────────────────────────────────────
+fetch('/api/session')
+  .then(r => r.json())
+  .then(data => {
+    if (!data.logged_in) { window.location.href = '/signin'; return; }
+    const name    = data.name || 'User';
+    const initial = name[0].toUpperCase();
+    const avatar  = document.getElementById('guide-user-avatar');
+    if (avatar) avatar.textContent = initial || 'U';
+    const uname = document.getElementById('dash-username');
+    if (uname) uname.textContent = name;
+    loadReviews();
+  })
+  .catch(() => { window.location.href = '/signin'; });
+</script>
+
+</body>
+</html>

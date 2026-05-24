@@ -1,0 +1,4220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>New Farmer Guide</title>
+
+    <!-- Important for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+        :root {
+            --emerald: #00e5a0;
+            --teal: #00c9b1;
+            --cyan: #00d4ff;
+            --green-deep: #0a6b4a;
+            --green-light: #00e5a0;
+            --green-mid: #00c9b1;
+            --green-bg: rgba(0, 229, 160, 0.1);
+            --red: #ff6b6b;
+            --bg-dark: #050e0a;
+            --bg-mid: #091a12;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --glass: rgba(0, 229, 160, 0.06);
+            --glass-border: rgba(0, 229, 160, 0.15);
+            --text-main: #e8f5ee;
+            --text-muted: #7aa390;
+            --text-soft: rgba(232, 245, 238, 0.75);
+            --glow: 0 0 40px rgba(0, 229, 160, 0.25);
+            --sidebar-w: 220px;
+            --topbar-h: 62px;
+            --radius: 18px;
+            font-size: 15px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.55;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Syne', sans-serif;
+            color: var(--text-main);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 229, 160, 0.25);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* Sidebar CSS has been unified and moved to templates/sidebar.html */
+
+        /* ============================================================ TOPBAR */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-w);
+            right: 0;
+            height: var(--topbar-h);
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            gap: 16px;
+            z-index: 100;
+            transition: left 0.3s;
+            position: fixed;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .topbar-center {
+            font-family: 'Syne', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--emerald), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            flex: 1;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .weather-chip {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .notif-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .topbar-icon-btn {
+            min-width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .topbar-icon-btn:hover {
+            background: var(--glass);
+            border-color: rgba(0, 229, 160, 0.35);
+        }
+
+        /* Settings modal matching main dashboard settings */
+        .settings-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 12, 10, 0.68);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 250;
+            backdrop-filter: blur(8px);
+        }
+        .settings-modal.open { display: flex; }
+        .settings-panel {
+            width: min(100%, 560px);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: linear-gradient(180deg, rgba(13, 28, 24, 0.98), rgba(8, 20, 17, 0.98));
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
+            padding: 22px;
+        }
+        .settings-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+        .settings-head h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+        .settings-head p { color: var(--text-muted); font-size: 13px; }
+        .settings-close {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-card);
+            cursor: pointer;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        .settings-close:hover {
+            background: var(--glass);
+        }
+        .settings-pop-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+        .settings-pop-section {
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 14px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .settings-pop-section h3 {
+            margin-bottom: 12px;
+            color: var(--text-main);
+            font-size: 15px;
+        }
+        .settings-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .meta-pill {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 12px;
+            border: 1px solid var(--glass-border);
+        }
+        .settings-pop-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        /* ============================================================ MAIN */
+        .main-content {
+            margin-left: var(--sidebar-w);
+            margin-top: var(--topbar-h);
+            padding: 24px 28px 36px;
+            min-height: calc(100vh - var(--topbar-h));
+            transition: margin-left 0.3s;
+            flex: 1;
+            background: radial-gradient(ellipse 60% 40% at 70% 20%, rgba(0, 229, 160, 0.04) 0%, transparent 60%);
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--emerald), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 229, 160, 0.18);
+            letter-spacing: -0.5px;
+        }
+
+        .page-sub {
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-size: 14px;
+        }
+
+        .page-header-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .back-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 7px 14px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            background: var(--glass);
+            border-color: rgba(0, 229, 160, 0.3);
+        }
+
+        /* ============================================================ HOME */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+            box-shadow: none;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 229, 160, 0.08);
+            border-color: rgba(0, 229, 160, 0.3);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 16px; right: 16px; height: 3px;
+            border-radius: 0 0 3px 3px;
+        }
+
+        .stat-card.green::before { background: var(--emerald); }
+        .stat-card.amber::before { background: var(--teal); }
+        .stat-card.blue::before { background: var(--cyan); }
+        .stat-card.purple::before { background: #a064ff; }
+
+        .stat-icon {
+            font-size: 24px;
+        }
+
+        .stat-val {
+            font-family: 'Syne', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .home-cta {
+            display: flex;
+            justify-content: center;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, rgba(0, 40, 28, 0.7), rgba(5, 14, 10, 0.8));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 36px;
+            color: var(--text-main);
+            text-align: center;
+            max-width: 520px;
+            margin: 0 auto;
+            box-shadow: var(--glow);
+        }
+
+        .cta-emoji {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .cta-card h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--emerald), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-card p {
+            opacity: 0.8;
+            margin-bottom: 20px;
+            color: var(--text-soft);
+        }
+
+        /* ============================================================ STEP PROGRESS */
+        .step-progress {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            margin-bottom: 28px;
+            gap: 0;
+            flex-wrap: wrap;
+            background: rgba(9, 26, 18, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 75px;
+        }
+
+        .step-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #020705;
+            border: 1px solid rgba(0, 229, 160, 0.2);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step-item.active .step-circle {
+            background: linear-gradient(135deg, var(--emerald), var(--teal));
+            color: #050e0a;
+            border-color: transparent;
+            transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(0, 229, 160, 0.5);
+        }
+
+        .step-item.done .step-circle {
+            background: rgba(0, 229, 160, 0.15);
+            color: var(--emerald);
+            border: 1px solid var(--emerald);
+            box-shadow: 0 0 12px rgba(0, 229, 160, 0.25);
+        }
+
+        .step-name {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .step-item.active .step-name {
+            color: var(--emerald);
+            font-weight: 700;
+        }
+
+        .step-item.done .step-name {
+            color: var(--text-main);
+        }
+
+        .step-line {
+            flex: 1;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.08);
+            min-width: 20px;
+            max-width: 60px;
+            margin-top: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .step-item.done + .step-line {
+            background: linear-gradient(90deg, var(--emerald), var(--teal));
+            box-shadow: 0 0 8px rgba(0, 229, 160, 0.4);
+        }
+
+        /* ============================================================ STEP PANELS */
+        .step-panel {
+            display: none;
+        }
+
+        .step-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .step-card {
+            background: rgba(9, 26, 18, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .step-card h2 {
+            font-size: 20px;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .step-card>p {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .step-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* ============================================================ LOCATION */
+        .location-options {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .loc-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'DM Sans', sans-serif;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .loc-btn:hover {
+            background: rgba(0, 229, 160, 0.06);
+            color: var(--text-main);
+            border-color: rgba(0, 229, 160, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .loc-btn.active {
+            border-color: var(--emerald);
+            background: rgba(0, 229, 160, 0.12);
+            color: var(--emerald);
+            box-shadow: 0 0 20px rgba(0, 229, 160, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .geo-detect-box {
+            text-align: center;
+            padding: 28px;
+            background: rgba(0, 229, 160, 0.02);
+            border-radius: var(--radius);
+            border: 1px dashed rgba(0, 229, 160, 0.3);
+            box-shadow: inset 0 0 20px rgba(0, 229, 160, 0.02);
+        }
+
+        .btn-detect {
+            background: linear-gradient(135deg, var(--emerald), var(--cyan));
+            color: #050e0a;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 229, 160, 0.2);
+        }
+        .btn-detect:hover {
+            box-shadow: 0 0 20px rgba(0, 229, 160, 0.4), 0 0 40px rgba(0, 212, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .geo-status {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 16px;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-main);
+            background: rgba(5, 14, 10, 0.8);
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group select option {
+            background: #091a12;
+            color: var(--text-main);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--emerald);
+            box-shadow: 0 0 12px rgba(0, 229, 160, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group input:disabled,
+        .form-group select:disabled {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.05);
+            color: rgba(232, 245, 238, 0.3);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .location-summary {
+            margin-top: 20px;
+        }
+
+        .summary-card {
+            background: rgba(5, 14, 10, 0.9);
+            border: 1px solid rgba(0, 229, 160, 0.2);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: inset 0 0 15px rgba(0, 229, 160, 0.05), 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .sum-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 14px;
+        }
+
+        .sum-row:last-child {
+            border-bottom: none;
+        }
+
+        .sum-row span {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .sum-row strong {
+            color: var(--text-main);
+        }
+
+        /* ============================================================ CROPS */
+        .crop-search-bar {
+            margin-bottom: 16px;
+        }
+
+        .crop-search-bar input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-main);
+            background: rgba(5, 14, 10, 0.8);
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .crop-search-bar input:focus {
+            border-color: var(--emerald);
+            box-shadow: 0 0 12px rgba(0, 229, 160, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .crop-compare-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 229, 160, 0.12);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .crop-compare-bar span {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .crops-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .crop-card {
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: var(--bg-card);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crop-card:hover {
+            border-color: rgba(0, 229, 160, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .crop-card.selected {
+            border-color: var(--emerald);
+            background: rgba(0, 229, 160, 0.08);
+            box-shadow: 0 0 15px rgba(0, 229, 160, 0.15);
+        }
+
+        .crop-card .selected-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, var(--emerald), var(--teal));
+            color: #050e0a;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .crop-emoji {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .crop-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .crop-reason {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .crop-suit {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .suit-bar-bg {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+        }
+
+        .suit-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--emerald), var(--teal));
+            transition: width 0.6s ease;
+        }
+
+        .suit-pct {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--emerald);
+        }
+
+        .crop-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .crop-meta-item {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .crop-meta-item strong {
+            display: block;
+            font-size: 12px;
+            color: var(--text-main);
+        }
+
+        .crop-risk {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .risk-low {
+            background: rgba(74, 222, 128, 0.15);
+            color: #4ade80;
+        }
+
+        .risk-medium {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+        }
+
+        .risk-high {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        /* ============================================================ PLAN */
+        .plan-mode-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .plan-mode-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-muted);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .plan-mode-btn:hover {
+            background: rgba(0, 229, 160, 0.06);
+            color: var(--text-main);
+            border-color: rgba(0, 229, 160, 0.4);
+        }
+
+        .plan-mode-btn.active {
+            border-color: var(--emerald);
+            background: rgba(0, 229, 160, 0.12);
+            color: var(--emerald);
+            box-shadow: 0 0 20px rgba(0, 229, 160, 0.2);
+        }
+
+        .input-with-unit {
+            display: flex;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(5, 14, 10, 0.8);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-with-unit:focus-within {
+            border-color: var(--emerald);
+            box-shadow: 0 0 12px rgba(0, 229, 160, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-with-unit input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            color: var(--text-main);
+            background: transparent;
+        }
+
+        .input-with-unit select {
+            padding: 12px 16px;
+            border: none;
+            border-left: 1px solid var(--glass-border);
+            background: rgba(9, 26, 18, 0.9);
+            color: var(--text-main);
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* ============================================================ FEASIBILITY */
+        .feasibility-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .feas-highlight {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .feas-highlight .fh-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .feas-highlight .fh-val {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--emerald);
+        }
+
+        .feas-highlight .fh-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .feas-table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+        }
+
+        .feas-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+        }
+
+        .feas-table th {
+            background: var(--bg-mid);
+            color: var(--text-main);
+            padding: 14px 16px;
+            font-size: 13px;
+            text-align: left;
+            font-family: 'Syne', sans-serif;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .feas-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .feas-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .feas-table tr:hover td {
+            background: var(--glass);
+        }
+
+        .best-badge {
+            background: rgba(0, 229, 160, 0.15);
+            color: var(--emerald);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 6px;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* ============================================================ INPUTS */
+        .inputs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .input-item-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 18px;
+            transition: all 0.2s;
+        }
+        .input-item-card:hover {
+            border-color: rgba(0, 229, 160, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .input-item-card .ii-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .input-item-card .ii-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .input-item-card .ii-qty {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 4px 0;
+        }
+
+        .input-item-card .ii-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--emerald);
+        }
+
+        .input-item-card .ii-use {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 6px;
+        }
+
+        .buy-btn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 7px;
+            background: linear-gradient(135deg, var(--emerald), var(--teal));
+            color: #050e0a;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.2s;
+        }
+        .buy-btn:hover {
+            box-shadow: 0 0 10px rgba(0, 229, 160, 0.3);
+        }
+
+        /* ============================================================ START */
+        .center-card {
+            text-align: center;
+        }
+
+        .start-emoji {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .center-card h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .center-card>p {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .final-summary {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .final-summary .sum-row {
+            font-size: 14px;
+        }
+
+        /* ============================================================ MY CROPS */
+        .crops-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 18px;
+        }
+
+        .my-crop-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            box-shadow: none;
+            cursor: pointer;
+            transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+        }
+
+        .my-crop-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 229, 160, 0.08);
+            border-color: rgba(0, 229, 160, 0.3);
+        }
+
+        .mcc-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(135deg, rgba(0, 229, 160, 0.06), rgba(0, 201, 177, 0.02));
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .mcc-emoji {
+            font-size: 40px;
+        }
+
+        .mcc-info h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .mcc-info .mcc-loc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .mcc-badge {
+            margin-left: auto;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .badge-growing {
+            background: rgba(0, 229, 160, 0.15);
+            color: var(--emerald);
+            border: 1px solid rgba(0, 229, 160, 0.3);
+        }
+
+        .badge-ready {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .badge-harvested {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .mcc-body {
+            padding: 16px 20px;
+        }
+
+        .mcc-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .mcc-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .mcc-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--emerald), var(--teal));
+            border-radius: 4px;
+            transition: width 0.6s;
+        }
+
+        .mcc-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .mcc-stat {
+            font-size: 12px;
+        }
+
+        .mcc-stat span {
+            color: var(--text-muted);
+        }
+
+        .mcc-stat strong {
+            display: block;
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .mcc-footer {
+            padding: 12px 20px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 8px;
+        }
+
+        .mcc-footer button {
+            flex: 1;
+            padding: 8px;
+            border-radius: 7px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+        .mcc-footer button:hover {
+            background: var(--glass);
+            border-color: rgba(0, 229, 160, 0.3);
+        }
+
+        .mcc-footer .btn-harvest {
+            background: rgba(251, 191, 36, 0.15);
+            border-color: rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+        }
+        .mcc-footer .btn-harvest:hover {
+            background: rgba(251, 191, 36, 0.25);
+        }
+
+        .mcc-footer .btn-sell {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+        .mcc-footer .btn-sell:hover {
+            background: rgba(59, 130, 246, 0.25);
+        }
+
+        /* ============================================================ CROP DETAIL */
+        .crop-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .detail-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: none;
+        }
+
+        .detail-card h3 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+        }
+
+        .growth-visual {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .plant-emoji {
+            font-size: 72px;
+            margin-bottom: 12px;
+            transition: font-size 0.3s;
+        }
+
+        .growth-stage-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--emerald);
+        }
+
+        .growth-stage-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .circular-progress {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 16px auto;
+        }
+
+        .circular-progress svg {
+            transform: rotate(-90deg);
+        }
+
+        .circular-progress .cp-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--emerald);
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tl-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .tl-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        .tl-dot.done {
+            background: var(--emerald);
+        }
+
+        .tl-dot.current {
+            background: var(--teal);
+            box-shadow: 0 0 0 4px rgba(0, 201, 177, 0.2);
+        }
+
+        .tl-dot.upcoming {
+            background: var(--glass-border);
+        }
+
+        .tl-content strong {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .tl-content small {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .task-icon {
+            font-size: 16px;
+        }
+
+        .task-day {
+            font-weight: 700;
+            color: var(--emerald);
+            min-width: 50px;
+        }
+
+        .task-name {
+            flex: 1;
+            color: var(--text-main);
+        }
+
+        .task-status {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .ts-pending {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+        }
+
+        .ts-done {
+            background: rgba(0, 229, 160, 0.15);
+            color: var(--emerald);
+        }
+
+        .ts-upcoming {
+            background: var(--glass-border);
+            color: var(--text-muted);
+        }
+
+        .tip-card {
+            background: var(--bg-card);
+            border-left: 4px solid var(--emerald);
+            border-radius: 0 8px 8px 0;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-top: 1px solid var(--glass-border);
+            border-right: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .tip-card strong {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .tip-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ============================================================ MONITOR */
+        .monitor-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .upload-section {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: none;
+        }
+
+        .upload-drop {
+            border: 2px dashed var(--glass-border);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+        }
+
+        .upload-drop:hover {
+            border-color: var(--emerald);
+            color: var(--text-main);
+            background: var(--glass);
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .upload-drop p {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .upload-drop span {
+            font-size: 12px;
+        }
+
+        .uploaded-previews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .preview-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .analysis-results {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: none;
+        }
+
+        .placeholder-analysis {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .ph-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .analysis-result-card {
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .arc-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .arc-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .arc-healthy {
+            background: rgba(74, 222, 128, 0.15);
+            color: #4ade80;
+        }
+
+        .arc-warning {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+        }
+
+        .arc-problem {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .arc-metric {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-main);
+        }
+
+        .arc-metric:last-child {
+            border-bottom: none;
+        }
+
+        /* ============================================================ MARKETPLACE */
+        .market-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 9px 20px;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            background: var(--bg-card);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .tab-btn:hover {
+            background: var(--glass);
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            background: rgba(0, 229, 160, 0.12);
+            color: var(--emerald);
+            border-color: var(--emerald);
+        }
+
+        .market-tab-content {
+            display: none;
+        }
+
+        .market-tab-content.active {
+            display: block;
+        }
+
+        .market-listings,
+        .market-browse {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 16px;
+        }
+
+        .listing-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: none;
+            border: 1px solid var(--glass-border);
+            transition: all 0.2s;
+        }
+        .listing-card:hover {
+            border-color: rgba(0, 229, 160, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .listing-crop {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .listing-price {
+            font-size: 22px;
+            font-weight: 800;
+            font-family: 'Syne', sans-serif;
+            color: var(--emerald);
+            margin-bottom: 8px;
+        }
+
+        .listing-price span {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .listing-meta div {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .listing-meta strong {
+            color: var(--text-main);
+        }
+
+        .contact-btn {
+            margin-top: 14px;
+            width: 100%;
+            padding: 9px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--emerald), var(--teal));
+            color: #050e0a;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.2s;
+        }
+        .contact-btn:hover {
+            box-shadow: 0 0 10px rgba(0, 229, 160, 0.3);
+        }
+
+        /* ============================================================ SETTINGS */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .settings-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: none;
+            border: 1px solid var(--glass-border);
+        }
+
+        .settings-card h3 {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--glass-border);
+            cursor: pointer;
+        }
+
+        .toggle-row span {
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        .toggle-row input[type=checkbox] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--emerald);
+        }
+
+        /* ============================================================ BUTTONS */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--emerald), var(--cyan));
+            color: #050e0a;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 229, 160, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1.5px);
+            box-shadow: 0 0 20px rgba(0, 229, 160, 0.4), 0 0 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .btn-primary:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform: none;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .btn-primary.large {
+            padding: 16px 32px;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary.small {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 12px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--emerald);
+            color: var(--emerald);
+            background: rgba(0, 229, 160, 0.08);
+            box-shadow: 0 4px 15px rgba(0, 229, 160, 0.08);
+        }
+
+        /* ============================================================ MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 12, 10, 0.68);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-box {
+            background: linear-gradient(180deg, rgba(13, 28, 24, 0.98), rgba(8, 20, 17, 0.98));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 560px;
+            width: 90%;
+            animation: fadeIn 0.25s ease;
+            box-shadow: var(--glow);
+        }
+
+        .modal-box h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .modal-box>p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .harvest-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 20px 0;
+        }
+
+        .harvest-opt {
+            border: 1px solid var(--glass-border);
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .harvest-opt:hover,
+        .harvest-opt.selected {
+            border-color: var(--emerald);
+            background: rgba(0, 229, 160, 0.08);
+        }
+
+        .ho-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .harvest-opt h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
+        .harvest-opt p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .ho-cost {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--emerald);
+            margin-top: 8px;
+        }
+
+        /* ============================================================ TOAST */
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: linear-gradient(135deg, var(--bg-mid), var(--bg-dark));
+            border: 1px solid var(--emerald);
+            color: var(--text-main);
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            z-index: 1000;
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0, 229, 160, 0.2);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================================ EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================ LOADING */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--emerald);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 6px;
+        }
+
+        @keyframes shimmer {
+            to {
+                background-position: -200% 0;
+            }
+        }
+
+        /* ============================================================ RESPONSIVE */
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .topbar {
+                left: 0 !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                padding-top: 90px !important;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .crop-detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .monitor-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-progress {
+                gap: 2px;
+                padding: 10px;
+            }
+
+            .step-line {
+                min-width: 10px;
+            }
+
+            .step-name {
+                font-size: 9px;
+            }
+            .main-content {
+                padding: 16px;
+            }
+
+            .harvest-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Category Pills styling in Step 2 */
+        .crop-categories-filter {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 2px 14px;
+            margin-bottom: 12px;
+            scroll-behavior: smooth;
+        }
+        .crop-categories-filter::-webkit-scrollbar {
+            height: 4px;
+        }
+        .crop-categories-filter::-webkit-scrollbar-thumb {
+            background: rgba(0, 229, 160, 0.15);
+            border-radius: 10px;
+        }
+        .cat-pill {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            color: var(--text-muted);
+            font-size: 12.5px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .cat-pill:hover {
+            background: rgba(0, 229, 160, 0.05);
+            border-color: rgba(0, 229, 160, 0.25);
+            color: var(--text-main);
+        }
+        .cat-pill.active {
+            background: rgba(0, 229, 160, 0.12);
+            border-color: var(--emerald);
+            color: var(--emerald);
+            font-weight: 600;
+            box-shadow: 0 0 10px rgba(0, 229, 160, 0.1);
+        }
+    </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+{% include 'sidebar.html' %}
+
+<!-- Top Navbar -->
+<div class="topbar">
+    <button class="menu-toggle" id="menuToggle">☰</button>
+    <div class="topbar-center" id="topbarTitle">New Farmer Guide</div>
+    <div class="topbar-right">
+        <a href="/dashboard" class="back-btn" title="Back to Dashboard" style="background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 9px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; text-decoration: none; color: var(--text-main); margin-right: 10px;">←</a>
+        <button class="topbar-icon-btn" id="guideLangToggleBtn" type="button">EN</button>
+    </div>
+</div>
+
+<!-- Main Content -->
+<main class="main-content" id="mainContent">
+
+    <!-- ===== PAGE: HOME ===== -->
+    <div class="page" id="page-home">
+        <div class="page-header">
+            <h1 id="welcomeHeading">Welcome back, {{ user_name }} 👋</h1>
+            <p class="page-sub">Here's your farming overview for today</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card green">
+                <div class="stat-icon">🌾</div>
+                <div class="stat-val" id="home-crop-count">0</div>
+                <div class="stat-label">Active Crops</div>
+            </div>
+            <div class="stat-card amber">
+                <div class="stat-icon">📅</div>
+                <div class="stat-val">Today</div>
+                <div class="stat-label">3 Tasks Due</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-icon">💰</div>
+                <div class="stat-val">₹0</div>
+                <div class="stat-label">Est. Revenue</div>
+            </div>
+            <div class="stat-card purple">
+                <div class="stat-icon">🌡</div>
+                <div class="stat-val" id="home-temp">--°C</div>
+                <div class="stat-label">Temperature</div>
+            </div>
+        </div>
+        <div class="home-cta">
+            <div class="cta-card">
+                <div class="cta-emoji">🌱</div>
+                <h2>Start Your Farming Journey</h2>
+                <p>Use the New Farmer Guide to get personalized crop recommendations and a full farming plan.</p>
+                <button class="btn-primary" onclick="navigateTo('guide', true)">Open New Farmer Guide →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PAGE: NEW FARMER GUIDE ===== -->
+    <div class="page active" id="page-guide">
+        <div class="page-header">
+            <h1>New Farmer Guide 🌾</h1>
+            <p class="page-sub">Follow the steps to get your personalized farming plan</p>
+        </div>
+
+        <!-- Step Progress Bar -->
+        <div class="step-progress">
+            <div class="step-item active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-name">Location</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-name">Crop Select</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-name">Planning</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-name">Feasibility</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item" data-step="5">
+                <div class="step-circle">5</div>
+                <div class="step-name">Inputs</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item" data-step="6">
+                <div class="step-circle">6</div>
+                <div class="step-name">Start</div>
+            </div>
+        </div>
+
+        <!-- STEP 1: Location -->
+        <div class="step-panel active" id="step-1">
+            <div class="step-card">
+                <h2>📍 Select Your Location</h2>
+                <p>Tell us where your farm is so we can recommend the best crops for your region.</p>
+                <div class="location-options">
+                    <button class="loc-btn active" id="locAutoBtn" onclick="setLocMode('auto')">📡 Use My
+                        Location</button>
+                    <button class="loc-btn" id="locManualBtn" onclick="setLocMode('manual')">✏️ Enter Manually</button>
+                </div>
+
+                <div id="autoLocSection">
+                    <div class="geo-detect-box" id="geoDetectBox">
+                        <button class="btn-detect" onclick="detectLocation()">🔍 Detect My Location</button>
+                        <div class="geo-status" id="geoStatus"></div>
+                    </div>
+                </div>
+
+                <div id="manualLocSection" style="display:none">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select id="countrySelect" disabled>
+                                <option value="India" selected>India</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>State / Province</label>
+                            <select id="stateSelect" onchange="onStateChange()" disabled>
+                                <option value="">-- Select State --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>District</label>
+                            <select id="districtSelect" onchange="onDistrictChange()" disabled>
+                                <option value="">-- Select District --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="location-summary" id="locationSummary" style="display:none">
+                    <div class="summary-card">
+                        <div class="sum-row"><span>📍 Location</span><strong id="sumLocation">-</strong></div>
+                        <div class="sum-row"><span>🌡 Season</span><strong id="sumSeason">-</strong></div>
+                        <div class="sum-row"><span>🌧 Avg Rainfall</span><strong id="sumRainfall">-</strong></div>
+                        <div class="sum-row"><span>🌱 Soil Type</span><strong id="sumSoil">-</strong></div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-primary" onclick="goStep(2)" id="step1Next" disabled>Next: Crop Suggestions
+                        →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: Crop Suggestion -->
+        <div class="step-panel" id="step-2">
+            <div class="step-card">
+                <h2>🌾 Crop Recommendations</h2>
+                <p>Based on your location, season, and soil type, here are the best crops for you.</p>
+                <div class="crop-search-bar">
+                    <input type="text" id="cropSearchInput" placeholder="🔍 Search for a crop..."
+                        oninput="filterCrops()">
+                </div>
+                <div class="crop-categories-filter" id="cropCategoriesFilter">
+                    <button class="cat-pill active" onclick="selectCategory('all', this)" type="button">All</button>
+                    <button class="cat-pill" onclick="selectCategory('Grain', this)" type="button">🌾 Grains</button>
+                    <button class="cat-pill" onclick="selectCategory('Dal', this)" type="button">🌱 Dals</button>
+                    <button class="cat-pill" onclick="selectCategory('Vegetable', this)" type="button">🥔 Vegetables</button>
+                    <button class="cat-pill" onclick="selectCategory('Fruit', this)" type="button">🍎 Fruits</button>
+                    <button class="cat-pill" onclick="selectCategory('Green Vegetable', this)" type="button">🥬 Green Veggies</button>
+                    <button class="cat-pill" onclick="selectCategory('Commercial Crop', this)" type="button">☁️ Commercial</button>
+                    <button class="cat-pill" onclick="selectCategory('Other', this)" type="button">🧪 Others</button>
+                </div>
+                <div class="crop-compare-bar" id="compareBar" style="display:none">
+                    <span id="compareCount">0 selected</span>
+                    <button class="btn-outline" onclick="clearCropSelection()">Clear</button>
+                    <button class="btn-primary small" onclick="goStep(3)">Proceed with Selected →</button>
+                </div>
+                <div class="crops-grid" id="cropsGrid">
+                    <!-- Populated dynamically -->
+                </div>
+                <div class="step-actions">
+                    <button class="btn-outline" onclick="goStep(1)">← Back</button>
+                    <button class="btn-primary" onclick="goStep(3)" id="step2Next" disabled>Next: Plan →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3: Planning -->
+        <div class="step-panel" id="step-3">
+            <div class="step-card">
+                <h2>📋 Farming Plan Input</h2>
+                <p>Tell us more about your farm so we can personalize your plan.</p>
+                <div class="plan-mode-toggle">
+                    <button class="plan-mode-btn active" id="modeArea" onclick="setPlanMode('area')">📐 By Land
+                        Area</button>
+                    <button class="plan-mode-btn" id="modeIncome" onclick="setPlanMode('income')">💰 By Income
+                        Goal</button>
+                </div>
+
+                <div id="planAreaSection">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Land Area</label>
+                            <div class="input-with-unit">
+                                <input type="number" id="landArea" placeholder="e.g. 5" min="0.1" step="0.1">
+                                <select id="landUnit">
+                                    <option value="acres">Acres</option>
+                                    <option value="hectares">Hectares</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="planIncomeSection" style="display:none">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Target Income (₹)</label>
+                            <input type="number" id="targetIncome" placeholder="e.g. 100000" min="1000">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Budget Range (₹)</label>
+                        <select id="budgetRange">
+                            <option value="low">Low (Up to ₹25,000)</option>
+                            <option value="medium" selected>Medium (₹25,000 – ₹1,00,000)</option>
+                            <option value="high">High (₹1,00,000+)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Irrigation Available</label>
+                        <select id="irrigationAvail">
+                            <option value="none">None (Rainfed only)</option>
+                            <option value="partial">Partial</option>
+                            <option value="full" selected>Full Irrigation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Farming Experience</label>
+                        <select id="farmingExp">
+                            <option value="beginner" selected>Beginner (0–2 years)</option>
+                            <option value="intermediate">Intermediate (2–5 years)</option>
+                            <option value="experienced">Experienced (5+ years)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Risk Preference</label>
+                        <select id="riskPref">
+                            <option value="low">Low Risk</option>
+                            <option value="medium" selected>Medium Risk</option>
+                            <option value="high">High Return (Higher Risk)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-outline" onclick="goStep(2)">← Back</button>
+                    <button class="btn-primary" onclick="runFeasibility()">Analyze Feasibility →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 4: Feasibility -->
+        <div class="step-panel" id="step-4">
+            <div class="step-card">
+                <h2>📊 Feasibility Analysis</h2>
+                <p>Here is your personalized crop plan analysis.</p>
+                <div class="feasibility-highlights" id="feasHighlights"></div>
+                <div class="feasibility-table-wrap" id="feasTableWrap"></div>
+                <div class="step-actions">
+                    <button class="btn-outline" onclick="goStep(3)">← Back</button>
+                    <button class="btn-primary" onclick="goStep(5)">Confirm Plan →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 5: Inputs Required -->
+        <div class="step-panel" id="step-5">
+            <div class="step-card">
+                <h2>🛒 Required Inputs</h2>
+                <p>Here is what you'll need to purchase before you start.</p>
+                <div class="inputs-grid" id="inputsGrid"></div>
+                <div class="step-actions">
+                    <button class="btn-outline" onclick="goStep(4)">← Back</button>
+                    <button class="btn-primary" onclick="goStep(6)">Confirm & Proceed →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 6: Start -->
+        <div class="step-panel" id="step-6">
+            <div class="step-card center-card">
+                <div class="start-emoji">🚀</div>
+                <h2>You're Ready to Farm!</h2>
+                <p>Review your plan summary and click Start Farming to create your crop journey.</p>
+                <div class="final-summary" id="finalSummary"></div>
+                <button class="btn-primary large" onclick="startFarming()">🌱 Start Farming Now</button>
+                <button class="btn-outline" onclick="goStep(5)">← Go Back</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PAGE: MY CROPS ===== -->
+    <div class="page" id="page-mycrops">
+        <div class="page-header">
+            <h1>My Crops 🌿</h1>
+            <p class="page-sub">Track and manage all your active crop plans</p>
+        </div>
+        <div class="crops-list" id="myCropsList">
+            <div class="empty-state">
+                <div class="empty-icon">🌱</div>
+                <h3>No crops yet</h3>
+                <p>Use the New Farmer Guide to start your first crop plan.</p>
+                <button class="btn-primary" onclick="navigateTo('guide', true)">Start Guide →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PAGE: CROP DETAIL ===== -->
+    <div class="page" id="page-cropdetail">
+        <div class="page-header-row">
+            <button class="back-btn" onclick="navigateTo('mycrops')">← Back</button>
+            <h1 id="cropDetailTitle">Crop Detail</h1>
+        </div>
+        <div class="crop-detail-grid" id="cropDetailGrid"></div>
+    </div>
+
+    <!-- ===== PAGE: MONITOR ===== -->
+    <div class="page" id="page-monitor">
+        <div class="page-header">
+            <h1>Monitor Crop 📡</h1>
+            <p class="page-sub">Upload images and get AI-powered health analysis</p>
+        </div>
+        <div class="monitor-layout">
+            <div class="upload-section">
+                <div class="upload-drop" id="uploadDrop" onclick="document.getElementById('cropImageInput').click()">
+                    <div class="upload-icon">📸</div>
+                    <p>Click or drag & drop crop images here</p>
+                    <span>Supports JPG, PNG, WEBP</span>
+                    <input type="file" id="cropImageInput" accept="image/*" multiple style="display:none"
+                        onchange="handleImageUpload(event)">
+                </div>
+                <div class="uploaded-previews" id="uploadedPreviews"></div>
+                <button class="btn-primary" onclick="analyzeImages()" id="analyzeBtn" style="display:none">🔬 Analyze
+                    Crop Health</button>
+            </div>
+            <div class="analysis-results" id="analysisResults">
+                <div class="placeholder-analysis">
+                    <div class="ph-icon">🌿</div>
+                    <p>Upload crop images to see health analysis</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PAGE: MARKETPLACE ===== -->
+    <div class="page" id="page-marketplace">
+        <div class="page-header">
+            <h1>Marketplace 🏪</h1>
+            <p class="page-sub">List your harvested crops and connect with buyers</p>
+        </div>
+        <div class="step-card" style="margin-bottom:18px;">
+            <h2 style="margin-bottom:12px;">Add Marketplace Listing</h2>
+            <div class="form-grid">
+                <div class="form-group"><label>Item Name</label><input id="marketItemName" type="text" placeholder="Seeds, Fertilizer, Wheat grain"></div>
+                <div class="form-group"><label>Crop Type</label><input id="marketCropType" type="text" placeholder="Wheat, Rice, Cotton"></div>
+                <div class="form-group"><label>Phone</label><input id="marketPhone" type="text" placeholder="10 digit phone"></div>
+                <div class="form-group"><label>Price (₹)</label><input id="marketPrice" type="number" min="0" placeholder="250"></div>
+                <div class="form-group"><label>Quantity</label><input id="marketQuantity" type="text" placeholder="50 kg / 20 bags"></div>
+                <div class="form-group"><label>Location</label><input id="marketLocation" type="text" placeholder="Mathura, Uttar Pradesh"></div>
+                <div class="form-group"><label>Listing Type</label><select id="marketListingType"><option value="produce">Produce</option><option value="seeds">Seeds</option><option value="fertilizer">Fertilizer</option><option value="treatment">Disease Treatment</option></select></div>
+            </div>
+            <div class="step-actions">
+                <button class="btn-primary" onclick="createMarketplaceListing()">Add Listing</button>
+            </div>
+        </div>
+        <div class="market-tabs">
+            <button class="tab-btn active" onclick="setMarketTab('listings')">My Listings</button>
+            <button class="tab-btn" onclick="setMarketTab('browse')">Browse Market</button>
+        </div>
+        <div id="tab-listings" class="market-tab-content active">
+            <div class="market-listings" id="myListings">
+                <div class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <h3>No listings yet</h3>
+                    <p>After harvesting, create a listing to sell your crops.</p>
+                </div>
+            </div>
+        </div>
+        <div id="tab-browse" class="market-tab-content">
+            <div class="form-group" style="margin-bottom:14px;">
+                <label>Search Marketplace</label>
+                <input id="marketSearchInput" type="text" placeholder="Search seeds, fertilizer, wheat..." oninput="handleMarketplaceSearch()">
+            </div>
+            <div class="market-browse" id="browseListing"></div>
+        </div>
+    </div>
+
+    <div class="page" id="page-marketdata">
+        <div class="page-header">
+            <h1>Market Data</h1>
+            <p class="page-sub">Check live mandi prices for your crops across India.</p>
+        </div>
+        <div style="background:rgba(9, 26, 18, 0.4);border:1px solid var(--glass-border);border-radius:22px;padding:40px;text-align:center;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+            <div style="font-size:48px;margin-bottom:16px;">📊</div>
+            <h3 style="font-size:20px;color:var(--text-main);margin-bottom:8px;">Market Data</h3>
+            <p style="color:var(--text-muted);margin-bottom:24px;">Access live market prices and trends to make informed selling decisions.</p>
+            <a href="/market_data" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;">Open Market Dashboard →</a>
+        </div>
+    </div>
+
+    <div class="page" id="page-machineryhub">
+        <div class="page-header">
+            <h1>Machinery</h1>
+            <p class="page-sub">Rent farm equipment and machinery from verified vendors.</p>
+        </div>
+        <div style="background:rgba(9, 26, 18, 0.4);border:1px solid var(--glass-border);border-radius:22px;padding:40px;text-align:center;min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+            <div style="font-size:48px;margin-bottom:16px;">🚜</div>
+            <h3 style="font-size:20px;color:var(--text-main);margin-bottom:8px;">Machinery Hub</h3>
+            <p style="color:var(--text-muted);margin-bottom:24px;">Browse and rent farm machinery from verified vendors in your area.</p>
+            <a href="/machinery" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;">Open Machinery Hub →</a>
+        </div>
+    </div>
+
+
+
+</main>
+
+{% include 'chat_widget.html' %}
+
+
+
+<!-- HARVEST MODAL -->
+<div class="modal-overlay" id="harvestModal" style="display:none">
+    <div class="modal-box">
+        <h2>🌾 Harvest Time!</h2>
+        <p id="harvestModalText">Your crop appears ready for harvest. What would you like to do?</p>
+        <div class="harvest-options">
+            <div class="harvest-opt" onclick="selectHarvest('manual')">
+                <div class="ho-icon">👨‍🌾</div>
+                <h4>Manual Harvesting</h4>
+                <p>Lower cost, labor intensive</p>
+                <div class="ho-cost">~₹3,000/acre</div>
+            </div>
+            <div class="harvest-opt" onclick="selectHarvest('machine')">
+                <div class="ho-icon">🚜</div>
+                <h4>Machine Harvesting</h4>
+                <p>Faster, more efficient</p>
+                <div class="ho-cost">~₹5,000/acre</div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-outline" onclick="closeHarvestModal()">Not Ready Yet</button>
+            <button class="btn-primary" id="confirmHarvestBtn" disabled onclick="confirmHarvest()">Confirm
+                Harvest</button>
+        </div>
+    </div>
+</div>
+
+<!-- SELL MODAL -->
+<div class="modal-overlay" id="sellModal" style="display:none">
+    <div class="modal-box">
+        <h2>🏪 Create Sell Listing</h2>
+        <div class="form-group"><label>Quantity (kg)</label><input type="number" id="sellQty" placeholder="e.g. 500">
+        </div>
+        <div class="form-group"><label>Price per kg (₹)</label><input type="number" id="sellPrice"
+                placeholder="e.g. 25"></div>
+        <div class="form-group"><label>Location</label><input type="text" id="sellLoc" placeholder="e.g. Mathura, UP">
+        </div>
+        <div class="form-group"><label>Contact Number</label><input type="text" id="sellContact"
+                placeholder="+91 XXXXX XXXXX"></div>
+        <div class="modal-actions">
+            <button class="btn-outline" onclick="closeSellModal()">Cancel</button>
+            <button class="btn-primary" onclick="submitListing()">Create Listing</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</body>
+
+<script>
+   
+const API_BASE = 'http://localhost:5000/api'; // Your Python Flask backend URL
+const INDIA_DATA = {{ india_data|tojson }};
+const LOCATION_DATA = {
+  India: INDIA_DATA
+
+};
+
+const SEASON_MAP = {
+  "Kharif": { months: [6,7,8,9,10], label: "Kharif (Monsoon)", icon: "🌧" },
+  "Rabi": { months: [10,11,12,1,2,3], label: "Rabi (Winter)", icon: "❄️" },
+  "Zaid": { months: [3,4,5,6], label: "Zaid (Summer)", icon: "☀️" }
+};
+
+let CROPS_DB = [];
+
+async function loadCropsDatabase() {
+  try {
+    const urls = [
+      '/static/crops/grains.json',
+      '/static/crops/dals.json',
+      '/static/crops/vegetables.json',
+      '/static/crops/fruits.json',
+      '/static/crops/green_vegetables.json',
+      '/static/crops/commercial.json',
+      '/static/crops/others.json'
+    ];
+    const results = await Promise.all(
+      urls.map(url => fetch(url).then(res => {
+        if (!res.ok) throw new Error('Failed to load ' + url);
+        return res.json();
+      }))
+    );
+    const combined = results.flat();
+    if (combined && combined.length > 0) {
+      CROPS_DB = combined;
+      console.log('Successfully loaded ' + CROPS_DB.length + ' crops from split category JSON databases.');
+    }
+  } catch (err) {
+    console.warn('Error loading split crops database files, trying combined crops_db.json fallback:', err);
+    try {
+      const res = await fetch('/static/crops/crops_db.json');
+      if (!res.ok) throw new Error('Crops database status not OK');
+      const data = await res.json();
+      if (data && data.length > 0) {
+        CROPS_DB = data;
+        console.log('Successfully loaded ' + CROPS_DB.length + ' crops from fallback combined JSON.');
+      }
+    } catch (fallbackErr) {
+      console.warn('Error loading fallback crops database JSON, utilizing hardcoded fallback crops:', fallbackErr);
+      CROPS_DB = [
+        { id: "wheat", name: "Wheat", emoji: "🌾", category: "Grain", season: "Rabi", soilTypes: ["loamy", "clay loam"], waterNeed: "Moderate", duration: "120-150 days", riskLevel: "low", profitRange: "18,000-28,000/acre", reason: "Ideal for Rabi season; thrives in loamy soil.", suitScore: 92, costPerAcre: 15000, yieldPerAcre: 18, pricePerKg: 22, inputs: [], stages: ["Land Preparation", "Sowing", "Germination", "Vegetative", "Flowering", "Harvest Ready"] },
+        { id: "rice", name: "Rice", emoji: "🌾", category: "Grain", season: "Kharif", soilTypes: ["clay", "alluvial"], waterNeed: "High", duration: "90-120 days", riskLevel: "medium", profitRange: "20,000-35,000/acre", reason: "Great for monsoon season; requires high water.", suitScore: 78, costPerAcre: 18000, yieldPerAcre: 22, pricePerKg: 24, inputs: [], stages: ["Nursery", "Land Prep", "Transplanting", "Vegetative", "Panicle", "Harvest Ready"] },
+        { id: "mustard", name: "Mustard", emoji: "🌼", category: "Other", season: "Rabi", soilTypes: ["sandy loam", "loamy"], waterNeed: "Low", duration: "90-110 days", riskLevel: "low", profitRange: "15,000-22,000/acre", reason: "Drought-tolerant crop, excellent for low irrigation.", suitScore: 85, costPerAcre: 9000, yieldPerAcre: 10, pricePerKg: 55, inputs: [], stages: ["Land Preparation", "Sowing", "Germination", "Rosette", "Flowering", "Harvest Ready"] },
+        { id: "potato", name: "Potato", emoji: "🥔", category: "Vegetable", season: "Rabi", soilTypes: ["sandy loam", "loamy"], waterNeed: "Moderate", duration: "75-100 days", riskLevel: "medium", profitRange: "25,000-45,000/acre", reason: "High-value crop with strong market demand.", suitScore: 80, costPerAcre: 25000, yieldPerAcre: 100, pricePerKg: 10, inputs: [], stages: ["Sprouting", "Planting", "Emergence", "Tuber Initiation", "Tuber Bulking", "Harvest Ready"] },
+        { id: "sugarcane", name: "Sugarcane", emoji: "🎋", category: "Commercial Crop", season: "Kharif", soilTypes: ["alluvial", "loamy"], waterNeed: "High", duration: "300-365 days", riskLevel: "low", profitRange: "40,000-75,000/acre", reason: "Long-duration crop with guaranteed purchase.", suitScore: 70, costPerAcre: 30000, yieldPerAcre: 350, pricePerKg: 3, inputs: [], stages: ["Land Prep", "Planting", "Germination", "Tillering", "Grand Growth", "Harvest Ready"] },
+        { id: "maize", name: "Maize", emoji: "🌽", category: "Grain", season: "Kharif", soilTypes: ["sandy loam", "loamy", "alluvial"], waterNeed: "Moderate", duration: "80-95 days", riskLevel: "low", profitRange: "16,000-26,000/acre", reason: "Short-duration, versatile crop with growing demand.", suitScore: 88, costPerAcre: 12000, yieldPerAcre: 25, pricePerKg: 20, inputs: [], stages: ["Land Prep", "Sowing", "Germination", "Vegetative", "Tasseling", "Harvest Ready"] }
+      ];
+    }
+  }
+}
+loadCropsDatabase();
+
+const BROWSE_MARKET_DATA = [
+  { crop: "Wheat", emoji: "", qty: "500 kg", price: 23, loc: "Mathura, UP", seller: "Ram Singh", contact: "+91 94567 XXXXX" },
+  { crop: "Rice", emoji: "", qty: "1,200 kg", price: 26, loc: "Karnal, Haryana", seller: "Gurjit Farms", contact: "+91 98765 XXXXX" },
+  { crop: "Mustard", emoji: "", qty: "300 kg", price: 58, loc: "Bharatpur, Raj.", seller: "Shyam Agro", contact: "+91 91234 XXXXX" },
+  { crop: "Potato", emoji: "", qty: "2,000 kg", price: 12, loc: "Agra, UP", seller: "Mohan Farms", contact: "+91 97654 XXXXX" }
+];
+
+const CROP_GUIDES = {
+  rice: [
+    'Seed Selection: Use IR8, Sonalika, Basmati 370, or Pusa 1121. Salt-water sort and Carbendazim treatment help avoid weak seed and blast disease.',
+    'Nursery and Sowing: Raise seedlings for 25-30 days while preparing a puddled main field with 5-10 cm water.',
+    'Transplantation: Shift seedlings to the main field in 20 cm row spacing for easier weed control and airflow.',
+    'Fertilizers: Apply NPK 120:60:40 kg/ha, Zinc Sulfate 25 kg/ha, and split Urea at transplanting, tillering, and panicle initiation.',
+    'Water and Weeds: Maintain standing water until grain ripening and spray Butachlor or similar herbicide within 3 days of transplanting.',
+    'Harvest and Sell: Drain the field 10-15 days before harvest and sell once grains are golden with safe moisture.'
+  ],
+  wheat: [
+    'Seed Selection: Prefer HD 2967, WH 1105, DBW-327, or SMW 5174 and treat seeds with Carbendazim 2.5 g/kg.',
+    'Land Preparation: Prepare a fine seedbed with 2-3 ploughings and give pre-sowing irrigation if soil moisture is low.',
+    'Sowing: Use a seed drill at 4-5 cm depth and 22 cm row spacing with 100-125 kg seed per hectare.',
+    'Fertilizers: Apply DAP 100 kg/ha, MOP 50 kg/ha, split Urea 120 kg/ha, and Zinc Sulfate 25 kg/ha.',
+    'Irrigation: Focus on CRI, tillering, jointing, flowering, milk, and dough stages for the highest yield.',
+    'Weeds and Harvest: Control Phalaris minor around 30-35 DAS and harvest in March-April when grains harden fully.'
+  ],
+  maize: [
+    'Seed Selection: Use Pioneer 3302, Dekalb 9108, or Syngenta NK6240 and treat with Thiram or Carbendazim.',
+    'Land Preparation: Build a fine, well-drained seedbed and add FYM during the final ploughing.',
+    'Sowing: Maintain 60 x 20 cm spacing and 3-5 cm sowing depth.',
+    'Nutrition: Apply NPK 150:60:40 kg/ha with split Nitrogen at basal, knee-high, and tasseling stages plus Zinc Sulfate 25 kg/ha.',
+    'Irrigation and Pests: Protect knee-high, tasseling, silking, and grain-fill stages while scouting for Fall Armyworm.',
+    'Harvest and Sell: Harvest when cobs turn brown and grains harden below 20% moisture.'
+  ],
+  sugarcane: [
+    'Seed Sets: Use 3-budded sets from CoS-17231, Co-15023, or Co-0118 and dip in Carbendazim 0.2% for 15 minutes.',
+    'Planting: Choose flat furrows or trench planting in deep, well-drained loamy soil.',
+    'Nutrition: Add FYM 20-25 tonnes/ha, DAP 500 kg/ha, Potash 150 kg/ha, and split Urea across 3 doses.',
+    'Irrigation: Water every 8-10 days in summer and every 15-20 days in winter with trash mulching for moisture control.',
+    'Earthing Up: Strengthen stalks by earthing up after 3-4 months and tie canes before strong monsoon winds.',
+    'Harvest and Ratoon: Cut close to the ground and use ratooning to save replanting cost.'
+  ],
+  cotton: [
+    'Seed Selection: Use Bt cotton hybrids like Bollgard II, RCH 2, or MRC 7351.',
+    'Land Preparation: Deep plough and harrow 2-3 times, keeping the field clear of stubbles.',
+    'Sowing: Maintain wide spacing and use dibbling to reduce seed wastage.',
+    'Nutrition: Apply NPK 120:60:60 kg/ha and correct red leaf symptoms using Magnesium Sulfate and Zinc Sulfate sprays.',
+    'Water and Pests: Irrigate carefully during flowering and boll development, and monitor whiteflies plus Pink Bollworm.',
+    'Harvest and Sell: Hand-pick when 50-60% bolls open and keep lint clean before sale.'
+  ]
+};
+
+let state = {
+  currentPage: 'guide',
+  currentStep: 1,
+  locMode: 'auto',
+  location: null,
+  season: null,
+  selectedCategory: 'all',
+  selectedCrops: [],
+  planMode: 'area',
+  planInputs: {},
+  feasibilityData: [],
+  myCrops: [],
+  marketListings: [],
+  browseListings: [],
+  marketplaceSearch: '',
+  selectedHarvestMethod: null,
+  currentCropDetailId: null,
+  uploadedImages: [],
+};
+
+const GUIDE_PAGES = new Set(['home', 'guide', 'mycrops', 'monitor', 'marketplace', 'marketdata', 'machineryhub', 'cropdetail']);
+
+function normalizeGuidePage(page) {
+  return GUIDE_PAGES.has(page) ? page : 'guide';
+}
+
+function navigateTo(page, forceReset = false) {
+  page = normalizeGuidePage(page);
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pageEl = document.getElementById('page-' + page);
+  if (pageEl) pageEl.classList.add('active');
+  state.currentPage = page;
+  const titles = { home: 'Home', guide: 'New Farmer Guide', mycrops: 'My Crops', cropdetail: 'Crop Detail', monitor: 'Monitor Crop', marketplace: 'Marketplace', marketdata: 'Market Data', machineryhub: 'Machinery' };
+  document.getElementById('topbarTitle').textContent = titles[page] || page;
+  if (page === 'mycrops') renderMyCrops();
+  if (page === 'marketplace') renderMarketplace();
+  if (page === 'home') renderHome();
+  // ── Farmer Guide: only reset if explicitly forced ──────────────────────
+  if (page === 'guide' && forceReset) {
+    resetGuide();
+  }
+  if (typeof window.updateSharedSidebarSelection === 'function') {
+    window.updateSharedSidebarSelection(page);
+  }
+  window.scrollTo(0,0);
+}
+
+function resetGuide() {
+  // Clear previous session data
+  state.location       = null;
+  state.season         = null;
+  state.soilType       = null;
+  state.rainfall       = null;
+  state.selectedCrops  = [];
+  state.feasibilityData = [];
+  state.planInputs     = {};
+  state.currentStep    = 0; // set to 0 so goStep(1) triggers properly
+
+  // Reset geo status text
+  const geoStatus = document.getElementById('geoStatus');
+  if (geoStatus) geoStatus.textContent = '';
+
+  // Hide location summary card
+  const locSum = document.getElementById('locationSummary');
+  if (locSum) locSum.style.display = 'none';
+
+  // Disable next button on step 1
+  const step1Next = document.getElementById('step1Next');
+  if (step1Next) step1Next.disabled = true;
+
+  // Reset location mode to auto
+  setLocMode('auto');
+
+  // Reset compare bar
+  updateCompareBar();
+
+  // Jump to step 1
+  goStep(1);
+}
+
+
+function goStep(n) {
+  if (n === state.currentStep) return;
+  for (let i = 1; i <= 6; i++) {
+    const item = document.querySelector(`.step-item[data-step="${i}"]`);
+    if (item) {
+      item.classList.toggle('active', i === n);
+      item.classList.toggle('done', i < n);
+    }
+  }
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  const nextPanel = document.getElementById(`step-${n}`);
+  if (nextPanel) nextPanel.classList.add('active');
+  state.currentStep = n;
+  if (n === 2) renderCrops();
+  if (n === 4) renderFeasibility();
+  if (n === 5) renderInputsRequired();
+  if (n === 6) renderFinalSummary();
+  window.scrollTo(0,0);
+}
+
+function setLocMode(mode) {
+  state.locMode = mode;
+  document.getElementById('locAutoBtn').classList.toggle('active', mode === 'auto');
+  document.getElementById('locManualBtn').classList.toggle('active', mode === 'manual');
+  document.getElementById('autoLocSection').style.display = mode === 'auto' ? 'block' : 'none';
+  document.getElementById('manualLocSection').style.display = mode === 'manual' ? 'block' : 'none';
+  if (mode === 'manual') {
+    document.getElementById("countrySelect").value = "India";
+    onCountryChange();
+  }
+}
+
+function onCountryChange() {
+  const stateSel = document.getElementById('stateSelect');
+  const distSel = document.getElementById('districtSelect');
+  stateSel.innerHTML = '<option value="">-- Select State --</option>';
+  distSel.innerHTML = '<option value="">-- Select District --</option>';
+  document.getElementById('step1Next').disabled = true;
+  stateSel.disabled = false;
+  distSel.disabled = true;
+  const states = Object.keys(INDIA_DATA || {}).sort();
+  states.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    stateSel.appendChild(opt);
+  });
+}
+
+function onStateChange() {
+  const state_ = document.getElementById('stateSelect').value;
+  const distSel = document.getElementById('districtSelect');
+  distSel.innerHTML = '<option value="">-- Select District --</option>';
+  distSel.disabled = !state_;
+  document.getElementById('step1Next').disabled = true;
+  if (state_ && INDIA_DATA[state_]) {
+    INDIA_DATA[state_].forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = d;
+      distSel.appendChild(opt);
+    });
+  }
+}
+
+function onDistrictChange() {
+  const country = document.getElementById('countrySelect').value;
+  const selectedState = document.getElementById('stateSelect').value;
+  const district = document.getElementById('districtSelect').value;
+  if (!selectedState || !district) {
+    document.getElementById('step1Next').disabled = true;
+    return;
+  }
+  finalizeManualLocation(country, selectedState, district);
+}
+
+async function finalizeManualLocation(country, st, dist) {
+  if (!dist) return;
+  state.location = { country, state: st, district: dist, lat: null, lon: null };
+  detectSeasonAndSoil(state.location);
+  showLocationSummary();
+
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(dist + ', ' + st + ', India')}&format=json&limit=1`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.length > 0) {
+        state.location.lat = parseFloat(data[0].lat);
+        state.location.lon = parseFloat(data[0].lon);
+        fetchWeather(state.location.lat, state.location.lon);
+      }
+    }
+  } catch (err) {
+    console.warn('Geocoding manual location failed:', err);
+  }
+}
+
+function detectLocation() {
+  const status = document.getElementById('geoStatus');
+  status.textContent = '📡 Detecting your location...';
+  if (!navigator.geolocation) {
+    status.textContent = '❌ Geolocation not supported by your browser.';
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const { latitude, longitude } = pos.coords;
+      status.textContent = `📍 Got coordinates: ${latitude.toFixed(4)}, ${longitude.toFixed(4)} — looking up address...`;
+      reverseGeocode(latitude, longitude)
+        .then(loc => {
+          if (!loc.state || !loc.district) {
+            // Could not resolve to a known state/district — nudge user to manual
+            status.textContent = `⚠️ Could not identify your exact district. Please use Manual Entry below.`;
+            setLocMode('manual');
+            return;
+          }
+          state.location = { ...loc, lat: latitude, lon: longitude };
+          detectSeasonAndSoil(state.location);
+          showLocationSummary();
+          status.textContent = `✅ Detected: ${loc.district}, ${loc.state}`;
+        })
+        .catch(err => {
+          status.textContent = '❌ Error detecting location details.';
+          console.error(err);
+        });
+    },
+    err => {
+      status.textContent = '❌ Geolocation permission denied or timed out.';
+      console.warn(err);
+    },
+    { timeout: 10000, maximumAge: 60000 }
+  );
+}
+
+async function reverseGeocode(lat, lon) {
+  try {
+    // Use OpenStreetMap Nominatim – free, no API key required
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;
+    const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+    if (!res.ok) throw new Error('Nominatim HTTP ' + res.status);
+    const data = await res.json();
+    const addr = data.address || {};
+
+    // Nominatim field names vary – collect all useful candidates
+    const rawState    = addr.state || addr.province || addr.region || '';
+    const rawDistrict = addr.county || addr.district || addr.state_district ||
+                        addr.city_district || addr.municipality ||
+                        addr.city || addr.town || addr.village || '';
+
+    // Fuzzy-match against INDIA_DATA keys (case-insensitive, strip "district" suffix)
+    function bestMatch(raw, candidates) {
+      if (!raw) return '';
+      const norm = s => s.toLowerCase().replace(/\s+district$/i, '').replace(/\s+/g, ' ').trim();
+      const r = norm(raw);
+      // 1. exact
+      let found = candidates.find(c => norm(c) === r);
+      if (found) return found;
+      // 2. starts-with
+      found = candidates.find(c => norm(c).startsWith(r) || r.startsWith(norm(c)));
+      if (found) return found;
+      // 3. includes
+      found = candidates.find(c => norm(c).includes(r) || r.includes(norm(c)));
+      return found || '';
+    }
+
+    const stateKeys   = Object.keys(INDIA_DATA || {});
+    const matchedState = bestMatch(rawState, stateKeys) || rawState;
+    const districtList = (INDIA_DATA[matchedState] || []);
+    const matchedDistrict = bestMatch(rawDistrict, districtList) || rawDistrict;
+
+    return {
+      country:  addr.country || 'India',
+      state:    matchedState,
+      district: matchedDistrict
+    };
+  } catch (err) {
+    console.warn('Reverse geocode error:', err);
+    // Last-resort: let user pick manually instead of showing wrong city
+    return { country: 'India', state: '', district: '' };
+  }
+}
+
+function detectSeasonAndSoil(loc) {
+  const month = new Date().getMonth() + 1;
+  let detectedSeason = "Rabi";
+  for (const [season, config] of Object.entries(SEASON_MAP)) {
+    if (config.months.includes(month)) {
+      detectedSeason = season;
+      break;
+    }
+  }
+  state.season = detectedSeason;
+  
+  const soilMap = {
+    "Uttar Pradesh": "Loamy Soil",
+    "Punjab": "Loamy Soil",
+    "Haryana": "Sandy Loam",
+    "Maharashtra": "Black Cotton Soil",
+    "Karnataka": "Red Laterite",
+    "Rajasthan": "Sandy Soil",
+    "West Bengal": "Alluvial Soil",
+    "Madhya Pradesh": "Black Soil",
+    "Bihar": "Alluvial Soil",
+    "Gujarat": "Black Soil",
+    "Andhra Pradesh": "Red Soil",
+    "Tamil Nadu": "Red Soil"
+  };
+  state.soilType = soilMap[loc.state] || "Loamy Soil";
+  
+  const rainfallMap = {
+    "Uttar Pradesh": "700-1100 mm/yr",
+    "Punjab": "500-700 mm/yr",
+    "Haryana": "400-600 mm/yr",
+    "Maharashtra": "1000-3000 mm/yr",
+    "Rajasthan": "200-400 mm/yr",
+    "West Bengal": "1600-2000 mm/yr",
+    "Karnataka": "1000-2000 mm/yr",
+    "Madhya Pradesh": "800-1200 mm/yr"
+  };
+  state.rainfall = rainfallMap[loc.state] || "600-900 mm/yr";
+}
+
+function showLocationSummary() {
+  const loc = state.location;
+  document.getElementById('sumLocation').textContent = `${loc.district}, ${loc.state}, ${loc.country}`;
+  document.getElementById('sumSeason').textContent = `${state.season} Season`;
+  document.getElementById('sumRainfall').textContent = state.rainfall || '600-900 mm/yr';
+  document.getElementById('sumSoil').textContent = state.soilType || 'Loamy';
+  document.getElementById('locationSummary').style.display = 'block';
+  document.getElementById('step1Next').disabled = false;
+  fetchWeather(loc.lat || 27.5, loc.lon || 77.6);
+}
+
+function getRainfallBand(value) {
+  const text = String(value || '').toLowerCase();
+  if (text.includes('high') || text.includes('1500') || text.includes('2000') || text.includes('3000')) return 'high';
+  if (text.includes('low') || text.includes('200') || text.includes('300') || text.includes('400') || text.includes('500')) return 'low';
+  return 'moderate';
+}
+
+function scoreCrop(crop) {
+  let score = crop.suitScore || 60;
+  const seasonMatch = crop.season === state.season;
+  const soilText = String(state.soilType || '').toLowerCase();
+  const soils = (crop.soilTypes || []).map(s => s.toLowerCase());
+  const soilMatch = soils.some(soil => soilText.includes(soil) || soil.includes(soilText));
+  const rainfallBand = getRainfallBand(state.rainfall);
+
+  if (seasonMatch) score += 12;
+  if (soilMatch) score += 10;
+  if (rainfallBand === 'moderate' && crop.id === 'cotton') score += 10;
+  if (rainfallBand === 'high' && ['rice', 'sugarcane'].includes(crop.id)) score += 10;
+  if (rainfallBand === 'low' && ['bajra', 'gram', 'mustard'].includes(crop.id)) score += 8;
+
+  return {
+    score: Math.min(99, Math.max(35, score)),
+    seasonalSuitability: seasonMatch ? 'Excellent' : 'Alternate',
+    soilMatch,
+    successProbability: Math.min(95, Math.max(45, score - 2))
+  };
+}
+
+async function fetchWeather(lat, lon) {
+  try {
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+    const data = await res.json();
+    const temp = data.current_weather?.temperature;
+    const weatherChip = document.getElementById('weatherChip');
+    if (weatherChip) weatherChip.textContent = `🌡 ${temp}°C`;
+    document.getElementById('home-temp').textContent = `${temp}°C`;
+  } catch {
+    const weatherChip = document.getElementById('weatherChip');
+    if (weatherChip) weatherChip.textContent = '🌡 --°C';
+  }
+}
+
+function renderCrops() {
+  const grid = document.getElementById('cropsGrid');
+  grid.innerHTML = '';
+  
+  const searchQuery = (document.getElementById('cropSearchInput').value || '').trim().toLowerCase();
+  const selectedCat = state.selectedCategory || 'all';
+  
+  let filtered = [];
+  
+  if (searchQuery) {
+    filtered = CROPS_DB.filter(crop => {
+      return crop.name.toLowerCase().includes(searchQuery) ||
+             (crop.category || '').toLowerCase().includes(searchQuery);
+    });
+  } else {
+    filtered = CROPS_DB.filter(crop => {
+      const matchesSeason = crop.season === state.season;
+      const matchesCat = selectedCat === 'all' || crop.category === selectedCat;
+      const isAlreadySelected = state.selectedCrops.some(c => c.id === crop.id);
+      return (matchesSeason && matchesCat) || isAlreadySelected;
+    });
+  }
+  
+  const scored = filtered.map(crop => ({
+    crop,
+    scoreData: scoreCrop(crop)
+  })).sort((a, b) => b.scoreData.score - a.scoreData.score);
+  
+  if (scored.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column: 1 / -1; padding: 40px 20px;">
+        <div class="empty-icon" style="font-size: 40px; margin-bottom: 10px;">🌾</div>
+        <h3 style="font-size: 16px; margin-bottom: 6px;">No crops found</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">Try another search or select a different category.</p>
+      </div>
+    `;
+    return;
+  }
+  
+  scored.forEach(({ crop, scoreData }) => {
+    const isSelected = state.selectedCrops.some(c => c.id === crop.id);
+    const card = document.createElement('div');
+    card.className = `crop-card${isSelected ? ' selected' : ''}`;
+    card.dataset.id = crop.id;
+    card.innerHTML = `
+      ${isSelected ? '<div class="selected-badge">✓ Selected</div>' : ''}
+      <div class="crop-emoji">${crop.emoji}</div>
+      <div class="crop-name">${crop.name}</div>
+      <div class="crop-reason">${crop.reason}</div>
+      <div class="crop-suit">
+        <div class="suit-bar-bg"><div class="suit-bar-fill" style="width:${scoreData.score}%"></div></div>
+        <div class="suit-pct">${scoreData.score}%</div>
+      </div>
+      <div class="crop-meta">
+        <div class="crop-meta-item"><strong>${crop.season}</strong>Season</div>
+        <div class="crop-meta-item"><strong>${crop.waterNeed}</strong>Water</div>
+        <div class="crop-meta-item"><strong>${crop.duration}</strong>Duration</div>
+        <div class="crop-meta-item"><strong>₹${crop.profitRange}</strong>Est. Profit</div>
+      </div>
+      <div class="crop-risk risk-${crop.riskLevel}">${crop.riskLevel.toUpperCase()} RISK</div>
+    `;
+    card.onclick = () => toggleCropSelection(crop.id);
+    grid.appendChild(card);
+  });
+}
+
+function filterCrops() {
+  renderCrops();
+}
+
+function selectCategory(category, button) {
+  state.selectedCategory = category;
+  document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
+  if (button) {
+    button.classList.add('active');
+  } else {
+    document.querySelectorAll('.cat-pill').forEach(btn => {
+      if (btn.textContent.includes(category)) btn.classList.add('active');
+    });
+  }
+  renderCrops();
+}
+
+function toggleCropSelection(cropId) {
+  const idx = state.selectedCrops.findIndex(c => c.id === cropId);
+  if (idx > -1) {
+    state.selectedCrops.splice(idx, 1);
+  } else {
+    const cropObj = CROPS_DB.find(c => c.id === cropId);
+    if (cropObj) state.selectedCrops.push(cropObj);
+  }
+  updateCompareBar();
+  renderCrops();
+}
+
+function updateCompareBar() {
+  const n = state.selectedCrops.length;
+  const bar = document.getElementById('compareBar');
+  if (bar) bar.style.display = n > 0 ? 'flex' : 'none';
+  const countEl = document.getElementById('compareCount');
+  if (countEl) countEl.textContent = `${n} crop${n>1?'s':''} selected`;
+  const nextBtn = document.getElementById('step2Next');
+  if (nextBtn) nextBtn.disabled = n === 0;
+}
+
+function clearCropSelection() {
+  state.selectedCrops = [];
+  updateCompareBar();
+  renderCrops();
+}
+
+function setPlanMode(mode) {
+  state.planMode = mode;
+  document.getElementById('modeArea').classList.toggle('active', mode === 'area');
+  document.getElementById('modeIncome').classList.toggle('active', mode === 'income');
+  document.getElementById('planAreaSection').style.display = mode === 'area' ? 'block' : 'none';
+  document.getElementById('planIncomeSection').style.display = mode === 'income' ? 'block' : 'none';
+}
+
+function runFeasibility() {
+  let area = 0;
+  if (state.planMode === 'area') {
+    area = parseFloat(document.getElementById('landArea').value) || 2;
+    if (document.getElementById('landUnit').value === 'hectares') area *= 2.47;
+  } else {
+    const income = parseFloat(document.getElementById('targetIncome').value) || 50000;
+    area = income / 18000;
+  }
+  
+  state.planInputs = {
+    area: area.toFixed(1),
+    budget: document.getElementById('budgetRange').value,
+    irrigation: document.getElementById('irrigationAvail').value,
+    experience: document.getElementById('farmingExp').value,
+    risk: document.getElementById('riskPref').value,
+  };
+  
+  state.feasibilityData = state.selectedCrops.map(crop => {
+    const totalCost = crop.costPerAcre * area;
+    const totalYield = crop.yieldPerAcre * area;
+    const totalRevenue = totalYield * crop.pricePerKg * 1000;
+    const profit = totalRevenue - totalCost;
+    const breakEven = (totalCost / (crop.pricePerKg * 1000)).toFixed(0);
+    return {
+      ...crop,
+      area: area.toFixed(1),
+      totalCost: Math.round(totalCost),
+      totalYield: Math.round(totalYield * 1000) + " kg",
+      totalRevenue: Math.round(totalRevenue),
+      profit: Math.round(profit),
+      breakEven: breakEven + " kg",
+      roi: ((profit / totalCost) * 100).toFixed(1) + "%"
+    };
+  });
+  
+  goStep(4);
+}
+
+function renderFeasibility() {
+  const highlights = document.getElementById('feasHighlights');
+  const tableWrap = document.getElementById('feasTableWrap');
+  
+  if (state.feasibilityData.length === 0) {
+    highlights.innerHTML = '';
+    tableWrap.innerHTML = '<p style="text-align:center;padding:20px;color:var(--text-muted);">No crop plan data available.</p>';
+    return;
+  }
+  
+  let bestProfitCrop = state.feasibilityData[0];
+  let bestRoiCrop = state.feasibilityData[0];
+  let lowestCostCrop = state.feasibilityData[0];
+  
+  state.feasibilityData.forEach(c => {
+    if (c.profit > bestProfitCrop.profit) bestProfitCrop = c;
+    const roiVal = parseFloat(c.roi);
+    const bestRoiVal = parseFloat(bestRoiCrop.roi);
+    if (roiVal > bestRoiVal) bestRoiCrop = c;
+    if (c.totalCost < lowestCostCrop.totalCost) lowestCostCrop = c;
+  });
+  
+  highlights.innerHTML = `
+    <div class="feas-highlight">
+      <div class="fh-label">💰 Highest Profit</div>
+      <div class="fh-val">${bestProfitCrop.emoji} ${bestProfitCrop.name}</div>
+      <div class="fh-sub">Est. Profit: ₹${bestProfitCrop.profit.toLocaleString()}</div>
+    </div>
+    <div class="feas-highlight">
+      <div class="fh-label">📈 Highest ROI</div>
+      <div class="fh-val">${bestRoiCrop.emoji} ${bestRoiCrop.name}</div>
+      <div class="fh-sub">ROI: ${bestRoiCrop.roi}</div>
+    </div>
+    <div class="feas-highlight">
+      <div class="fh-label">🛒 Lowest Cost</div>
+      <div class="fh-val">${lowestCostCrop.emoji} ${lowestCostCrop.name}</div>
+      <div class="fh-sub">Cost: ₹${lowestCostCrop.totalCost.toLocaleString()}</div>
+    </div>
+  `;
+  
+  tableWrap.innerHTML = `
+    <table class="feas-table">
+      <thead>
+        <tr>
+          <th>Crop</th>
+          <th>Land Area</th>
+          <th>Est. Cost</th>
+          <th>Est. Yield</th>
+          <th>Est. Revenue</th>
+          <th>Net Profit</th>
+          <th>ROI</th>
+          <th>Break Even</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${state.feasibilityData.map(c => `
+          <tr>
+            <td>
+              <strong>${c.emoji} ${c.name}</strong>
+              ${c.id === bestProfitCrop.id ? '<span class="best-badge">Best Profit</span>' : ''}
+            </td>
+            <td>${c.area} acres</td>
+            <td>₹${c.totalCost.toLocaleString()}</td>
+            <td>${c.totalYield}</td>
+            <td>₹${c.totalRevenue.toLocaleString()}</td>
+            <td style="color:${c.profit >= 0 ? 'var(--emerald)' : 'var(--red)'}; font-weight:600;">
+              ₹${c.profit.toLocaleString()}
+            </td>
+            <td>${c.roi}</td>
+            <td>${c.breakEven}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function formatInputQty(qtyStr, area) {
+  if (!qtyStr) return 'Not set';
+  const match = qtyStr.match(/^([\d.-]+)\s*(.*)$/);
+  if (match) {
+    const val = parseFloat(match[1]);
+    const unit = match[2];
+    if (!isNaN(val)) {
+      const scaled = (val * area).toFixed(0);
+      return `${scaled} ${unit.replace('/acre', '').replace('per acre', '').trim()}`;
+    }
+  }
+  return qtyStr;
+}
+
+function renderInputsRequired() {
+  const grid = document.getElementById('inputsGrid');
+  grid.innerHTML = '';
+  
+  const allInputs = [];
+  state.feasibilityData.forEach(crop => {
+    const area = parseFloat(crop.area) || 1.0;
+    if (crop.inputs && crop.inputs.length > 0) {
+      crop.inputs.forEach(input => {
+        const scaledQty = formatInputQty(input.qty, area);
+        const totalPrice = Math.round(input.price * area);
+        allInputs.push({
+          cropName: crop.name,
+          icon: input.icon || '📦',
+          name: input.name,
+          qty: scaledQty,
+          price: totalPrice,
+          use: input.use
+        });
+      });
+    } else {
+      allInputs.push({
+        cropName: crop.name,
+        icon: '🌱',
+        name: `${crop.name} Seeds`,
+        qty: `${(20 * area).toFixed(0)} kg`,
+        price: Math.round(1500 * area),
+        use: 'Sowing phase'
+      });
+      allInputs.push({
+        cropName: crop.name,
+        icon: '🧪',
+        name: 'NPK Fertilizer',
+        qty: `${(50 * area).toFixed(0)} kg`,
+        price: Math.round(1200 * area),
+        use: 'Basal dose'
+      });
+    }
+  });
+  
+  if (allInputs.length === 0) {
+    grid.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:var(--text-muted);">No input items required.</p>';
+    return;
+  }
+  
+  grid.innerHTML = allInputs.map(item => `
+    <div class="input-item-card">
+      <div class="ii-icon">${item.icon}</div>
+      <div class="ii-name">${item.name}</div>
+      <div style="font-size:11px; color:var(--emerald); margin-bottom:4px; font-weight:600;">For ${item.cropName}</div>
+      <div class="ii-qty">Required: <strong>${item.qty}</strong></div>
+      <div class="ii-price">Est. Cost: ₹${item.price.toLocaleString()}</div>
+      <div class="ii-use">${item.use}</div>
+      <button class="buy-btn" onclick="openMarketplaceBuy('${item.name}', '${item.cropName}')">🛒 Source on Market</button>
+    </div>
+  `).join('');
+}
+
+function renderFinalSummary() {
+  const summary = document.getElementById('finalSummary');
+  
+  let totalCost = 0;
+  let totalProfit = 0;
+  let totalArea = 0;
+  
+  state.feasibilityData.forEach(c => {
+    totalCost += c.totalCost;
+    totalProfit += c.profit;
+    totalArea += parseFloat(c.area);
+  });
+  
+  const today = new Date();
+  
+  summary.innerHTML = `
+    <div style="margin-bottom: 18px;">
+      <h3 style="font-size: 16px; margin-bottom: 12px; color: var(--text-main);">Plan Highlights:</h3>
+      <div class="summary-card">
+        <div class="sum-row"><span>Total Crops Selected</span><strong>${state.selectedCrops.length}</strong></div>
+        <div class="sum-row"><span>Total Land Area</span><strong>${totalArea.toFixed(1)} acres</strong></div>
+        <div class="sum-row"><span>Total Est. Investment</span><strong>₹${totalCost.toLocaleString()}</strong></div>
+        <div class="sum-row"><span>Total Est. Profit</span><strong style="color:var(--emerald)">₹${totalProfit.toLocaleString()}</strong></div>
+      </div>
+    </div>
+    
+    <h3 style="font-size: 15px; margin-bottom: 10px; color: var(--text-main);">Selected Crops:</h3>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      ${state.feasibilityData.map(c => {
+        const durationDays = parseInt(c.duration) || 120;
+        const harvestDate = new Date(today.getTime() + durationDays * 24 * 60 * 60 * 1000);
+        return `
+          <div style="background:rgba(255,255,255,0.02); border:1px solid var(--glass-border); border-radius:10px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong style="color:var(--text-main); font-size:14px;">${c.emoji} ${c.name}</strong>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Duration: ${c.duration} | Season: ${c.season}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:13px; font-weight:700; color:var(--text-main);">${c.area} acres</div>
+              <div style="font-size:12px; color:var(--emerald); font-weight:600; margin-top:2px;">Profit: ₹${c.profit.toLocaleString()}</div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+async function startFarming() {
+  const today = new Date();
+  
+  const plans = state.feasibilityData.map(c => {
+    const durationDays = parseInt(c.duration) || 120;
+    const harvestDate = new Date(today.getTime() + durationDays * 24 * 60 * 60 * 1000);
+    return {
+      cropName: c.name,
+      cropId: c.id,
+      emoji: c.emoji,
+      area: parseFloat(c.area),
+      startDate: today.toISOString().split('T')[0],
+      harvestDate: harvestDate.toISOString().split('T')[0],
+      totalCost: c.totalCost,
+      expectedProfit: c.profit,
+      location: {
+        country: state.location?.country || 'India',
+        state: state.location?.state || '',
+        district: state.location?.district || ''
+      },
+      status: 'growing',
+      stages: c.stages || ["Land Preparation", "Sowing", "Germination", "Vegetative", "Flowering", "Harvest Ready"]
+    };
+  });
+  
+  try {
+    const res = await fetch('/api/guide/crops', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ plans })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      showToast('🎉 Crop plans started successfully!');
+      state.selectedCrops = [];
+      updateCompareBar();
+      goStep(1);
+      await loadMyCrops();
+      navigateTo('mycrops');
+    } else {
+      showToast(data.message || 'Error starting farming journey');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('Failed to connect to server');
+  }
+}
+
+async function loadMyCrops() {
+  try {
+    const res = await fetch('/api/guide/crops');
+    const data = await res.json();
+    if (res.ok && data.success) {
+      state.myCrops = data.crops || [];
+    }
+  } catch (err) {
+    console.warn('Error loading user crops:', err);
+  }
+}
+
+function renderMyCrops() {
+  const el = document.getElementById('myCropsList');
+  document.getElementById('home-crop-count').textContent = state.myCrops.length;
+  
+  if (state.myCrops.length === 0) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🌱</div>
+        <h3>No crops yet</h3>
+        <p>Use the New Farmer Guide to start your first crop plan.</p>
+        <button class="btn-primary" onclick="navigateTo('guide', true)">Start Guide →</button>
+      </div>
+    `;
+    return;
+  }
+  
+  el.innerHTML = state.myCrops.map(c => {
+    const progress = c.progress !== undefined ? c.progress : 25;
+    const daysLeft = c.daysLeft !== undefined ? c.daysLeft : 90;
+    
+    let badgeClass = 'badge-growing';
+    let statusText = 'Growing';
+    if (c.status === 'harvested') {
+      badgeClass = 'badge-harvested';
+      statusText = 'Harvested';
+    } else if (progress >= 100) {
+      badgeClass = 'badge-ready';
+      statusText = 'Ready for Harvest';
+    }
+    
+    return `
+      <div class="my-crop-card" onclick="showCropDetail('${c.id}')">
+        <div class="mcc-header">
+          <div class="mcc-emoji">${c.emoji || '🌱'}</div>
+          <div class="mcc-info">
+            <h3>${c.cropName}</h3>
+            <div class="mcc-loc">📍 ${c.location?.district || 'Farm'}</div>
+          </div>
+          <div class="mcc-badge ${badgeClass}">${statusText}</div>
+        </div>
+        <div class="mcc-body">
+          <div class="mcc-progress-label">
+            <span>Growth Progress</span>
+            <span>${progress}%</span>
+          </div>
+          <div class="mcc-bar">
+            <div class="mcc-bar-fill" style="width: ${progress}%"></div>
+          </div>
+          <div class="mcc-stats">
+            <div class="mcc-stat">
+              <span>Land Area</span>
+              <strong>${c.area} acres</strong>
+            </div>
+            <div class="mcc-stat">
+              <span>Time Left</span>
+              <strong>${daysLeft} days</strong>
+            </div>
+          </div>
+        </div>
+        <div class="mcc-footer" onclick="event.stopPropagation()">
+          ${c.status !== 'harvested' ? `
+            <button class="btn-harvest" onclick="openHarvestModal('${c.id}')">🌾 Mark Harvest</button>
+          ` : `
+            <button class="btn-sell" onclick="openSellModal('${c.id}')">🏪 Sell Crop</button>
+          `}
+          <button onclick="deleteCropPlan('${c.id}')" style="border-color:var(--red); color:var(--red); max-width:40px;">✕</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function deleteCropPlan(cropId) {
+  if (!confirm('Are you sure you want to delete this crop plan?')) return;
+  try {
+    const res = await fetch(`/api/guide/crops/${cropId}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      showToast('Crop plan deleted.');
+      await loadMyCrops();
+      renderMyCrops();
+    } else {
+      showToast('Error deleting crop plan.');
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function showCropDetail(cropId) {
+  const crop = state.myCrops.find(c => c.id === cropId);
+  if (!crop) return;
+
+  const start = new Date(crop.startDate);
+  const today = new Date();
+  const elapsed = Math.max(0, (today - start) / 86400000);
+  const durationDays = parseInt(crop.duration) || 120;
+  const progress = Math.min(100, Math.round((elapsed / durationDays) * 100));
+  const daysLeft = Math.max(0, durationDays - Math.round(elapsed));
+
+  const stageIdx = Math.min(crop.stages.length - 1, Math.floor((progress / 100) * crop.stages.length));
+  const plantEmoji = crop.emoji || '🌱';
+
+  const dbCrop = CROPS_DB.find(c => c.id === crop.cropId);
+  const guideSteps = (dbCrop && dbCrop.guideSteps) ? dbCrop.guideSteps : [
+    'Follow timely sowing or transplanting with proper spacing.',
+    'Manage irrigation, nutrients, weeds, and pests at the right stage.',
+    'Harvest at maturity and sell through the Marketplace or nearby mandi.'
+  ];
+
+  // Build tasks
+  const taskDays = [7, 14, 21, 30, 45, 60, 75, 90];
+  const taskNames = ['First Irrigation 💧', 'Fertilizer Application 🧪', 'Weed Control 🌿', 'Pest Inspection 🐛', 'Growth Check 📏', 'Second Fertilizer 🧪', 'Disease Prevention 💊', 'Pre-Harvest Prep 🌾'];
+  const tasks = taskDays.map((d, i) => {
+    const taskDate = new Date(start); taskDate.setDate(taskDate.getDate() + d);
+    const status = taskDate < today ? 'done' : taskDate <= new Date(today.getTime() + 3*86400000) ? 'pending' : 'upcoming';
+    return { day: d, name: taskNames[i], status, date: taskDate.toISOString().split('T')[0] };
+  });
+
+  const circumference = 2 * Math.PI * 40;
+  const dash = (progress / 100) * circumference;
+
+  document.getElementById('cropDetailGrid').innerHTML = `
+    <div class="detail-card">
+      <h3>🌱 Growth Tracker</h3>
+      <div class="growth-visual">
+        <div class="plant-emoji">${plantEmoji}</div>
+        <div class="circular-progress">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="var(--border)" stroke-width="8"/>
+            <circle cx="50" cy="50" r="40" fill="none" stroke="var(--green-mid)" stroke-width="8"
+              stroke-dasharray="${dash} ${circumference}" stroke-linecap="round"/>
+          </svg>
+          <div class="cp-text">${progress}%</div>
+        </div>
+        <div class="growth-stage-name">${crop.stages[stageIdx]}</div>
+        <div class="growth-stage-sub">📅 ${daysLeft} days until harvest</div>
+      </div>
+      <div class="timeline">
+        ${crop.stages.map((s,i) => `
+          <div class="tl-item">
+            <div class="tl-dot ${i < stageIdx ? 'done' : i === stageIdx ? 'current' : 'upcoming'}"></div>
+            <div class="tl-content"><strong>${s}</strong><small>${i < stageIdx ? '✓ Completed' : i === stageIdx ? '● In Progress' : '⏳ Upcoming'}</small></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="detail-card">
+      <h3>📋 Task Timeline</h3>
+      <div class="task-list">
+        ${tasks.map(t => `
+          <div class="task-item">
+            <span class="task-day">Day ${t.day}</span>
+            <span class="task-name">${t.name}</span>
+            <span class="task-status ts-${t.status}">${t.status}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="detail-card">
+      <h3>💡 Farming Guidance</h3>
+      ${guideSteps.map((step, idx) => `<div class="tip-card"><strong>Step ${idx + 1}</strong><p>${step}</p></div>`).join('')}
+    </div>
+    <div class="detail-card">
+      <h3>💰 Plan Summary</h3>
+      <div class="summary-card">
+        <div class="sum-row"><span>Area</span><strong>${crop.area} acres</strong></div>
+        <div class="sum-row"><span>Investment</span><strong>₹${crop.totalCost?.toLocaleString()}</strong></div>
+        <div class="sum-row"><span>Expected Profit</span><strong style="color:var(--green-mid)">₹${crop.expectedProfit?.toLocaleString()}</strong></div>
+        <div class="sum-row"><span>Start Date</span><strong>${crop.startDate}</strong></div>
+        <div class="sum-row"><span>Harvest Date</span><strong>${crop.harvestDate}</strong></div>
+        <div class="sum-row"><span>Status</span><strong>${crop.status?.toUpperCase()}</strong></div>
+      </div>
+      <div style="margin-top:16px; display:flex; gap:10px;">
+        ${crop.status !== 'harvested' ? `<button class="btn-primary" style="flex:1" onclick="openHarvestModal('${crop.id}')">🌾 Mark Harvest</button>` : `<button class="btn-primary" style="flex:1" onclick="openSellModal('${crop.id}')">🏪 Sell Crop</button>`}
+        <button class="btn-outline" onclick="navigateTo('monitor')">📡 Monitor</button>
+      </div>
+    </div>
+  `;
+
+  navigateTo('cropdetail');
+}
+
+
+let harvestCropId = null;
+function openHarvestModal(cropId) {
+  harvestCropId = cropId;
+  const crop = state.myCrops.find(c => c.id === cropId);
+  document.getElementById('harvestModalText').textContent = `Is your ${crop?.cropName} ready for harvest? Select a harvesting method.`;
+  state.selectedHarvestMethod = null;
+  document.getElementById('confirmHarvestBtn').disabled = true;
+  document.querySelectorAll('.harvest-opt').forEach(o => o.classList.remove('selected'));
+  document.getElementById('harvestModal').style.display = 'flex';
+}
+function closeHarvestModal() { document.getElementById('harvestModal').style.display = 'none'; }
+function selectHarvest(method) {
+  state.selectedHarvestMethod = method;
+  document.querySelectorAll('.harvest-opt').forEach(o => o.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('confirmHarvestBtn').disabled = false;
+}
+function confirmHarvest() {
+  const crop = state.myCrops.find(c => c.id === harvestCropId);
+  fetch(`/api/guide/crops/${harvestCropId}/harvest`, { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        state.myCrops = data.crops || state.myCrops;
+        closeHarvestModal();
+        showToast(`🎉 ${crop?.cropName} harvested! Ready to sell.`);
+        renderMyCrops();
+      }
+    });
+}
+
+
+let sellCropId = null;
+function openSellModal(cropId) {
+  sellCropId = cropId;
+  const crop = state.myCrops.find(c => c.id === cropId);
+  document.getElementById('sellLoc').value = `${crop?.location?.district}, ${crop?.location?.state}` || '';
+  document.getElementById('sellModal').style.display = 'flex';
+}
+function closeSellModal() { document.getElementById('sellModal').style.display = 'none'; }
+async function submitListing() {
+  const qty = document.getElementById('sellQty').value;
+  const price = document.getElementById('sellPrice').value;
+  const loc = document.getElementById('sellLoc').value;
+  const contact = document.getElementById('sellContact').value;
+  if (!qty || !price) { showToast('⚠️ Please enter quantity and price'); return; }
+  const crop = state.myCrops.find(c => c.id === sellCropId);
+  const res = await fetch('/api/guide/listings', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      item_name: crop?.cropName || 'Produce',
+      crop_type: crop?.cropName || 'Produce',
+      phone: (contact || '').replace(/\D/g, '').slice(-10),
+      price,
+      quantity: qty + ' kg',
+      location: loc,
+      listing_type: 'produce'
+    })
+  });
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    showToast(data.message || 'Could not create listing');
+    return;
+  }
+  await loadListings();
+  closeSellModal();
+  showToast('✅ Listing created in Marketplace!');
+}
+
+
+async function loadListings() {
+  const res = await fetch('/api/guide/listings');
+  const data = await res.json();
+  if (res.ok && data.success) {
+    state.marketListings = data.my_listings || [];
+    state.browseListings = data.browse_listings || [];
+  }
+}
+
+function renderMarketplace() {
+  // My Listings
+  const myEl = document.getElementById('myListings');
+  if (state.marketListings.length === 0) {
+    myEl.innerHTML = `<div class="empty-state"><div class="empty-icon">📦</div><h3>No listings yet</h3><p>After harvesting, create a listing to sell your crops.</p></div>`;
+  } else {
+    myEl.innerHTML = state.marketListings.map(l => `
+      <div class="listing-card">
+        <div class="listing-crop">📦 ${l.item_name}</div>
+        <div class="listing-price">₹${l.price}<span>/kg</span></div>
+        <div class="listing-meta">
+          <div><span>📦 Quantity: </span><strong>${l.quantity || 'Not set'}</strong></div>
+          <div><span>📍 Location: </span><strong>${l.location || 'Not set'}</strong></div>
+          <div><span>🌾 Crop: </span><strong>${l.crop_type || 'Not set'}</strong></div>
+          <div><span>📞 Contact: </span><strong>${l.phone || 'Not set'}</strong></div>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <div style="padding:8px 12px; background:var(--green-bg); border-radius:8px; font-size:12px; color:var(--green-mid); font-weight:600;">✅ Active Listing</div>
+          <button class="btn-outline" onclick="deleteMarketplaceListing('${l.id}')">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Browse
+  const q = (state.marketplaceSearch || '').toLowerCase();
+  const filtered = state.browseListings.filter(l => {
+    return !q ||
+      (l.item_name || '').toLowerCase().includes(q) ||
+      (l.crop_type || '').toLowerCase().includes(q) ||
+      (l.listing_type || '').toLowerCase().includes(q);
+  });
+  document.getElementById('browseListing').innerHTML = filtered.map(l => `
+    <div class="listing-card">
+      <div class="listing-crop">📦 ${l.item_name}</div>
+      <div class="listing-price">₹${l.price}<span>/kg</span></div>
+      <div class="listing-meta">
+        <div><span>📦 Available: </span><strong>${l.quantity || 'Not set'}</strong></div>
+        <div><span>📍 Location: </span><strong>${l.location || 'Not set'}</strong></div>
+        <div><span>🌾 Crop: </span><strong>${l.crop_type || 'Not set'}</strong></div>
+        <div><span>👨‍🌾 Seller: </span><strong>${l.seller_name || 'User'}</strong></div>
+      </div>
+      <button class="contact-btn" onclick="window.location.href='tel:${l.phone}'">📞 Contact Seller</button>
+    </div>
+  `).join('') || `<div class="empty-state"><div class="empty-icon">📦</div><h3>No listings found</h3><p>Try another search or add your own listing.</p></div>`;
+}
+
+function setMarketTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', ['listings','browse'][i] === tab));
+  document.querySelectorAll('.market-tab-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+function handleMarketplaceSearch() {
+  state.marketplaceSearch = document.getElementById('marketSearchInput').value.trim().toLowerCase();
+  renderMarketplace();
+}
+
+function openMarketplaceBuy(itemName, cropName) {
+  state.marketplaceSearch = `${itemName} ${cropName || ''}`.trim().toLowerCase();
+  navigateTo('marketplace');
+  setMarketTab('browse');
+  const searchInput = document.getElementById('marketSearchInput');
+  if (searchInput) searchInput.value = `${itemName} ${cropName || ''}`.trim();
+  renderMarketplace();
+}
+
+async function createMarketplaceListing() {
+  const item_name = document.getElementById('marketItemName').value.trim();
+  const crop_type = document.getElementById('marketCropType').value.trim();
+  const phone = document.getElementById('marketPhone').value.trim().replace(/\D/g, '');
+  const price = document.getElementById('marketPrice').value.trim();
+  const quantity = document.getElementById('marketQuantity').value.trim();
+  const location = document.getElementById('marketLocation').value.trim();
+  const listing_type = document.getElementById('marketListingType').value;
+
+  const res = await fetch('/api/guide/listings', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ item_name, crop_type, phone, price, quantity, location, listing_type })
+  });
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    showToast(data.message || 'Could not create listing.');
+    return;
+  }
+
+  ['marketItemName','marketCropType','marketPhone','marketPrice','marketQuantity','marketLocation'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  await loadListings();
+  renderMarketplace();
+  setMarketTab('listings');
+  showToast('Listing added successfully.');
+}
+
+async function deleteMarketplaceListing(listingId) {
+  const res = await fetch(`/api/guide/listings/${listingId}`, { method: 'DELETE' });
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    showToast('Could not delete listing.');
+    return;
+  }
+  await loadListings();
+  renderMarketplace();
+  showToast('Listing removed.');
+}
+
+function handleImageUpload(e) {
+  const files = e.target.files;
+  if (!files || files.length === 0) return;
+  
+  const previews = document.getElementById('uploadedPreviews');
+  const analyzeBtn = document.getElementById('analyzeBtn');
+  
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    state.uploadedImages.push(file);
+    
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const imgWrap = document.createElement('div');
+      imgWrap.className = 'preview-wrap';
+      imgWrap.style.position = 'relative';
+      imgWrap.style.display = 'inline-block';
+      imgWrap.style.margin = '5px';
+      
+      const img = document.createElement('img');
+      img.src = evt.target.result;
+      img.style.width = '80px';
+      img.style.height = '80px';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '8px';
+      img.style.border = '1px solid var(--glass-border)';
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = '✕';
+      removeBtn.style.position = 'absolute';
+      removeBtn.style.top = '-5px';
+      removeBtn.style.right = '-5px';
+      removeBtn.style.background = 'var(--red)';
+      removeBtn.style.color = '#fff';
+      removeBtn.style.border = 'none';
+      removeBtn.style.borderRadius = '50%';
+      removeBtn.style.width = '20px';
+      removeBtn.style.height = '20px';
+      removeBtn.style.cursor = 'pointer';
+      removeBtn.style.fontSize = '12px';
+      removeBtn.style.display = 'flex';
+      removeBtn.style.alignItems = 'center';
+      removeBtn.style.justifyContent = 'center';
+      
+      removeBtn.onclick = function() {
+        const index = state.uploadedImages.indexOf(file);
+        if (index > -1) {
+          state.uploadedImages.splice(index, 1);
+        }
+        imgWrap.remove();
+        if (state.uploadedImages.length === 0) {
+          analyzeBtn.style.display = 'none';
+        }
+      };
+      
+      imgWrap.appendChild(img);
+      imgWrap.appendChild(removeBtn);
+      previews.appendChild(imgWrap);
+    };
+    reader.readAsDataURL(file);
+  }
+  
+  analyzeBtn.style.display = 'block';
+}
+
+async function analyzeImages() {
+  const results = document.getElementById('analysisResults');
+  results.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-soft)"><div style="font-size:32px">🔬</div><p>Analyzing crop images...</p></div>';
+
+  await new Promise(r => setTimeout(r, 2000)); // Simulate API delay
+
+  const mockResults = [
+    { label: 'Plant Health', value: 'Moderate', status: 'warning' },
+    { label: 'Disease Detection', value: 'No disease found', status: 'healthy' },
+    { label: 'Nutrient Status', value: 'Nitrogen deficiency suspected', status: 'warning' },
+    { label: 'Water Stress', value: 'Low', status: 'healthy' },
+    { label: 'Pest Activity', value: 'None detected', status: 'healthy' },
+    { label: 'Overall Growth', value: 'Normal', status: 'healthy' },
+  ];
+
+  results.innerHTML = `
+    <h3 style="margin-bottom:16px; font-size:16px">🔬 Analysis Results (${state.uploadedImages.length} image${state.uploadedImages.length>1?'s':''})</h3>
+    <div class="analysis-result-card" style="border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px; background: rgba(255,255,255,0.02);">
+      <div class="arc-header" style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <div style="font-size:24px">🌿</div>
+        <div>
+          <strong>Crop Health Report</strong>
+          <div style="font-size:12px;color:var(--text-muted)">AI Analysis • ${new Date().toLocaleDateString()}</div>
+        </div>
+      </div>
+      ${mockResults.map(r => `
+        <div class="arc-metric" style="display:flex; justify-content:space-between; padding:8px 0; border-bottom: 1px solid var(--glass-border);">
+          <span>${r.label}</span>
+          <span class="arc-status" style="font-weight:600; color:${r.status === 'warning' ? 'var(--red)' : 'var(--green-mid)'}">${r.value}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="tip-card" style="margin-top:12px; border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px; background: rgba(255,255,255,0.02);">
+      <strong>🤖 AI Recommendation</strong>
+      <p>Apply 10kg/acre Urea fertilizer within 7 days to address nitrogen deficiency. Next inspection recommended in 14 days.</p>
+    </div>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:12px">⚠️ This is a mock analysis. Connect the Plant.id API or OpenAI Vision for real disease detection.</p>
+  `;
+}
+
+function renderHome() {
+  document.getElementById('home-crop-count').textContent = state.myCrops.length;
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  if (toast) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+}
+
+const GUIDE_I18N = {
+  en: {
+    guideOverviewLinkLabel: 'Overview',
+    guideHomeLabel: 'Home',
+    guideGuideLabel: 'New Farmer Guide',
+    guideMyCropsLabel: 'My Crops',
+    guideMonitorLabel: 'Monitor Crop',
+    guideMarketplaceLabel: 'Marketplace',
+    guideMarketDataLabel: 'Market Data',
+    guideMachineryLabel: 'Machinery',
+    guideReviewsLabel: 'Reviews',
+    guideSettingsTitle: 'Account Settings',
+    guideSettingsSubtitle: 'Manage your profile, password, and language preference.',
+    guideProfileHeading: 'Profile',
+    guideSecurityHeading: 'Security',
+    guidePreferencesHeading: 'Preferences',
+    guideNameLabel: 'Full Name',
+    guidePhoneLabel: 'Phone',
+    guideAccountIdLabel: 'Account ID:',
+    guidePasswordLabel: 'New Password',
+    guideConfirmPasswordLabel: 'Confirm Password',
+    guideLanguageLabel: 'Language',
+    guideCancelSettingsBtn: 'Cancel',
+    guideSaveSettingsBtn: 'Save Changes'
+  },
+  hi: {
+    guideOverviewLinkLabel: 'ओवरव्यू',
+    guideHomeLabel: 'होम',
+    guideGuideLabel: 'फार्मर गाइड',
+    guideMyCropsLabel: 'मेरी फसलें',
+    guideMonitorLabel: 'फसल मॉनिटर',
+    guideMarketplaceLabel: 'मार्केटप्लेस',
+    guideMarketDataLabel: 'मार्केट डेटा',
+    guideMachineryLabel: 'मशीनरी',
+    guideReviewsLabel: 'रिव्यू',
+    guideSettingsTitle: 'अकाउंट सेटिंग्स',
+    guideSettingsSubtitle: 'अपना प्रोफाइल, पासवर्ड और भाषा पसंद बदलें।',
+    guideProfileHeading: 'प्रोफाइल',
+    guideSecurityHeading: 'सुरक्षा',
+    guidePreferencesHeading: 'प्राथमिकताएं',
+    guideNameLabel: 'पूरा नाम',
+    guidePhoneLabel: 'फोन',
+    guideAccountIdLabel: 'अकाउंट आईडी:',
+    guidePasswordLabel: 'नया पासवर्ड',
+    guideConfirmPasswordLabel: 'पासवर्ड दोबारा लिखें',
+    guideLanguageLabel: 'भाषा',
+    guideCancelSettingsBtn: 'रद्द करें',
+    guideSaveSettingsBtn: 'सेव करें'
+  }
+};
+
+let guideLanguage = localStorage.getItem('agroverse_lang') || 'en';
+let guideUser = { name: '{{ user_name }}', email: '{{ user_email }}', phone: '' };
+
+function applyGuideLanguage(lang) {
+  guideLanguage = GUIDE_I18N[lang] ? lang : 'en';
+  localStorage.setItem('agroverse_lang', guideLanguage);
+  document.documentElement.lang = guideLanguage === 'hi' ? 'hi' : 'en';
+
+  const copy = GUIDE_I18N[guideLanguage];
+  Object.entries(copy).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  });
+
+  const toggle = document.getElementById('guideLangToggleBtn');
+  if (toggle) toggle.textContent = guideLanguage === 'hi' ? 'हि' : 'EN';
+  const select = document.getElementById('guideSettingsLanguage');
+  if (select) select.value = guideLanguage;
+  const heading = document.getElementById('welcomeHeading');
+  if (heading) heading.textContent = guideLanguage === 'hi'
+    ? `वापस स्वागत है, ${guideUser.name} 👋`
+    : `Welcome back, ${guideUser.name} 👋`;
+}
+
+async function init() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const pageParam = urlParams.get('page') || 'guide';
+  const activePage = pageParam === 'settings' ? 'guide' : pageParam;
+  navigateTo(activePage);
+
+  const langToggle = document.getElementById('guideLangToggleBtn');
+  if (langToggle) {
+    langToggle.addEventListener('click', () => {
+      applyGuideLanguage(guideLanguage === 'en' ? 'hi' : 'en');
+    });
+  }
+
+  applyGuideLanguage(guideLanguage);
+
+  // Drag-drop upload
+  const drop = document.getElementById('uploadDrop');
+  if (drop) {
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.borderColor = 'var(--green-mid)'; });
+    drop.addEventListener('dragleave', () => { drop.style.borderColor = 'var(--border)'; });
+    drop.addEventListener('drop', e => {
+      e.preventDefault();
+      drop.style.borderColor = 'var(--border)';
+      const files = Array.from(e.dataTransfer.files);
+      handleImageUpload({ target: { files } });
+    });
+  }
+
+  // Asynchronously fetch backend data in background
+  await loadMyCrops();
+  await loadListings();
+  onCountryChange();
+
+  // Re-render active page content once data has loaded
+  if (pageParam === 'mycrops') renderMyCrops();
+  if (pageParam === 'marketplace') renderMarketplace();
+  if (pageParam === 'home') renderHome();
+}
+
+
+
+
+
+
+init();
+
+(function initGuideParticles() {
+  const canvas = document.getElementById('particle-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const EMOJIS = ['🌿', '🌱', '🍀', '🌸', '🌼', '🌺', '🌻', '✨', '💫', '⭐', '🌾', '🍃', '🌷'];
+  const floaters = Array.from({ length: 42 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+    size: Math.random() * 14 + 8,
+    vx: (Math.random() - 0.5) * 0.2,
+    vy: Math.random() * 0.7 + 0.45,
+    opacity: Math.random() * 0.38 + 0.1,
+    rotation: Math.random() * Math.PI * 2,
+    rotSpeed: (Math.random() - 0.5) * 0.02,
+    pulse: Math.random() * Math.PI * 2,
+    pulseSpeed: Math.random() * 0.01 + 0.005,
+    swayOffset: Math.random() * Math.PI * 2,
+    swaySpeed: Math.random() * 0.015 + 0.008,
+    swayRange: Math.random() * 0.75 + 0.35
+  }));
+
+  const sparkles = Array.from({ length: 28 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 1.4 + 0.5,
+    phase: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.04 + 0.02
+  }));
+
+  function drawBg() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    sparkles.forEach((s) => {
+      s.phase += s.speed;
+      const alpha = (Math.sin(s.phase) + 1) / 2 * 0.7;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 229, 160, ${alpha})`;
+      ctx.fill();
+    });
+
+    floaters.forEach((f) => {
+      f.pulse += f.pulseSpeed;
+      f.rotation += f.rotSpeed;
+      f.swayOffset += f.swaySpeed;
+      f.x += Math.sin(f.swayOffset) * f.swayRange + f.vx;
+      f.y += f.vy;
+
+      if (f.y > canvas.height + 30) {
+        f.y = -30;
+        f.x = Math.random() * canvas.width;
+      }
+      if (f.x < -30) f.x = canvas.width + 30;
+      if (f.x > canvas.width + 30) f.x = -30;
+
+      const scale = 1 + Math.sin(f.pulse) * 0.06;
+      ctx.save();
+      ctx.globalAlpha = f.opacity;
+      ctx.translate(f.x, f.y);
+      ctx.rotate(f.rotation);
+      ctx.scale(scale, scale);
+      ctx.font = `${f.size}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(f.emoji, 0, 0);
+      ctx.restore();
+    });
+
+    requestAnimationFrame(drawBg);
+  }
+
+  drawBg();
+})();
+
+// ── Session init ──────────────────────────────────────────────────────────────
+fetch('/api/session')
+  .then(r => r.json())
+  .then(data => {
+    if (!data.logged_in) { window.location.href = '/signin'; return; }
+    const name = data.name || 'User';
+    const firstName = name.split(' ')[0] || name;
+    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    guideUser = { name, email: data.email || '', phone: data.phone || '' };
+
+    const avatar = document.getElementById('guide-user-avatar');
+    if (avatar) avatar.textContent = initials || 'U';
+
+    const userName = document.getElementById('guide-user-name');
+    if (userName) userName.textContent = name;
+
+    const userEmail = document.getElementById('guide-user-email');
+    if (userEmail) userEmail.textContent = data.email || 'New Farmer';
+
+
+
+    const welcomeHeading = document.getElementById('welcomeHeading');
+    if (welcomeHeading) welcomeHeading.textContent = `Welcome back, ${name} 👋`;
+
+    const homeTitle = document.querySelector('#page-home .page-sub');
+    if (homeTitle) homeTitle.textContent = `Here's your farming overview for today, ${firstName}.`;
+    applyGuideLanguage(guideLanguage);
+  })
+  .catch(() => { window.location.href = '/signin'; });
+
+</script>
+
+</html>

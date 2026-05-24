@@ -1,0 +1,4 @@
+id,first_name,last_name,email,phone,password_hash,firebase_uid,created_at,land_owned,device_connected,soil_moisture,soil_n,soil_p,soil_k
+2d10972008f2ab12,Harsh,Sharma,harsh123@gmail.com,+919520194057,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,,2026-04-11T10:46:17.428523,0,none,0,0,0,0
+7e90655c631849d5,Hariom,.,hariom@gmail.com,9412345678,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,,2026-04-11T11:17:15.638068,50.0,none,0.0,0.0,0.0,0.0
+0090072f4f9fd0a9,Harsh,Sharma,harshsharma0614@gmail.com,9812345678,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,,2026-04-12T04:25:32.592788,0,none,0,0,0,0

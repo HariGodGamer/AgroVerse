@@ -1,0 +1,569 @@
+<style>
+  .shared-chat-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 54px;
+    height: 54px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 540;
+    box-shadow: 0 4px 20px rgba(0, 229, 160, 0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: none;
+    color: #050e0a;
+  }
+
+  .shared-chat-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 14px 34px rgba(0, 229, 160, 0.48);
+  }
+
+  .shared-chat-fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ff6b6b;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-dark);
+  }
+
+  .shared-chat-drawer {
+    position: fixed;
+    bottom: 94px;
+    right: 28px;
+    width: 360px;
+    max-height: 520px;
+    background: linear-gradient(180deg, rgba(9, 26, 18, 0.98), rgba(6, 17, 13, 0.98));
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 530;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 229, 160, 0.08);
+    transform: scale(0.86) translateY(30px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-origin: bottom right;
+    overflow: hidden;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .shared-chat-drawer.open {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .shared-chat-drawer::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 86px;
+    background: linear-gradient(180deg, rgba(0, 229, 160, 0.1), rgba(0, 229, 160, 0));
+    pointer-events: none;
+  }
+
+  .shared-chat-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .shared-chat-avatar {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 0 16px rgba(0, 229, 160, 0.2);
+  }
+
+  .shared-chat-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .shared-chat-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .shared-chat-status {
+    font-size: 11px;
+    color: var(--emerald);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 2px;
+  }
+
+  .shared-chat-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--emerald);
+    box-shadow: 0 0 10px rgba(0, 229, 160, 0.45);
+  }
+
+  .shared-chat-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.2s ease;
+  }
+
+  .shared-chat-close:hover {
+    color: var(--text-main);
+  }
+
+  .shared-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 220px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .shared-chat-messages::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .shared-chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 229, 160, 0.22);
+    border-radius: 10px;
+  }
+
+  .shared-chat-msg {
+    display: flex;
+    gap: 8px;
+  }
+
+  .shared-chat-msg.user {
+    flex-direction: row-reverse;
+  }
+
+  .shared-chat-msg-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .shared-chat-msg.bot .shared-chat-msg-avatar {
+    background: rgba(0, 229, 160, 0.15);
+  }
+
+  .shared-chat-msg.user .shared-chat-msg-avatar {
+    background: rgba(0, 212, 255, 0.15);
+  }
+
+  .shared-chat-msg-bubble {
+    max-width: 76%;
+    padding: 10px 13px;
+    border-radius: 14px;
+    font-size: 12.5px;
+    line-height: 1.58;
+  }
+
+  .shared-chat-msg.bot .shared-chat-msg-bubble {
+    background: rgba(0, 229, 160, 0.07);
+    border: 1px solid rgba(0, 229, 160, 0.12);
+    color: var(--text-main);
+    border-bottom-left-radius: 4px;
+  }
+
+  .shared-chat-msg.user .shared-chat-msg-bubble {
+    background: linear-gradient(135deg, rgba(0, 229, 160, 0.2), rgba(0, 212, 255, 0.14));
+    border: 1px solid rgba(0, 229, 160, 0.2);
+    color: var(--text-main);
+    border-bottom-right-radius: 4px;
+  }
+
+  .shared-chat-msg-time {
+    font-size: 9px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    text-align: right;
+  }
+
+  .shared-chat-msg.user .shared-chat-msg-time {
+    text-align: left;
+  }
+
+  .shared-chat-typing {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 4px 0;
+  }
+
+  .shared-chat-typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--emerald);
+    opacity: 0.65;
+    animation: sharedChatTyping 1.2s infinite;
+  }
+
+  .shared-chat-typing span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .shared-chat-typing span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes sharedChatTyping {
+    0%, 80%, 100% { transform: scale(1); }
+    40% { transform: scale(1.35); opacity: 1; }
+  }
+
+  .shared-chat-suggestions {
+    padding: 0 14px 10px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .shared-chat-chip {
+    font-size: 10.5px;
+    padding: 4px 10px;
+    background: rgba(0, 229, 160, 0.07);
+    border: 1px solid rgba(0, 229, 160, 0.15);
+    border-radius: 20px;
+    color: var(--emerald);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .shared-chat-chip:hover {
+    background: rgba(0, 229, 160, 0.15);
+  }
+
+  .shared-chat-input-row {
+    padding: 12px 14px;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .shared-chat-input {
+    flex: 1;
+    background: rgba(0, 229, 160, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 10px 13px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 12.5px;
+    resize: none;
+    outline: none;
+    min-height: 40px;
+    max-height: 100px;
+    transition: border-color 0.2s ease;
+  }
+
+  .shared-chat-input:focus {
+    border-color: rgba(0, 229, 160, 0.35);
+  }
+
+  .shared-chat-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .shared-chat-send {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    color: #050e0a;
+    transition: all 0.2s ease;
+  }
+
+  .shared-chat-send:hover {
+    box-shadow: 0 4px 15px rgba(0, 229, 160, 0.4);
+    transform: scale(1.05);
+  }
+
+  .shared-chat-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  @media (max-width: 768px) {
+    .shared-chat-drawer {
+      width: calc(100vw - 32px);
+      right: 16px;
+      bottom: 88px;
+    }
+
+    .shared-chat-fab {
+      right: 16px;
+      bottom: 20px;
+    }
+  }
+</style>
+
+<div class="shared-chat-drawer" id="sharedChatDrawer">
+  <div class="shared-chat-header">
+    <div class="shared-chat-avatar">&#x1F916;</div>
+    <div class="shared-chat-info">
+      <div class="shared-chat-name">AgroBot</div>
+      <div class="shared-chat-status">Online &middot; AI Farming Expert</div>
+    </div>
+    <button class="shared-chat-close" id="sharedChatClose" title="Close">&#10005;</button>
+  </div>
+
+  <div class="shared-chat-messages" id="sharedChatMessages">
+    <div class="shared-chat-msg bot">
+      <div class="shared-chat-msg-avatar">&#x1F916;</div>
+      <div>
+        <div class="shared-chat-msg-bubble">Namaste! I'm AgroBot. Ask me about crops, pests, irrigation, weather planning, or market timing.</div>
+        <div class="shared-chat-msg-time" id="sharedChatWelcomeTime"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shared-chat-suggestions" id="sharedChatSuggestions">
+    <span class="shared-chat-chip" onclick="sendSharedChatSuggestion('Best crops for Kharif season?')">&#x1F33E; Kharif crops</span>
+    <span class="shared-chat-chip" onclick="sendSharedChatSuggestion('How to detect crop diseases?')">&#x1F52C; Disease help</span>
+    <span class="shared-chat-chip" onclick="sendSharedChatSuggestion('Current weather tips for farming?')">&#x1F324;&#xFE0F; Weather tips</span>
+    <span class="shared-chat-chip" onclick="sendSharedChatSuggestion('When is a good time to sell my crop?')">&#x1F4CA; Market timing</span>
+  </div>
+
+  <div class="shared-chat-input-row">
+    <textarea class="shared-chat-input" id="sharedChatInput" placeholder="Ask AgroBot about farming..." rows="1"></textarea>
+    <button class="shared-chat-send" id="sharedChatSend" title="Send">&#10148;</button>
+  </div>
+</div>
+
+<button class="shared-chat-fab" id="sharedChatFab" title="Open AgroBot">
+  &#x1F916;
+  <span class="shared-chat-fab-badge" id="sharedChatBadge">1</span>
+</button>
+
+<script>
+  (function () {
+    if (window.__agroSharedChatInitialized) return;
+    window.__agroSharedChatInitialized = true;
+
+    const drawer = document.getElementById('sharedChatDrawer');
+    const fab = document.getElementById('sharedChatFab');
+    const closeBtn = document.getElementById('sharedChatClose');
+    const input = document.getElementById('sharedChatInput');
+    const sendBtn = document.getElementById('sharedChatSend');
+    const messages = document.getElementById('sharedChatMessages');
+    const badge = document.getElementById('sharedChatBadge');
+    const suggestions = document.getElementById('sharedChatSuggestions');
+
+    let chatHistory = [];
+    let chatOpen = false;
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatTime(date) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function closeSidebarIfOpen() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (sidebar) sidebar.classList.remove('open');
+      if (overlay) overlay.classList.remove('open');
+    }
+
+    function scrollToBottom() {
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function setNavActive(active) {
+      const button = document.getElementById('nav-chatbot-btn');
+      if (button) button.classList.toggle('active', active);
+    }
+
+    function addMessage(role, text) {
+      const div = document.createElement('div');
+      const safeText = escapeHtml(text).replace(/\n/g, '<br>');
+      const isBot = role === 'bot';
+      div.className = 'shared-chat-msg ' + role;
+      div.innerHTML = `
+        <div class="shared-chat-msg-avatar">${isBot ? '&#x1F916;' : '&#x1F464;'}</div>
+        <div>
+          <div class="shared-chat-msg-bubble">${safeText}</div>
+          <div class="shared-chat-msg-time">${formatTime(new Date())}</div>
+        </div>
+      `;
+      messages.appendChild(div);
+      scrollToBottom();
+    }
+
+    function showTyping() {
+      const div = document.createElement('div');
+      div.className = 'shared-chat-msg bot';
+      div.id = 'sharedChatTyping';
+      div.innerHTML = `
+        <div class="shared-chat-msg-avatar">&#x1F916;</div>
+        <div class="shared-chat-msg-bubble" style="padding:10px 14px;">
+          <div class="shared-chat-typing"><span></span><span></span><span></span></div>
+        </div>
+      `;
+      messages.appendChild(div);
+      scrollToBottom();
+    }
+
+    function hideTyping() {
+      const el = document.getElementById('sharedChatTyping');
+      if (el) el.remove();
+    }
+
+    async function sendMessage(text) {
+      const message = (text || '').trim();
+      if (!message) return;
+
+      suggestions.style.display = 'none';
+      addMessage('user', message);
+      chatHistory.push({ role: 'user', content: message });
+      input.value = '';
+      input.style.height = 'auto';
+      sendBtn.disabled = true;
+      showTyping();
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message, history: chatHistory.slice(-10) })
+        });
+        const data = await response.json();
+        hideTyping();
+        const reply = data.reply || data.error || 'No response received.';
+        addMessage('bot', reply);
+        chatHistory.push({ role: 'assistant', content: reply });
+
+        if (!chatOpen) {
+          badge.style.display = 'flex';
+        }
+      } catch (error) {
+        hideTyping();
+        addMessage('bot', 'Could not reach AgroBot right now. Please try again.');
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    }
+
+    function openSharedChatbot() {
+      closeSidebarIfOpen();
+      chatOpen = true;
+      drawer.classList.add('open');
+      badge.style.display = 'none';
+      setNavActive(true);
+      setTimeout(() => input.focus(), 280);
+    }
+
+    function closeSharedChatbot() {
+      chatOpen = false;
+      drawer.classList.remove('open');
+      setNavActive(false);
+    }
+
+    function sendSharedChatSuggestion(text) {
+      openSharedChatbot();
+      setTimeout(() => sendMessage(text), 180);
+    }
+
+    document.getElementById('sharedChatWelcomeTime').textContent = formatTime(new Date());
+    fab.addEventListener('click', openSharedChatbot);
+    closeBtn.addEventListener('click', closeSharedChatbot);
+    sendBtn.addEventListener('click', () => sendMessage(input.value));
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage(input.value);
+      }
+    });
+    input.addEventListener('input', () => {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+    });
+
+    window.openSharedChatbot = openSharedChatbot;
+    window.closeSharedChatbot = closeSharedChatbot;
+    window.sendSharedChatSuggestion = sendSharedChatSuggestion;
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && chatOpen) {
+        closeSharedChatbot();
+      }
+    });
+
+    if (window.location.pathname.includes('/chat')) {
+      window.addEventListener('load', () => {
+        setTimeout(openSharedChatbot, 220);
+      });
+    }
+  })();
+</script>

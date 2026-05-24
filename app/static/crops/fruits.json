@@ -1,0 +1,330 @@
+[
+  {
+    "id": "mango",
+    "name": "Mango",
+    "emoji": "🥭",
+    "category": "Fruit",
+    "season": "Zaid",
+    "soilTypes": [
+      "alluvial",
+      "loamy",
+      "red laterite"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "medium",
+    "profitRange": "30,000-80,000/acre",
+    "reason": "Horticultural orchard crop suited to warm climate and deep alluvial/laterite soils.",
+    "suitScore": 69,
+    "costPerAcre": 25000,
+    "yieldPerAcre": 6,
+    "pricePerKg": 40,
+    "inputs": [
+      {
+        "icon": "🌳",
+        "name": "Grafted Saplings",
+        "qty": "70 plants/acre",
+        "price": 10000,
+        "use": "Planting"
+      },
+      {
+        "icon": "🧪",
+        "name": "Compost & NPK",
+        "qty": "500 kg/acre",
+        "price": 3000,
+        "use": "Soil feeding"
+      },
+      {
+        "icon": "💧",
+        "name": "Drip System",
+        "qty": "Yearly support",
+        "price": 6000,
+        "use": "Tree establishment"
+      }
+    ],
+    "stages": [
+      "Planting",
+      "Vegetative",
+      "Flowering",
+      "Fruit Set",
+      "Fruit Development",
+      "Harvest"
+    ],
+    "guideSteps": [
+      "Planting: Dig 1m x 1m pits. Mix topsoil with FYM and plant grafted saplings.",
+      "Irrigation: Drip irrigation is highly recommended during early vegetative years.",
+      "Harvesting: Pick mature fruits when color shifts to pale yellow; wash and ripen in hay."
+    ]
+  },
+  {
+    "id": "watermelon",
+    "name": "Watermelon",
+    "emoji": "🍉",
+    "category": "Fruit",
+    "season": "Zaid",
+    "soilTypes": [
+      "sandy",
+      "sandy loam",
+      "alluvial"
+    ],
+    "waterNeed": "Low",
+    "duration": "80-90 days",
+    "riskLevel": "medium",
+    "profitRange": "22,000-40,000/acre",
+    "reason": "Grows best in sandy riverbed soils and high summer heat.",
+    "suitScore": 88,
+    "costPerAcre": 14000,
+    "yieldPerAcre": 150,
+    "pricePerKg": 6,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Watermelon Seeds",
+        "qty": "1.5 kg/acre",
+        "price": 1800,
+        "use": "Direct sowing"
+      },
+      {
+        "icon": "🧪",
+        "name": "Compost & NPK",
+        "qty": "40 kg/acre",
+        "price": 2000,
+        "use": "Basal dose"
+      },
+      {
+        "icon": "💧",
+        "name": "Drip Irrigation",
+        "qty": "Drip line",
+        "price": 4000,
+        "use": "Vining stage"
+      }
+    ],
+    "stages": [
+      "Sowing",
+      "Germination",
+      "Vining",
+      "Flowering",
+      "Fruit Set",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Sowing: SOW directly in light, sandy soil under high sun exposure.",
+      "Watering: Drip irrigate weekly; restrict watering close to harvest to sweeten fruits.",
+      "Harvest: Mature melons sound hollow when tapped and the bottom patch turns yellow."
+    ]
+  },
+  {
+    "id": "banana",
+    "name": "Banana",
+    "emoji": "🍌",
+    "category": "Fruit",
+    "season": "Kharif",
+    "soilTypes": [
+      "clay loam",
+      "alluvial",
+      "loamy"
+    ],
+    "waterNeed": "High",
+    "duration": "300-330 days",
+    "riskLevel": "medium",
+    "profitRange": "35,000-65,000/acre",
+    "reason": "Requires high humidity, abundant water, and well-drained clay loam/alluvial soils.",
+    "suitScore": 76,
+    "costPerAcre": 28000,
+    "yieldPerAcre": 180,
+    "pricePerKg": 15,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Tissue Culture Saplings",
+        "qty": "1200 plants/acre",
+        "price": 12000,
+        "use": "Planting"
+      }
+    ],
+    "stages": [
+      "Planting",
+      "Shooting",
+      "Flowering",
+      "Bunch Formation",
+      "Maturity",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Saplings: Use tissue culture plants like Grand Naine for disease-free high yield.",
+      "Nutrition: Heavy feeder; apply copious compost and split nitrogen/potassium doses.",
+      "Harvest: Cut bundles when green fruits turn plump and ribs become round."
+    ]
+  },
+  {
+    "id": "orange",
+    "name": "Orange",
+    "emoji": "🍊",
+    "category": "Fruit",
+    "season": "Rabi",
+    "soilTypes": [
+      "sandy loam",
+      "loamy",
+      "alluvial"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "medium",
+    "profitRange": "28,000-50,000/acre",
+    "reason": "Perennial citrus crop; performs well in cool winters and well-drained sandy loams.",
+    "suitScore": 73,
+    "costPerAcre": 22000,
+    "yieldPerAcre": 80,
+    "pricePerKg": 25,
+    "inputs": [
+      {
+        "icon": "🌳",
+        "name": "Budded Plants",
+        "qty": "110 plants/acre",
+        "price": 8000,
+        "use": "Planting"
+      }
+    ],
+    "stages": [
+      "Planting",
+      "Establishment",
+      "Flowering",
+      "Fruit Setting",
+      "Ripening",
+      "Harvest"
+    ],
+    "guideSteps": [
+      "Soil: Deep, loose sandy loam is perfect. Citrus cannot stand waterlogged roots.",
+      "Pruning: Keep trees clean; prune deadwood to allow sunlight into the canopy.",
+      "Harvest: Pluck fruits when they turn bright orange and feel heavy."
+    ]
+  },
+  {
+    "id": "apple",
+    "name": "Apple",
+    "emoji": "🍎",
+    "category": "Fruit",
+    "season": "Rabi",
+    "soilTypes": [
+      "loamy",
+      "clay loam"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "high",
+    "profitRange": "40,000-1,10,000/acre",
+    "reason": "Cold climate crop limited to hilly/mountain slopes and loamy soils.",
+    "suitScore": 55,
+    "costPerAcre": 35000,
+    "yieldPerAcre": 60,
+    "pricePerKg": 60,
+    "inputs": [
+      {
+        "icon": "🌳",
+        "name": "Grafted Saplings",
+        "qty": "150 plants/acre",
+        "price": 18000,
+        "use": "Planting"
+      }
+    ],
+    "stages": [
+      "Dormancy",
+      "Bud Break",
+      "Flowering",
+      "Fruit Set",
+      "Fruit Bulking",
+      "Harvest"
+    ],
+    "guideSteps": [
+      "Location: Thrives in temperate zones with chill hours. Plant in winter.",
+      "Pruning: Strict winter pruning is necessary to shape trees and induce fruit spurs.",
+      "Harvest: Pick hand-sorted when color develops fully and seeds turn brown."
+    ]
+  },
+  {
+    "id": "grapes",
+    "name": "Grapes",
+    "emoji": "🍇",
+    "category": "Fruit",
+    "season": "Zaid",
+    "soilTypes": [
+      "sandy loam",
+      "loamy",
+      "red laterite"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "Perennial",
+    "riskLevel": "high",
+    "profitRange": "45,000-90,000/acre",
+    "reason": "Vining crop requiring structured trellises and warm, dry climate.",
+    "suitScore": 68,
+    "costPerAcre": 40000,
+    "yieldPerAcre": 70,
+    "pricePerKg": 45,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Rooted Cuttings",
+        "qty": "400 plants/acre",
+        "price": 10000,
+        "use": "Planting"
+      }
+    ],
+    "stages": [
+      "Pruning",
+      "Sprouting",
+      "Flowering",
+      "Berry Set",
+      "Berry Growth",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Trellising: Train vines onto telephone or Y-trellis systems.",
+      "Pruning: Twice-yearly pruning (October and April) is key to fruit yield.",
+      "Harvest: Harvest bunches when berries taste sweet and pedicels turn woody."
+    ]
+  },
+  {
+    "id": "papaya",
+    "name": "Papaya",
+    "emoji": " papaya",
+    "category": "Fruit",
+    "season": "Kharif",
+    "soilTypes": [
+      "sandy loam",
+      "alluvial",
+      "loamy"
+    ],
+    "waterNeed": "Moderate",
+    "duration": "240-300 days",
+    "riskLevel": "medium",
+    "profitRange": "22,000-45,000/acre",
+    "reason": "Fast fruit crop requiring warm climate and sandy loam with excellent drainage.",
+    "suitScore": 82,
+    "costPerAcre": 16000,
+    "yieldPerAcre": 300,
+    "pricePerKg": 10,
+    "inputs": [
+      {
+        "icon": "🌱",
+        "name": "Papaya Seedlings",
+        "qty": "1000 plants",
+        "price": 4000,
+        "use": "Transplant"
+      }
+    ],
+    "stages": [
+      "Nursery",
+      "Transplant",
+      "Flowering",
+      "Fruit Setting",
+      "Tuber Bulking",
+      "Harvest Ready"
+    ],
+    "guideSteps": [
+      "Seedlings: Raise seeds in polybags, transplant at 45 days. Use bisexual strains (e.g. Red Lady).",
+      "Drainage: Extremely sensitive to waterlogging, which causes root rot. Plant on mounds.",
+      "Harvest: Harvest when skin color shows a light yellow streak."
+    ]
+  }
+]

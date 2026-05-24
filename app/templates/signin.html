@@ -343,6 +343,33 @@
   ::-webkit-scrollbar-track { background: var(--bg-dark); }
   ::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.3); border-radius: 10px; }
 </style>
+
+<!-- Firebase SDK - COMMENTED OUT
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBU6sQ9FZ_-oXO7qE2WifoIsQ34uNlkSpg",
+    authDomain: "life-os-613f9.firebaseapp.com",
+    projectId: "life-os-613f9",
+    storageBucket: "life-os-613f9.firebasestorage.app",
+    messagingSenderId: "471169346899",
+    appId: "1:471169346899:web:38d27abb7088e062d5c5a6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.firebaseAuth = auth;
+  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+  window.sendEmailVerification = sendEmailVerification;
+  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+  window.signOut = signOut;
+  window.onAuthStateChanged = onAuthStateChanged;
+</script>
+-->
+
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
@@ -357,7 +384,7 @@
     <div style="position:absolute;top:-100px;left:-100px;width:300px;height:300px;border-radius:50%;background:rgba(0,229,160,0.05);filter:blur(60px);pointer-events:none"></div>
     <div style="position:absolute;bottom:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(0,200,177,0.06);filter:blur(50px);pointer-events:none"></div>
 
-    <a href="index.html" class="left-logo">
+    <a href="/" class="left-logo">
       <div class="logo-box">🌿</div>
       <span>AgroVerse</span>
     </a>
@@ -549,7 +576,7 @@
           <label class="form-label">Phone Number</label>
           <div class="input-wrap">
             <span class="input-icon">📱</span>
-            <input type="tel" class="form-input" id="signup-phone" placeholder="+91 98765 43210"/>
+            <input type="tel" class="form-input" id="signup-phone" placeholder="9876543210" maxlength="10" inputmode="numeric"/>
           </div>
         </div>
 
@@ -589,6 +616,16 @@
 </div>
 
 <script>
+// Auth state listener - COMMENTED OUT (Firebase disabled)
+// onAuthStateChanged(window.firebaseAuth, (user) => {
+//   if (user && user.emailVerified) {
+//     // User has verified their email, show a success message
+//     const signinPanel = document.getElementById('panel-signin');
+//     if (signinPanel && signinPanel.classList.contains('active')) {
+//       showMsg('signin', '✅ Email verified successfully! You can now sign in.', 'ok');
+//     }
+//   }
+// });
 // Cursor — desktop only
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
@@ -657,7 +694,7 @@ function checkPw(val) {
   for(let i=0;i<strength;i++) document.getElementById(bars[i]).classList.add(cls);
 }
 
-// Auth handler — calls Flask backend
+// Auth handler — calls Flask backend (Firebase DISABLED)
 async function handleAuth(type) {
   const btn = document.querySelector(`#panel-${type} .btn-submit`);
   const origText = btn.textContent;
@@ -675,6 +712,7 @@ async function handleAuth(type) {
       btn.textContent = origText; btn.disabled = false; btn.style.opacity = '1';
       return;
     }
+
     payload = { email, password };
   } else {
     const first    = document.getElementById('signup-first').value.trim();
@@ -693,6 +731,12 @@ async function handleAuth(type) {
       btn.textContent = origText; btn.disabled = false; btn.style.opacity = '1';
       return;
     }
+    if (phone && !/^\d{10}$/.test(phone)) {
+      showMsg(type, '⚠️ Phone number must be exactly 10 digits.', 'warn');
+      btn.textContent = origText; btn.disabled = false; btn.style.opacity = '1';
+      return;
+    }
+
     payload = { first_name: first, last_name: last, email, phone, password };
   }
 
@@ -709,7 +753,11 @@ async function handleAuth(type) {
       btn.textContent = type === 'signin' ? '✅ Signed In!' : '✅ Account Created!';
       btn.style.background = 'linear-gradient(135deg,#00e5a0,#00c9b1)';
       showMsg(type, data.message, 'ok');
-      setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
+      if (type === 'signin') {
+        setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
+      } else {
+        setTimeout(() => { switchTab('signin'); }, 2000);
+      }
     } else {
       showMsg(type, data.message || 'Something went wrong.', 'err');
       btn.textContent = origText; btn.disabled = false; btn.style.opacity = '1';

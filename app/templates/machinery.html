@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroVerse — Machinery on Rent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --emerald: #00e5a0;
+    --teal: #00c9b1;
+    --cyan: #00d4ff;
+    --green-deep: #0a6b4a;
+    --bg-dark: #050e0a;
+    --bg-mid: #091a12;
+    --bg-card: rgba(255,255,255,0.03);
+    --glass: rgba(0, 229, 160, 0.06);
+    --glass-border: rgba(0, 229, 160, 0.15);
+    --text-main: #e8f5ee;
+    --text-muted: #7aa390;
+    --glow: 0 0 40px rgba(0, 229, 160, 0.25);
+    --sidebar-w: 220px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+    display: flex;
+    height: 100vh;
+  }
+
+  /* ===== SIDEBAR ===== */
+.main-area {
+    margin-left: var(--sidebar-w); flex: 1;
+    display: flex; flex-direction: column;
+    height: 100vh; overflow: hidden;
+  }
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--glass-border);
+    background: var(--bg-dark); flex-shrink: 0;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-left a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .topbar-left a:hover { color: var(--emerald); }
+  .topbar-breadcrumb { font-size: 12px; color: var(--text-muted); }
+  .topbar-breadcrumb span { color: var(--emerald); }
+  .topbar-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+  .topbar-title em {
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-style: normal;
+  }
+  .page-content {
+    flex: 1; overflow-y: auto; padding: 24px 28px 40px;
+    background: radial-gradient(ellipse 60% 40% at 70% 20%, rgba(0,229,160,0.04) 0%, transparent 60%);
+  }
+  .page-content::-webkit-scrollbar { width: 4px; }
+  .page-content::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+
+  /* ===== HERO BANNER ===== */
+  .hero-banner {
+    background: linear-gradient(135deg, rgba(0,40,28,0.9), rgba(5,14,10,0.95));
+    border: 1px solid rgba(0,229,160,0.18);
+    border-radius: 20px; padding: 28px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px; margin-bottom: 26px;
+    position: relative; overflow: hidden;
+  }
+  .hero-banner::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 50% 80% at 85% 50%, rgba(0,229,160,0.08), transparent);
+    pointer-events: none;
+  }
+  .hero-text h2 {
+    font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+    margin-bottom: 8px; letter-spacing: -0.5px;
+  }
+  .hero-text h2 em {
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-style: normal;
+  }
+  .hero-text p { font-size: 13px; color: var(--text-muted); line-height: 1.6; max-width: 480px; }
+  .hero-stats { display: flex; gap: 24px; flex-shrink: 0; }
+  .hero-stat { text-align: center; }
+  .hero-stat-val {
+    font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ===== MACHINE TYPE FILTER STRIP ===== */
+  .filter-strip {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 22px; align-items: center;
+  }
+  .filter-label { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; margin-right: 4px; }
+  .filter-chip {
+    display: flex; align-items: center; gap: 5px;
+    padding: 6px 13px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    background: var(--bg-card); border: 1px solid rgba(0,229,160,0.1);
+    color: var(--text-muted); cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .filter-chip:hover { background: var(--glass); border-color: rgba(0,229,160,0.25); color: var(--text-main); }
+  .filter-chip.active {
+    background: rgba(0,229,160,0.12); border-color: var(--emerald);
+    color: var(--emerald); font-weight: 600;
+  }
+
+  /* ===== SEARCH & LOCATION BAR ===== */
+  .location-bar {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    align-items: flex-end; margin-bottom: 26px;
+  }
+  .select-wrap { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 160px; }
+  .select-wrap label { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; }
+  .select-wrap select, .select-wrap input {
+    background: var(--bg-card); border: 1px solid var(--glass-border);
+    border-radius: 10px; padding: 10px 14px;
+    color: var(--text-main); font-family: inherit; font-size: 13px; outline: none;
+    transition: border-color 0.2s; appearance: none; cursor: pointer;
+  }
+  .select-wrap select:focus, .select-wrap input:focus { border-color: rgba(0,229,160,0.4); }
+  .select-wrap select option { background: #091a12; color: var(--text-main); }
+  .btn-search {
+    padding: 10px 22px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    color: #050e0a; border: none; cursor: pointer; transition: all 0.25s;
+    align-self: flex-end; white-space: nowrap;
+  }
+  .btn-search:hover { box-shadow: 0 4px 18px rgba(0,229,160,0.4); transform: translateY(-1px); }
+  .btn-add {
+    padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    background: transparent; color: var(--emerald);
+    border: 1px solid var(--glass-border); cursor: pointer; transition: all 0.25s;
+    align-self: flex-end; white-space: nowrap;
+  }
+  .btn-add:hover { background: var(--glass); border-color: var(--emerald); }
+
+  /* ===== RESULTS SECTION ===== */
+  .results-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .results-title {
+    font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+  }
+  .results-count {
+    font-size: 11px; color: var(--text-muted);
+    background: var(--bg-card); border: 1px solid var(--glass-border);
+    padding: 3px 10px; border-radius: 20px;
+  }
+
+  /* ===== MACHINE GRID ===== */
+  .machine-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px; margin-bottom: 28px;
+  }
+  .machine-card {
+    background: var(--bg-card); border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 18px; overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+    position: relative;
+  }
+  .machine-card:hover {
+    border-color: rgba(0,229,160,0.22); transform: translateY(-4px);
+    box-shadow: 0 16px 50px rgba(0,0,0,0.5), 0 0 30px rgba(0,229,160,0.07);
+  }
+  .machine-card-img {
+    width: 100%; height: 160px; overflow: hidden;
+    background: linear-gradient(135deg, rgba(0,40,28,0.8), rgba(9,26,18,0.9));
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .machine-card-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.88; transition: transform 0.4s ease;
+  }
+  .machine-card:hover .machine-card-img img { transform: scale(1.05); }
+  .machine-card-img .img-fallback {
+    font-size: 56px; opacity: 0.5;
+  }
+  .machine-type-badge {
+    position: absolute; top: 10px; left: 10px;
+    background: rgba(5,14,10,0.85); backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px; padding: 4px 10px;
+    font-size: 11px; font-weight: 700; color: var(--emerald);
+    letter-spacing: 0.3px;
+  }
+  .machine-card-body { padding: 16px 18px; }
+  .machine-card-name {
+    font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .machine-card-location { font-size: 11.5px; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
+  .machine-card-divider { height: 1px; background: rgba(0,229,160,0.07); margin: 10px 0; }
+  .machine-card-meta { display: flex; justify-content: space-between; align-items: center; }
+  .machine-card-price {
+    font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .machine-card-price span { font-size: 11px; color: var(--text-muted); font-weight: 400; -webkit-text-fill-color: var(--text-muted); }
+  .machine-owner { font-size: 12px; color: var(--text-muted); }
+  .machine-owner strong { color: var(--text-main); font-weight: 600; }
+  .machine-card-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .btn-call {
+    flex: 1; padding: 9px; border-radius: 10px; font-size: 12px; font-weight: 600;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    color: #050e0a; border: none; cursor: pointer; transition: all 0.2s;
+    text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px;
+  }
+  .btn-call:hover { box-shadow: 0 4px 15px rgba(0,229,160,0.35); }
+  .btn-info {
+    padding: 9px 14px; border-radius: 10px; font-size: 12px; font-weight: 600;
+    background: transparent; color: var(--text-muted);
+    border: 1px solid var(--glass-border); cursor: pointer; transition: all 0.2s;
+  }
+  .btn-info:hover { background: var(--glass); color: var(--text-main); border-color: rgba(0,229,160,0.3); }
+  .machine-added {
+    font-size: 10px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 4px; margin-top: 8px;
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    text-align: center; padding: 60px 20px;
+    border: 1px dashed rgba(0,229,160,0.15);
+    border-radius: 20px; background: var(--bg-card);
+  }
+  .empty-state .empty-icon { font-size: 52px; margin-bottom: 16px; opacity: 0.6; }
+  .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .empty-state p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+
+  /* ===== ALL MACHINES CATALOG ===== */
+  .catalog-section { margin-bottom: 28px; }
+  .section-heading {
+    font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-heading::before { content: '•'; color: var(--emerald); font-size: 18px; }
+  .catalog-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .catalog-card {
+    background: var(--bg-card); border: 1px solid rgba(0,229,160,0.08);
+    border-radius: 14px; padding: 16px 12px;
+    text-align: center; cursor: pointer; transition: all 0.25s;
+  }
+  .catalog-card:hover {
+    border-color: rgba(0,229,160,0.25); transform: translateY(-3px);
+    background: var(--glass);
+  }
+  .catalog-card.active-filter { border-color: var(--emerald); background: rgba(0,229,160,0.08); }
+  .catalog-card-img {
+    width: 80px; height: 50px; margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; border-radius: 8px;
+    background: rgba(0,40,28,0.5);
+  }
+  .catalog-card-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
+  .catalog-card-img .cat-emoji { font-size: 28px; }
+  .catalog-card-name { font-size: 11.5px; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+
+  /* ===== ADD MACHINE MODAL ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+    z-index: 400; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    padding: 16px;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--bg-mid); border: 1px solid var(--glass-border);
+    border-radius: 22px; width: 100%; max-width: 540px;
+    max-height: 90vh; overflow-y: auto;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+  }
+  .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+  .modal::-webkit-scrollbar { width: 3px; }
+  .modal::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.2); border-radius: 10px; }
+  .modal-header {
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-header h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+  .modal-close {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 20px; cursor: pointer; transition: color 0.2s; line-height: 1; padding: 4px;
+  }
+  .modal-close:hover { color: var(--text-main); }
+  .modal-body { padding: 22px 24px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1/-1; }
+  .form-group label { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; }
+  .form-group input, .form-group select, .form-group textarea {
+    background: rgba(0,229,160,0.04); border: 1px solid var(--glass-border);
+    border-radius: 10px; padding: 10px 13px;
+    color: var(--text-main); font-family: inherit; font-size: 13px; outline: none;
+    transition: border-color 0.2s; appearance: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: rgba(0,229,160,0.4);
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--text-muted); }
+  .form-group select option { background: #091a12; }
+  .form-group textarea { resize: vertical; min-height: 72px; }
+  .modal-footer {
+    padding: 16px 24px 22px;
+    display: flex; gap: 10px; justify-content: flex-end;
+  }
+  .btn-cancel {
+    padding: 10px 20px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    background: transparent; color: var(--text-muted);
+    border: 1px solid var(--glass-border); cursor: pointer; transition: all 0.2s;
+  }
+  .btn-cancel:hover { background: var(--glass); color: var(--text-main); }
+  .btn-submit {
+    padding: 10px 24px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    background: linear-gradient(135deg, var(--emerald), var(--teal));
+    color: #050e0a; border: none; cursor: pointer; transition: all 0.25s;
+  }
+  .btn-submit:hover { box-shadow: 0 4px 18px rgba(0,229,160,0.4); }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--bg-mid); border: 1px solid var(--glass-border);
+    border-radius: 12px; padding: 12px 20px;
+    font-size: 13px; z-index: 600;
+    display: flex; align-items: center; gap: 8px;
+    transition: transform 0.35s cubic-bezier(0.23,1,0.32,1);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    min-width: 240px; max-width: 380px; text-align: center; justify-content: center;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { border-color: rgba(0,229,160,0.3); color: var(--emerald); }
+  .toast.error   { border-color: rgba(255,80,80,0.3); color: #ff8a8a; }
+
+  /* ===== DETAIL MODAL ===== */
+  .detail-info-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .detail-info-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .detail-info-label { font-size: 11px; color: var(--text-muted); margin-bottom: 2px; }
+  .detail-info-val { font-size: 14px; font-weight: 600; color: var(--text-main); }
+  .detail-price-box {
+    background: rgba(0,229,160,0.06); border: 1px solid rgba(0,229,160,0.15);
+    border-radius: 12px; padding: 14px 18px; margin-bottom: 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .detail-price-label { font-size: 12px; color: var(--text-muted); }
+  .detail-price-val {
+    font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800;
+    background: linear-gradient(90deg, var(--emerald), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .detail-price-unit { font-size: 12px; color: var(--text-muted); }
+  .detail-img {
+    width: 100%; height: 180px; border-radius: 12px; overflow: hidden;
+    margin-bottom: 18px; background: rgba(0,40,28,0.5);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .detail-img img { width: 100%; height: 100%; object-fit: cover; }
+  .detail-img .d-emoji { font-size: 64px; }
+
+  /* ===== CANVAS BG ===== */
+  #particle-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; opacity: 0.4;
+  }
+
+  /* ===== MOBILE ===== */
+  .mobile-topbar {
+    display: none; align-items: center; justify-content: space-between;
+    padding: 14px 16px; background: var(--bg-mid);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky; top: 0; z-index: 200;
+  }
+  .hamburger { display: flex; flex-direction: column; gap: 4px; cursor: pointer; padding: 6px; }
+  .hamburger span { display: block; width: 20px; height: 2px; background: var(--text-muted); border-radius: 2px; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 90; }
+  .sidebar-overlay.open { display: block; }
+
+  @media (max-width: 900px) {
+    .catalog-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    .hero-stats { display: none; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; z-index: 100; }
+    .sidebar.open { transform: translateX(0); }
+    .main-area { margin-left: 0; }
+    .mobile-topbar { display: flex; }
+    .topbar { display: none; }
+    .page-content { padding: 16px; }
+    .machine-grid { grid-template-columns: 1fr; }
+    .location-bar { flex-direction: column; }
+    .btn-search, .btn-add { width: 100%; }
+  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.25); border-radius: 10px; }
+</style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+{% include 'sidebar.html' %}
+
+
+<!-- ===== MAIN AREA ===== -->
+<div class="main-area">
+
+  <!-- Mobile top bar -->
+  <div class="mobile-topbar">
+    <a href="/dashboard" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+      <div class="sidebar-logo-icon" style="width:28px;height:28px;font-size:14px;">🌿</div>
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:16px;background:linear-gradient(90deg,var(--emerald),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">AgroVerse</span>
+    </a>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="/dashboard">← Dashboard</a>
+      <span style="color:var(--glass-border);">/</span>
+      <div class="topbar-title">Machinery on <em>Rent</em></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn-add" onclick="openAddModal()">+ List Your Machine</button>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-content">
+
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+      <div class="hero-text">
+        <h2>Rent Farm <em>Machinery</em> Near You</h2>
+        <p>Browse tractors, harvesters, tillers, and 12+ types of agricultural equipment available on rent from local owners across India.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-val" id="stat-total">—</div>
+          <div class="hero-stat-label">Total Listings</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">15+</div>
+          <div class="hero-stat-label">Machine Types</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">30+</div>
+          <div class="hero-stat-label">States Covered</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Machine Catalog -->
+    <div class="catalog-section">
+      <div class="section-heading">Browse by Machine Type</div>
+      <div class="catalog-grid" id="catalogGrid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Search / Location Bar -->
+    <div class="location-bar">
+      <div class="select-wrap">
+        <label>STATE</label>
+        <select id="stateSelect" onchange="loadDistricts()">
+          <option value="">— Select State —</option>
+          {% for s in states %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="select-wrap">
+        <label>DISTRICT</label>
+        <select id="districtSelect">
+          <option value="">— Select District —</option>
+        </select>
+      </div>
+      <button class="btn-search" onclick="searchMachines()">🔍 Search</button>
+      <button class="btn-add" onclick="openAddModal()">＋ List Machine</button>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsSection" style="display:none;">
+      <div class="results-header">
+        <div class="results-title" id="resultsTitle">Available Machines</div>
+        <div class="results-count" id="resultsCount">0 found</div>
+      </div>
+      <div class="machine-grid" id="machineGrid"></div>
+    </div>
+
+    <!-- Placeholder / initial prompt -->
+    <div id="searchPrompt" class="empty-state">
+      <div class="empty-icon">🗺️</div>
+      <h3>Select Your Location</h3>
+      <p>Choose a state and district above to find farm machinery available on rent near you.</p>
+    </div>
+
+  </div><!-- end page-content -->
+</div><!-- end main-area -->
+
+<!-- ===== ADD MACHINE MODAL ===== -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🚜 List Your Machine for Rent</h3>
+      <button class="modal-close" onclick="closeAddModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>STATE</label>
+          <select id="m-state" onchange="loadModalDistricts()">
+            <option value="">— Select State —</option>
+            {% for s in states %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>DISTRICT</label>
+          <select id="m-district">
+            <option value="">— Select District —</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>MACHINE TYPE</label>
+          <select id="m-type">
+            <option value="">— Select Machine —</option>
+            {% for t in machine_types %}<option value="{{ t }}">{{ machine_config[t].emoji }} {{ t }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>OWNER NAME</label>
+          <input type="text" id="m-owner" placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label>PHONE (10 digits)</label>
+          <input type="tel" id="m-phone" placeholder="9876543210" maxlength="10">
+        </div>
+        <div class="form-group">
+          <label>RENT PER DAY (₹)</label>
+          <input type="number" id="m-rent" placeholder="e.g. 2500" min="1">
+        </div>
+        <div class="form-group full">
+          <label>ADDRESS / LOCATION</label>
+          <textarea id="m-address" placeholder="Village / Town, landmark..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
+      <button class="btn-submit" id="submitBtn" onclick="submitMachine()">List Machine →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DETAIL MODAL ===== -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="detail-title">Machine Details</h3>
+      <button class="modal-close" onclick="closeDetailModal()">✕</button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+{% include 'chat_widget.html' %}
+
+<script>
+// ─── Machine catalog config from Jinja ───────────────────────────────────────
+const MACHINE_CONFIG = {{ machine_config | tojson }};
+const MACHINE_TYPES  = {{ machine_types | tojson }};
+
+// ─── Build catalog grid ───────────────────────────────────────────────────────
+let activeFilter = null;
+
+function buildCatalog() {
+  const grid = document.getElementById('catalogGrid');
+  grid.innerHTML = '';
+  MACHINE_TYPES.forEach(type => {
+    const cfg = MACHINE_CONFIG[type] || {};
+    const imgFile = cfg.image || '';
+    const emoji   = cfg.emoji || '🚜';
+    const card = document.createElement('div');
+    card.className = 'catalog-card';
+    card.dataset.type = type;
+    card.onclick = () => toggleFilter(type, card);
+    card.innerHTML = `
+      <div class="catalog-card-img">
+        <img src="/static/images/machines/${imgFile}" alt="${type}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cat-emoji" style="display:none">${emoji}</div>
+      </div>
+      <div class="catalog-card-name">${type}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function toggleFilter(type, card) {
+  if (activeFilter === type) {
+    activeFilter = null;
+    card.classList.remove('active-filter');
+  } else {
+    document.querySelectorAll('.catalog-card').forEach(c => c.classList.remove('active-filter'));
+    activeFilter = type;
+    card.classList.add('active-filter');
+  }
+  if (document.getElementById('resultsSection').style.display !== 'none') {
+    renderMachines(lastMachines);
+  }
+}
+
+// ─── Districts loading ────────────────────────────────────────────────────────
+async function loadDistricts() {
+  const state = document.getElementById('stateSelect').value;
+  const sel   = document.getElementById('districtSelect');
+  sel.innerHTML = '<option value="">— Loading… —</option>';
+  if (!state) { sel.innerHTML = '<option value="">— Select District —</option>'; return; }
+  const data = await fetch(`/api/machinery/districts/${encodeURIComponent(state)}`).then(r => r.json());
+  sel.innerHTML = '<option value="">— Select District —</option>' + data.map(d => `<option value="${d}">${d}</option>`).join('');
+}
+
+async function loadModalDistricts() {
+  const state = document.getElementById('m-state').value;
+  const sel   = document.getElementById('m-district');
+  sel.innerHTML = '<option value="">— Loading… —</option>';
+  if (!state) { sel.innerHTML = '<option value="">— Select District —</option>'; return; }
+  const data = await fetch(`/api/machinery/districts/${encodeURIComponent(state)}`).then(r => r.json());
+  sel.innerHTML = '<option value="">— Select District —</option>' + data.map(d => `<option value="${d}">${d}</option>`).join('');
+}
+
+// ─── Search ───────────────────────────────────────────────────────────────────
+let lastMachines = [];
+
+async function searchMachines() {
+  const state    = document.getElementById('stateSelect').value;
+  const district = document.getElementById('districtSelect').value;
+  if (!state || !district) { showToast('Please select both state and district.', 'error'); return; }
+
+  document.getElementById('searchPrompt').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('machineGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-muted);font-size:13px;">🔄 Searching…</div>';
+
+  const data = await fetch(`/api/machinery/list?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}`).then(r => r.json());
+  lastMachines = data;
+
+  document.getElementById('resultsTitle').textContent = `Machines in ${district}, ${state}`;
+  renderMachines(data);
+}
+
+function renderMachines(machines) {
+  const grid = document.getElementById('machineGrid');
+  const filtered = activeFilter ? machines.filter(m => m.machine_type === activeFilter) : machines;
+  document.getElementById('resultsCount').textContent = `${filtered.length} found`;
+
+  if (!filtered.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;">
+        <div class="empty-state">
+          <div class="empty-icon">${activeFilter ? (MACHINE_CONFIG[activeFilter]?.emoji || '🚜') : '🔍'}</div>
+          <h3>No machines found</h3>
+          <p>${activeFilter ? `No ${activeFilter} listed in this area yet.` : 'No machinery listed in this area yet.'}</p>
+          <button class="btn-add" onclick="openAddModal()" style="margin:0 auto;">+ List a Machine Here</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(m => {
+    const imgTag = m.image_url
+      ? `<img src="${m.image_url}" alt="${m.machine_type}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      : '';
+    return `
+    <div class="machine-card">
+      <div class="machine-card-img">
+        ${imgTag}
+        <div class="img-fallback" style="${m.image_url ? 'display:none' : ''}">${m.emoji || '🚜'}</div>
+        <div class="machine-type-badge">${m.machine_type}</div>
+      </div>
+      <div class="machine-card-body">
+        <div class="machine-card-name">${m.machine_type}</div>
+        <div class="machine-card-location">📍 ${m.district}, ${m.state}</div>
+        <div class="machine-card-divider"></div>
+        <div class="machine-card-meta">
+          <div class="machine-card-price">₹${parseFloat(m.rent_per_day).toLocaleString('en-IN')}<span>/day</span></div>
+          <div class="machine-owner">By <strong>${m.owner_name}</strong></div>
+        </div>
+        <div class="machine-card-actions">
+          <a class="btn-call" href="tel:${m.phone}">📞 Call Owner</a>
+          <button class="btn-info" onclick='showDetail(${JSON.stringify(m)})'>Info</button>
+        </div>
+        <div class="machine-added">🗓️ Listed: ${m.added_on || 'N/A'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── Detail modal ─────────────────────────────────────────────────────────────
+function showDetail(m) {
+  document.getElementById('detail-title').textContent = `${m.emoji || '🚜'} ${m.machine_type}`;
+  const imgHtml = m.image_url
+    ? `<img src="${m.image_url}" alt="${m.machine_type}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';document.getElementById('d-fallback').style.display='flex'">`
+    : '';
+  document.getElementById('detailBody').innerHTML = `
+    <div class="detail-img">
+      ${imgHtml}
+      <div class="d-emoji" id="d-fallback" style="${m.image_url ? 'display:none' : ''}">${m.emoji || '🚜'}</div>
+    </div>
+    <div class="detail-price-box">
+      <div><div class="detail-price-label">Rent Rate</div><div class="detail-price-unit">per day</div></div>
+      <div class="detail-price-val">₹${parseFloat(m.rent_per_day).toLocaleString('en-IN')}</div>
+    </div>
+    <div class="detail-info-row"><div class="detail-info-icon">👤</div><div><div class="detail-info-label">Owner</div><div class="detail-info-val">${m.owner_name}</div></div></div>
+    <div class="detail-info-row"><div class="detail-info-icon">📞</div><div><div class="detail-info-label">Phone</div><div class="detail-info-val"><a href="tel:${m.phone}" style="color:var(--emerald);text-decoration:none;">${m.phone}</a></div></div></div>
+    <div class="detail-info-row"><div class="detail-info-icon">📍</div><div><div class="detail-info-label">Location</div><div class="detail-info-val">${m.district}, ${m.state}</div></div></div>
+    <div class="detail-info-row"><div class="detail-info-icon">🏠</div><div><div class="detail-info-label">Address</div><div class="detail-info-val">${m.address}</div></div></div>
+    <div class="detail-info-row"><div class="detail-info-icon">🗓️</div><div><div class="detail-info-label">Listed On</div><div class="detail-info-val">${m.added_on || 'N/A'}</div></div></div>
+    <div style="margin-top:18px;">
+      <a href="tel:${m.phone}" class="btn-call" style="display:flex;justify-content:center;">📞 Call ${m.owner_name}</a>
+    </div>`;
+  document.getElementById('detailModal').classList.add('open');
+}
+function closeDetailModal() { document.getElementById('detailModal').classList.remove('open'); }
+
+// ─── Add modal ────────────────────────────────────────────────────────────────
+function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+function closeAddModal() { document.getElementById('addModal').classList.remove('open'); }
+
+async function submitMachine() {
+  const state   = document.getElementById('m-state').value;
+  const district= document.getElementById('m-district').value;
+  const type    = document.getElementById('m-type').value;
+  const owner   = document.getElementById('m-owner').value.trim();
+  const phone   = document.getElementById('m-phone').value.trim();
+  const rent    = document.getElementById('m-rent').value.trim();
+  const address = document.getElementById('m-address').value.trim();
+
+  if (!state || !district || !type || !owner || !phone || !rent || !address) {
+    showToast('Please fill all fields.', 'error'); return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Listing…';
+
+  try {
+    const res  = await fetch('/api/machinery/add', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ state, district, machine_type: type, owner_name: owner, phone, rent_per_day: rent, address })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('✅ Machine listed successfully!', 'success');
+      closeAddModal();
+      // Clear fields
+      ['m-state','m-district','m-type','m-owner','m-phone','m-rent','m-address'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      // Update stat
+      fetch('/api/machinery/list?state=' + encodeURIComponent(state) + '&district=' + encodeURIComponent(district))
+        .then(r => r.json()).then(d => updateTotalStat(d.length));
+    } else {
+      showToast('❌ ' + (data.error || 'Failed to list machine.'), 'error');
+    }
+  } catch(e) {
+    showToast('❌ Network error. Please try again.', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'List Machine →';
+  }
+}
+
+function updateTotalStat(n) {
+  const el = document.getElementById('stat-total');
+  if (el) el.textContent = n;
+}
+
+// ─── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ─── Canvas particles ─────────────────────────────────────────────────────────
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+const EMOJIS = ['🚜','🌾','⚙️','🌱','💧','✨','🌿','⭐'];
+const floaters = Array.from({length: 35}, () => ({
+  x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight,
+  emoji: EMOJIS[Math.floor(Math.random()*EMOJIS.length)],
+  size: Math.random()*12+7, vx: (Math.random()-.5)*.25, vy: (Math.random()-.5)*.25,
+  opacity: Math.random()*.35+.08, rotation: Math.random()*Math.PI*2, rotSpeed: (Math.random()-.5)*.008,
+  pulse: Math.random()*Math.PI*2
+}));
+const sparkles = Array.from({length: 30}, () => ({
+  x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight,
+  r: Math.random()*1.2+.4, phase: Math.random()*Math.PI*2, speed: Math.random()*.035+.015
+}));
+function drawBg() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  sparkles.forEach(s => {
+    s.phase += s.speed;
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(0,229,160,${(Math.sin(s.phase)+1)/2*.6})`; ctx.fill();
+  });
+  floaters.forEach(f => {
+    f.pulse += .01; f.rotation += f.rotSpeed; f.x += f.vx; f.y += f.vy;
+    if (f.x < -30) f.x = canvas.width+30; if (f.x > canvas.width+30) f.x = -30;
+    if (f.y < -30) f.y = canvas.height+30; if (f.y > canvas.height+30) f.y = -30;
+    const scale = 1 + Math.sin(f.pulse)*.05;
+    ctx.save(); ctx.globalAlpha = f.opacity;
+    ctx.translate(f.x, f.y); ctx.rotate(f.rotation); ctx.scale(scale, scale);
+    ctx.font = `${f.size}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(f.emoji, 0, 0); ctx.restore();
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+
+
+// ─── Close modals on overlay click ────────────────────────────────────────────
+document.getElementById('addModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAddModal(); });
+document.getElementById('detailModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeDetailModal(); });
+
+// ─── Session check ─────────────────────────────────────────────────────────────
+fetch('/api/session').then(r => r.json()).then(data => {
+  if (!data.logged_in) { window.location.href = '/signin'; return; }
+  const name = data.name || 'User';
+  const initials = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+  const av = document.getElementById('guide-user-avatar');
+  if (av) av.textContent = initials || 'U';
+  const un = document.getElementById('dash-username');
+  if (un) un.textContent = name;
+}).catch(() => window.location.href = '/signin');
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+buildCatalog();
+</script>
+</body>
+</html>
